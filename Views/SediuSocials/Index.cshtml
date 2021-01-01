@@ -1,0 +1,107 @@
+﻿@model IEnumerable<Licenta.Models.SediuSocial>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Localitate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Judet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sector)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Strada)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Numar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CodPostal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Et)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ap)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Telefon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Client.Denumire)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Localitate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Judet)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sector)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Strada)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Numar)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CodPostal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Et)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ap)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefon)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.Denumire)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.SediuSocialId"><i class="fa fa-pencil-square text-success" aria-hidden="true"></i></a> |
+                <a asp-action="Details" asp-route-id="@item.SediuSocialId"><i class="fa fa-info-circle" aria-hidden="true"></i></a> |
+                <a asp-action="Delete" asp-route-id="@item.SediuSocialId"><i class="fa fa-trash text-danger" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Licenta.Models.Client>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Denumire)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NrRegComertului)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CodCAEN)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipFirma)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CapitalSocial)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TVA)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SediuSocial.Telefon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SediuSocial.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientFurnizori)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model)
+{
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Denumire)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrRegComertului)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CodCAEN)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipFirma)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CapitalSocial)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TVA)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SediuSocial.Telefon)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SediuSocial.Email)
+            </td>
+            <td>
+                @{ 
+                    foreach (var furnizor in item.ClientFurnizori)
+                    {
+                        if (furnizor.Furnizor != null) { 
+                                @furnizor.FurnizorId @: @furnizor.Furnizor.Denumire <br/>
+                        }
+                    }
+                 }
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ClientId"><i class="fa fa-pencil-square text-success" aria-hidden="true"></i></a> |
+                <a asp-action="Details" asp-route-id="@item.ClientId"><i class="fa fa-info-circle" aria-hidden="true"></i></a> |
+                <a asp-action="Delete" asp-route-id="@item.ClientId"><i class="fa fa-trash text-danger" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

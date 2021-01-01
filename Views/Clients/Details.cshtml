@@ -1,0 +1,75 @@
+﻿@model Licenta.Models.Client
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Client</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Denumire)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Denumire)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NrRegComertului)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NrRegComertului)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CodCAEN)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CodCAEN)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TipFirma)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TipFirma)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CapitalSocial)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CapitalSocial)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CasaDeMarcat)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CasaDeMarcat)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TVA)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TVA)
+        </dd>
+
+        @* Includem detalii despre sediul social *@
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SediuSocial.Telefon)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SediuSocial.Telefon)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SediuSocial.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SediuSocial.Email)
+        </dd>
+
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ClientId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

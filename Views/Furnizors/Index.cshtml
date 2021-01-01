@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Licenta.Models.Furnizor>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Denumire)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Denumire)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.FurnizorID"><i class="fa fa-pencil-square text-success" aria-hidden="true"></i></a> |
+                <a asp-action="Details" asp-route-id="@item.FurnizorID"><i class="fa fa-info-circle" aria-hidden="true"></i></a> |
+                <a asp-action="Delete" asp-route-id="@item.FurnizorID"><i class="fa fa-trash text-danger" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
