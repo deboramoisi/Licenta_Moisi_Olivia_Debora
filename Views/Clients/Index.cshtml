@@ -1,45 +1,53 @@
 ﻿@model IEnumerable<Licenta.Models.Client>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Clienti";
 }
 
-<h1>Index</h1>
+<br/>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<div class="row">
+    <div class="col-6">
+        <h2>Clienti</h2>
+    </div>
+    <div class="col-6 text-right">
+        <a asp-action="Create" class="btn btn-outline-primary"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Creare client nou</a>
+    </div>
+</div>
+<br/>
+
+<div class="table-responsive-md">
+<table class="table table-hover">
     <thead>
-        <tr>
-            <th>
+        <tr class="table-light">
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.Denumire)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.NrRegComertului)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.CodCAEN)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.TipFirma)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.CapitalSocial)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.TVA)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.SediuSocial.Telefon)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.SediuSocial.Email)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.ClientFurnizori)
             </th>
-            <th></th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
@@ -89,3 +97,4 @@
 }
     </tbody>
 </table>
+ </div>

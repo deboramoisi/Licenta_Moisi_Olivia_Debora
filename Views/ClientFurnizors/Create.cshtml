@@ -4,9 +4,9 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<br />
+<h2>Atribuire furnizor unui client</h2>
 
-<h4>ClientFurnizor</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,11 +14,11 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ClientId" class="control-label"></label>
-                <select asp-for="ClientId" class ="form-control" asp-items="ViewBag.ClientId"></select>
+                <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="FurnizorId" class="control-label"></label>
-                <select asp-for="FurnizorId" class ="form-control" asp-items="ViewBag.FurnizorId"></select>
+                <select asp-for="FurnizorId" class="form-control" asp-items="ViewBag.FurnizorId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
