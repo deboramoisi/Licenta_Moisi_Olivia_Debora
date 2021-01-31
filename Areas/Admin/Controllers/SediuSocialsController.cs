@@ -8,8 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Licenta.Data;
 using Licenta.Models;
 
-namespace Licenta.Views.SediuSocials
+namespace Licenta.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class SediuSocialsController : Controller
     {
         private readonly ApplicationDbContext _context;

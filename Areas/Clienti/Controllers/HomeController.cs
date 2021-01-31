@@ -7,8 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Licenta.Models;
 
-namespace Licenta.Controllers
+namespace Licenta.Areas.Clienti.Controllers
 {
+    [Area("Clienti")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

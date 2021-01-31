@@ -32,8 +32,8 @@ namespace Licenta.Models
         [Required]
         public string TVA { get; set; }
 
-
         // Navigation Property Sediu Social 1:1
+        [Display(Name="Sediu Social")]
         public SediuSocial SediuSocial { get; set; }
 
         [Display(Name = "Furnizori")]

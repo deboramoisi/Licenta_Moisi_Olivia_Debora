@@ -67,6 +67,22 @@
             @Html.DisplayFor(model => model.SediuSocial.Email)
         </dd>
 
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ClientFurnizori)
+        </dt>
+        <dd class="col-sm-10">
+                @{
+                    foreach (var furnizor in Model.ClientFurnizori)
+                    {
+                        if (furnizor.Furnizor != null)
+                        {
+                           @furnizor.Furnizor.Denumire <br />
+                        }
+                    }
+                }
+        </dd>
+
+
     </dl>
 </div>
 <div>

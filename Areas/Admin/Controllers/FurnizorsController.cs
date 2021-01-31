@@ -8,29 +8,25 @@ using Microsoft.EntityFrameworkCore;
 using Licenta.Data;
 using Licenta.Models;
 
-namespace Licenta.Views.Clients
+namespace Licenta.Areas.Admin.Controllers
 {
-    public class ClientsController : Controller
+    [Area("Admin")]
+    public class FurnizorsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ClientsController(ApplicationDbContext context)
+        public FurnizorsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Clients
+        // GET: Furnizors
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Client
-                // Includem Sediu Social pentru a putea afisa detaliile din acel model relatia 1:1 cu clienti
-                                .Include(c => c.SediuSocial)
-                                .Include(c => c.ClientFurnizori)
-                                .ThenInclude(c => c.Furnizor)
-                                .ToListAsync());
+            return View(await _context.Furnizor.ToListAsync());
         }
 
-        // GET: Clients/Details/5
+        // GET: Furnizors/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -38,43 +34,39 @@ namespace Licenta.Views.Clients
                 return NotFound();
             }
 
-            var client = await _context.Client
-                // Includem detalii din Sediu Social
-                .Include(b => b.SediuSocial)
-                .Include(b => b.ClientFurnizori)
-                                .ThenInclude(b => b.Furnizor)
-                .FirstOrDefaultAsync(m => m.ClientId == id);
-            if (client == null)
+            var furnizor = await _context.Furnizor
+                .FirstOrDefaultAsync(m => m.FurnizorID == id);
+            if (furnizor == null)
             {
                 return NotFound();
             }
 
-            return View(client);
+            return View(furnizor);
         }
 
-        // GET: Clients/Create
+        // GET: Furnizors/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Clients/Create
+        // POST: Furnizors/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClientId,Denumire,NrRegComertului,CodCAEN,TipFirma,CapitalSocial,CasaDeMarcat,TVA")] Client client)
+        public async Task<IActionResult> Create([Bind("FurnizorID,Denumire")] Furnizor furnizor)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(client);
+                _context.Add(furnizor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(client);
+            return View(furnizor);
         }
 
-        // GET: Clients/Edit/5
+        // GET: Furnizors/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -82,22 +74,22 @@ namespace Licenta.Views.Clients
                 return NotFound();
             }
 
-            var client = await _context.Client.FindAsync(id);
-            if (client == null)
+            var furnizor = await _context.Furnizor.FindAsync(id);
+            if (furnizor == null)
             {
                 return NotFound();
             }
-            return View(client);
+            return View(furnizor);
         }
 
-        // POST: Clients/Edit/5
+        // POST: Furnizors/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClientId,Denumire,NrRegComertului,CodCAEN,TipFirma,CapitalSocial,CasaDeMarcat,TVA")] Client client)
+        public async Task<IActionResult> Edit(int id, [Bind("FurnizorID,Denumire")] Furnizor furnizor)
         {
-            if (id != client.ClientId)
+            if (id != furnizor.FurnizorID)
             {
                 return NotFound();
             }
@@ -106,12 +98,12 @@ namespace Licenta.Views.Clients
             {
                 try
                 {
-                    _context.Update(client);
+                    _context.Update(furnizor);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClientExists(client.ClientId))
+                    if (!FurnizorExists(furnizor.FurnizorID))
                     {
                         return NotFound();
                     }
@@ -122,10 +114,10 @@ namespace Licenta.Views.Clients
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(client);
+            return View(furnizor);
         }
 
-        // GET: Clients/Delete/5
+        // GET: Furnizors/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -133,30 +125,56 @@ namespace Licenta.Views.Clients
                 return NotFound();
             }
 
-            var client = await _context.Client
-                .FirstOrDefaultAsync(m => m.ClientId == id);
-            if (client == null)
+            var furnizor = await _context.Furnizor
+                .FirstOrDefaultAsync(m => m.FurnizorID == id);
+            if (furnizor == null)
             {
                 return NotFound();
             }
 
-            return View(client);
+            return View(furnizor);
         }
 
-        // POST: Clients/Delete/5
+        // POST: Furnizors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var client = await _context.Client.FindAsync(id);
-            _context.Client.Remove(client);
+            var furnizor = await _context.Furnizor.FindAsync(id);
+            _context.Furnizor.Remove(furnizor);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ClientExists(int id)
+        private bool FurnizorExists(int id)
         {
-            return _context.Client.Any(e => e.ClientId == id);
+            return _context.Furnizor.Any(e => e.FurnizorID == id);
         }
+
+        // API CALLS
+        #region
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var allFurnizors = _context.Furnizor.ToList();
+            return Json(new { data = allFurnizors });
+        }
+
+        // apel api folosind metoda delete din js
+        [HttpDelete]
+        public IActionResult DeleteAPI(int id)
+        {
+            var furnizor = _context.Furnizor.Find(id);
+            if (furnizor == null)
+            {
+                return Json(new { success = false, message = "Eroare la stergerea furnizorului!" });
+            }
+            _context.Furnizor.Remove(furnizor);
+            _context.SaveChanges();
+            return Json(new { success = true, message = "Furnizorul a fost sters cu succes!" });
+        }
+        #endregion
+
+
     }
 }

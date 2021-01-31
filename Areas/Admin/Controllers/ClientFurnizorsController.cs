@@ -8,8 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Licenta.Data;
 using Licenta.Models;
 
-namespace Licenta.Views.ClientFurnizors
+namespace Licenta.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class ClientFurnizorsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -49,7 +50,9 @@ namespace Licenta.Views.ClientFurnizors
         // GET: ClientFurnizors/Create
         public IActionResult Create()
         {
+            // Select List Denumire Client
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire");
+            // Select List Denumire Furnizor
             ViewData["FurnizorId"] = new SelectList(_context.Furnizor, "FurnizorID", "Denumire");
             return View();
         }
@@ -162,5 +165,30 @@ namespace Licenta.Views.ClientFurnizors
         {
             return _context.ClientFurnizor.Any(e => e.ClientFurnizorId == id);
         }
+
+        // API CALLS
+        #region
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var clientFurnizors = _context.ClientFurnizor.Include(c => c.Client).Include(c => c.Furnizor).ToList();
+            return Json(new { data = clientFurnizors });
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteAPI(int id)
+        {
+            ClientFurnizor clientFurnizor = _context.ClientFurnizor.Find(id);
+            if (clientFurnizor == null)
+            {
+                return Json(new { success = false, message = "Eroare la stergere!"});
+            } 
+            else {
+                _context.Remove(clientFurnizor);
+                _context.SaveChanges();
+                return Json(new { success = true, message = "Stergere realizata cu succes!" });
+            }
+        }
+        #endregion
     }
 }
