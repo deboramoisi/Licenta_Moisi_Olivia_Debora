@@ -157,5 +157,31 @@ namespace Licenta.Areas.Admin.Controllers
         {
             return _context.SediuSocial.Any(e => e.SediuSocialId == id);
         }
+
+        // API CALLS
+        #region
+        public IActionResult GetAll()
+        {
+            var sediiSociale = _context.SediuSocial.Include(c => c.Client).ToList();
+            return Json(new { data = sediiSociale });
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteAPI(int id)
+        {
+            SediuSocial sediuSocial = _context.SediuSocial.Find(id);
+            if(sediuSocial == null)
+            {
+                return Json(new { success = false, message = "Eroare la stergerea sediului social!" });
+            } 
+            else
+            {
+                _context.Remove(sediuSocial);
+                _context.SaveChanges();
+                return Json(new { success = true, message = "Sediu social sters cu succes!" });
+            }
+        }
+
+        #endregion
     }
 }
