@@ -9,6 +9,8 @@
   <ItemGroup>
     <Compile Remove="Data\Migrations\20201229175233_FurnizorAndClientFurnizorToAppDbContext.cs" />
     <Compile Remove="Data\Migrations\20201229175233_FurnizorAndClientFurnizorToAppDbContext.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210201143709_FKSediuSocialInClientTable.cs" />
+    <Compile Remove="Data\Migrations\20210201143709_FKSediuSocialInClientTable.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +33,7 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Clienti\Data\" />
     <Folder Include="Areas\Clienti\Models\" />
+    <Folder Include="Data\Migrations\" />
   </ItemGroup>
 
 </Project>

@@ -1,10 +1,9 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Licenta.Data.Migrations
+namespace Licenta.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class TablesToDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -48,11 +47,43 @@ namespace Licenta.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Client",
+                columns: table => new
+                {
+                    ClientId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Denumire = table.Column<string>(nullable: false),
+                    NrRegComertului = table.Column<string>(nullable: false),
+                    CodCAEN = table.Column<string>(nullable: true),
+                    TipFirma = table.Column<string>(nullable: true),
+                    CapitalSocial = table.Column<double>(nullable: false),
+                    CasaDeMarcat = table.Column<string>(nullable: true),
+                    TVA = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Client", x => x.ClientId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Furnizor",
+                columns: table => new
+                {
+                    FurnizorID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Denumire = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Furnizor", x => x.FurnizorID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -73,7 +104,7 @@ namespace Licenta.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -153,6 +184,61 @@ namespace Licenta.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "SediuSocial",
+                columns: table => new
+                {
+                    SediuSocialId = table.Column<int>(nullable: false),
+                    Localitate = table.Column<string>(nullable: true),
+                    Judet = table.Column<string>(nullable: true),
+                    Sector = table.Column<int>(nullable: true),
+                    Strada = table.Column<string>(nullable: true),
+                    Numar = table.Column<string>(nullable: true),
+                    CodPostal = table.Column<string>(maxLength: 6, nullable: true),
+                    Bl = table.Column<string>(nullable: true),
+                    Sc = table.Column<int>(nullable: true),
+                    Et = table.Column<int>(nullable: true),
+                    Ap = table.Column<int>(nullable: true),
+                    Telefon = table.Column<string>(maxLength: 10, nullable: false),
+                    Email = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SediuSocial", x => x.SediuSocialId);
+                    table.ForeignKey(
+                        name: "FK_SediuSocial_Client_SediuSocialId",
+                        column: x => x.SediuSocialId,
+                        principalTable: "Client",
+                        principalColumn: "ClientId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClientFurnizor",
+                columns: table => new
+                {
+                    ClientFurnizorId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ClientId = table.Column<int>(nullable: false),
+                    FurnizorId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClientFurnizor", x => x.ClientFurnizorId);
+                    table.ForeignKey(
+                        name: "FK_ClientFurnizor_Client_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Client",
+                        principalColumn: "ClientId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClientFurnizor_Furnizor_FurnizorId",
+                        column: x => x.FurnizorId,
+                        principalTable: "Furnizor",
+                        principalColumn: "FurnizorID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -191,6 +277,16 @@ namespace Licenta.Data.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClientFurnizor_ClientId",
+                table: "ClientFurnizor",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClientFurnizor_FurnizorId",
+                table: "ClientFurnizor",
+                column: "FurnizorId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -211,10 +307,22 @@ namespace Licenta.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "ClientFurnizor");
+
+            migrationBuilder.DropTable(
+                name: "SediuSocial");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Furnizor");
+
+            migrationBuilder.DropTable(
+                name: "Client");
         }
     }
 }

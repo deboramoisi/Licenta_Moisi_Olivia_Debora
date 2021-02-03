@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Licenta.Data;
 using Licenta.Models;
+using Licenta.ViewModels;
 
 namespace Licenta.Areas.Admin.Controllers
 {
@@ -56,6 +57,7 @@ namespace Licenta.Areas.Admin.Controllers
         // GET: Clients/Create
         public IActionResult Create()
         {
+            ViewData["FurnizorId"] = new SelectList(_context.Furnizor, "FurnizorID", "Denumire");
             return View();
         }
 
@@ -64,15 +66,31 @@ namespace Licenta.Areas.Admin.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClientId,Denumire,NrRegComertului,CodCAEN,TipFirma,CapitalSocial,CasaDeMarcat,TVA")] Client client)
+        public async Task<IActionResult> Create(ClientVM clientVM)
         {
+            ViewData["FurnizorId"] = new SelectList(_context.Furnizor, "FurnizorID", "Denumire");
+
+            Client client = clientVM.Client;
+
             if (ModelState.IsValid)
             {
                 _context.Add(client);
+                _context.SaveChanges();
+                foreach (var furnizor in clientVM.SelectedFurnizors)
+                {
+                    if (furnizor != 0)
+                    {
+                        _context.Add(new ClientFurnizor()
+                        {
+                            ClientId = client.ClientId,
+                            FurnizorId = furnizor
+                        });
+                    }
+                }
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(client);
+            return View(clientVM);
         }
 
         // GET: Clients/Edit/5
@@ -83,12 +101,37 @@ namespace Licenta.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var client = await _context.Client.FindAsync(id);
+            var client = await _context.Client
+                .Include(b => b.SediuSocial)
+                .Include(b => b.ClientFurnizori)
+                    .ThenInclude(b => b.Furnizor)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.ClientId == id);
+
             if (client == null)
             {
                 return NotFound();
             }
-            return View(client);
+
+            var clientFurnizori = _context.ClientFurnizor;
+            List<int> selectedFurnizors = new List<int>();
+
+            foreach (var item in clientFurnizori)
+            {
+                if (item.ClientId == client.ClientId)
+                {
+                    selectedFurnizors.Add(item.FurnizorId);
+                }
+            }
+
+            ClientVM clientVM = new ClientVM()
+            {
+                Client = client,
+                SelectedFurnizors = selectedFurnizors
+            };
+
+            ViewData["FurnizorId"] = new SelectList(_context.Furnizor, "FurnizorID", "Denumire");
+            return View(clientVM);
         }
 
         // POST: Clients/Edit/5
@@ -96,7 +139,7 @@ namespace Licenta.Areas.Admin.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClientId,Denumire,NrRegComertului,CodCAEN,TipFirma,CapitalSocial,CasaDeMarcat,TVA")] Client client)
+        public async Task<IActionResult> Edit(int id, [Bind("ClientId,Denumire,NrRegComertului,CodCAEN,TipFirma,CapitalSocial,CasaDeMarcat,TVA,ClientFurnizori")] Client client)
         {
             if (id != client.ClientId)
             {
@@ -109,6 +152,7 @@ namespace Licenta.Areas.Admin.Controllers
                 {
                     _context.Update(client);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -121,8 +165,8 @@ namespace Licenta.Areas.Admin.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
+            ViewData["FurnizorId"] = new SelectList(_context.Furnizor, "FurnizorID", "Denumire");
             return View(client);
         }
 
@@ -161,11 +205,30 @@ namespace Licenta.Areas.Admin.Controllers
         }
 
         // API CALLS
+        #region
         [HttpGet]
         public IActionResult GetAll()
         {
-            var allObj = _context.Client.Include(c => c.SediuSocial).Include(c => c.ClientFurnizori).ToList();
+            var allObj = _context.Client.Include(c => c.SediuSocial).Include(c => c.ClientFurnizori).ThenInclude(c => c.Furnizor).ToList();
             return Json(new { data = allObj });
         }
+
+        [HttpDelete]
+        public IActionResult DeleteAPI(int id)
+        {
+            Client client = _context.Client.Find(id);
+            if (client == null)
+            {
+                return Json(new { success = false, message = "Eroare la stergerea clientului!" });
+            }
+            else
+            {
+                _context.Remove(client);
+                _context.SaveChanges();
+                return Json(new { success = true, message = "Client sters cu succes!" });
+            }
+        }
+        #endregion
+
     }
 }

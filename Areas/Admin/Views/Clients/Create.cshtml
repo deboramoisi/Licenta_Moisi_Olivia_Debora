@@ -1,4 +1,4 @@
-﻿@model Licenta.Models.Client
+﻿@model Licenta.ViewModels.ClientVM
 
 @{
     ViewData["Title"] = "Create";
@@ -13,76 +13,82 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Denumire" class="control-label font-weight-bold"></label>
-                <input asp-for="Denumire" class="form-control" />
-                <span asp-validation-for="Denumire" class="text-danger"></span>
+                <label asp-for="Client.Denumire" class="control-label font-weight-bold"></label>
+                <input asp-for="Client.Denumire" class="form-control" />
+                <span asp-validation-for="Client.Denumire" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="NrRegComertului" class="control-label font-weight-bold"></label>
-                <input asp-for="NrRegComertului" class="form-control" />
-                <span asp-validation-for="NrRegComertului" class="text-danger"></span>
+                <label asp-for="Client.NrRegComertului" class="control-label font-weight-bold"></label>
+                <input asp-for="Client.NrRegComertului" class="form-control" />
+                <span asp-validation-for="Client.NrRegComertului" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CodCAEN" class="control-label font-weight-bold"></label>
-                <input asp-for="CodCAEN" class="form-control" />
-                <span asp-validation-for="CodCAEN" class="text-danger"></span>
+                <label asp-for="Client.CodCAEN" class="control-label font-weight-bold"></label>
+                <input asp-for="Client.CodCAEN" class="form-control" />
+                <span asp-validation-for="Client.CodCAEN" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TipFirma" class="control-label font-weight-bold"></label>
+                <label asp-for="Client.TipFirma" class="control-label font-weight-bold"></label>
                 @* Radio Button for Tip firma *@
                 <p>
                     Persoana Fizica
-                    @Html.RadioButtonFor(model => model.TipFirma, "Persoana Fizica")
+                    @Html.RadioButtonFor(model => model.Client.TipFirma, "Persoana Fizica")
                 </p>
 
                 <p>
                     Persoana Juridica
-                    @Html.RadioButtonFor(model => model.TipFirma, "Persoana juridica")
+                    @Html.RadioButtonFor(model => model.Client.TipFirma, "Persoana juridica")
                 </p>
-                <span asp-validation-for="TipFirma" class="text-danger"></span>
+                <span asp-validation-for="Client.TipFirma" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CapitalSocial" class="control-label font-weight-bold"></label>
-                <input asp-for="CapitalSocial" class="form-control" />
-                <span asp-validation-for="CapitalSocial" class="text-danger"></span>
+                <label asp-for="Client.CapitalSocial" class="control-label font-weight-bold"></label>
+                <input asp-for="Client.CapitalSocial" class="form-control" />
+                <span asp-validation-for="Client.CapitalSocial" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CasaDeMarcat" class="control-label font-weight-bold"></label>
+                <label asp-for="Client.CasaDeMarcat" class="control-label font-weight-bold"></label>
                 @* Radio Button for Casa de marcat *@
                 <p>
                     Da
-                    @Html.RadioButtonFor(model => model.CasaDeMarcat, "Da")
+                    @Html.RadioButtonFor(model => model.Client.CasaDeMarcat, "Da")
                 </p>
 
                 <p>
                     Nu
-                    @Html.RadioButtonFor(model => model.CasaDeMarcat, "Nu")
+                    @Html.RadioButtonFor(model => model.Client.CasaDeMarcat, "Nu")
                 </p>
-                <span asp-validation-for="CasaDeMarcat" class="text-danger"></span>
+                <span asp-validation-for="Client.CasaDeMarcat" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TVA" class="control-label font-weight-bold"></label>
+                <label asp-for="Client.TVA" class="control-label font-weight-bold"></label>
                 @* Radio Button for TVA *@
                 <p>
                     Lunar
-                    @Html.RadioButtonFor(model => model.TVA, "Lunar")
+                    @Html.RadioButtonFor(model => model.Client.TVA, "Lunar")
                 </p>
 
                 <p>
                     Trimestrial
-                    @Html.RadioButtonFor(model => model.TVA, "Trimestrial")
+                    @Html.RadioButtonFor(model => model.Client.TVA, "Trimestrial")
                 </p>
 
                 <p>
                     Neplatitor
-                    @Html.RadioButtonFor(model => model.TVA, "Neplatitor")
+                    @Html.RadioButtonFor(model => model.Client.TVA, "Neplatitor")
                 </p>
 
                 <p>
                     TVA colectata la incasare
-                    @Html.RadioButtonFor(model => model.TVA, "TVA colectata la incasare")
+                    @Html.RadioButtonFor(model => model.Client.TVA, "TVA colectata la incasare")
                 </p>
-                <span asp-validation-for="TVA" class="text-danger"></span>
+                <span asp-validation-for="Client.TVA" class="text-danger"></span>
+            </div>
+            @* Select multiple furnizori, folosim ClientVM pentru a actualiza tabela Clienti + ClientiFurnizori *@
+            <div class="form-group">
+                <label asp-for="SelectedFurnizors"></label>
+                <select asp-for="SelectedFurnizors" class="form-control" asp-items="ViewBag.FurnizorId" multiple></select>
+                <span asp-validation-for="SelectedFurnizors" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

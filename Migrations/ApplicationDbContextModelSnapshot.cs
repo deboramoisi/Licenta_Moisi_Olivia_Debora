@@ -4,16 +4,14 @@ using Licenta.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Licenta.Data.Migrations
+namespace Licenta.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201229113837_ModificariClient")]
-    partial class ModificariClient
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,23 +33,66 @@ namespace Licenta.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CodCAEN")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Denumire")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NrRegComertului")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TVA")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TipFirma")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ClientId");
 
                     b.ToTable("Client");
+                });
+
+            modelBuilder.Entity("Licenta.Models.ClientFurnizor", b =>
+                {
+                    b.Property<int>("ClientFurnizorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FurnizorId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ClientFurnizorId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("FurnizorId");
+
+                    b.ToTable("ClientFurnizor");
+                });
+
+            modelBuilder.Entity("Licenta.Models.Furnizor", b =>
+                {
+                    b.Property<int>("FurnizorID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Denumire")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("FurnizorID");
+
+                    b.ToTable("Furnizor");
                 });
 
             modelBuilder.Entity("Licenta.Models.SediuSocial", b =>
@@ -77,9 +118,11 @@ namespace Licenta.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Judet")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Localitate")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Numar")
@@ -92,6 +135,7 @@ namespace Licenta.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Strada")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telefon")
@@ -302,6 +346,21 @@ namespace Licenta.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Licenta.Models.ClientFurnizor", b =>
+                {
+                    b.HasOne("Licenta.Models.Client", "Client")
+                        .WithMany("ClientFurnizori")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Licenta.Models.Furnizor", "Furnizor")
+                        .WithMany("ClientFurnizori")
+                        .HasForeignKey("FurnizorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Licenta.Models.SediuSocial", b =>

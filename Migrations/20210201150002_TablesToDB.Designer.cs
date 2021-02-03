@@ -7,17 +7,17 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Licenta.Data.Migrations
+namespace Licenta.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201229095039_ClientToDb")]
-    partial class ClientToDb
+    [Migration("20210201150002_TablesToDB")]
+    partial class TablesToDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.9")
+                .HasAnnotation("ProductVersion", "3.1.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -28,10 +28,28 @@ namespace Licenta.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<double>("CapitalSocial")
+                        .HasColumnType("float");
+
+                    b.Property<string>("CasaDeMarcat")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CodCAEN")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Denumire")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NrRegComertului")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TVA")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TipFirma")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ClientId");
@@ -39,26 +57,64 @@ namespace Licenta.Data.Migrations
                     b.ToTable("Client");
                 });
 
+            modelBuilder.Entity("Licenta.Models.ClientFurnizor", b =>
+                {
+                    b.Property<int>("ClientFurnizorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FurnizorId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ClientFurnizorId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("FurnizorId");
+
+                    b.ToTable("ClientFurnizor");
+                });
+
+            modelBuilder.Entity("Licenta.Models.Furnizor", b =>
+                {
+                    b.Property<int>("FurnizorID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Denumire")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("FurnizorID");
+
+                    b.ToTable("Furnizor");
+                });
+
             modelBuilder.Entity("Licenta.Models.SediuSocial", b =>
                 {
                     b.Property<int>("SediuSocialId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Ap")
+                    b.Property<int?>("Ap")
                         .HasColumnType("int");
 
                     b.Property<string>("Bl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CodPostal")
-                        .HasColumnType("int")
+                    b.Property<string>("CodPostal")
+                        .HasColumnType("nvarchar(6)")
                         .HasMaxLength(6);
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Et")
+                    b.Property<int?>("Et")
                         .HasColumnType("int");
 
                     b.Property<string>("Judet")
@@ -70,10 +126,10 @@ namespace Licenta.Data.Migrations
                     b.Property<string>("Numar")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Sc")
+                    b.Property<int?>("Sc")
                         .HasColumnType("int");
 
-                    b.Property<int>("Sector")
+                    b.Property<int?>("Sector")
                         .HasColumnType("int");
 
                     b.Property<string>("Strada")
@@ -287,6 +343,21 @@ namespace Licenta.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Licenta.Models.ClientFurnizor", b =>
+                {
+                    b.HasOne("Licenta.Models.Client", "Client")
+                        .WithMany("ClientFurnizori")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Licenta.Models.Furnizor", "Furnizor")
+                        .WithMany("ClientFurnizori")
+                        .HasForeignKey("FurnizorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Licenta.Models.SediuSocial", b =>

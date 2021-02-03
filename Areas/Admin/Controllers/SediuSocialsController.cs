@@ -83,7 +83,7 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["SediuSocialId"] = new SelectList(_context.Client, "ClientId", "ClientId", sediuSocial.SediuSocialId);
+            ViewData["SediuSocialId"] = new SelectList(_context.Client, "ClientId", "Denumire", sediuSocial.SediuSocialId);
             return View(sediuSocial);
         }
 
@@ -119,7 +119,7 @@ namespace Licenta.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SediuSocialId"] = new SelectList(_context.Client, "ClientId", "ClientId", sediuSocial.SediuSocialId);
+            ViewData["SediuSocialId"] = new SelectList(_context.Client, "ClientId", "Denumire", sediuSocial.SediuSocialId);
             return View(sediuSocial);
         }
 
