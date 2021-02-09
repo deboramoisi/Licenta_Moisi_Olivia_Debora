@@ -17,9 +17,20 @@ function loadDataTable() {
             { "data": "tipFirma" },
             { "data": "capitalSocial" },
             { "data": "tva" },
-            { "data": "sediuSocial.telefon" },
+            {
+                "data": "sediuSocial.telefon",
+                "render": function (data) {
+                    if (data != null || data != undefined || data != "") {
+                        return `${data}`;
+                    }
+                    else {
+                        return `<i>Not set yet</i>`;
+                    }
+                }
+            },
             { "data": "sediuSocial.email" },
-            { "data": "clientFurnizori" },
+            { "data": "clientFurnizori.furnizorId",
+            },
             {
                 "data": "clientId",
                 "render": function (data) {
