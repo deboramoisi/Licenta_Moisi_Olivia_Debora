@@ -16,7 +16,10 @@ function loadDataTable() {
             { "data": "prenume" },
             { "data": "pozitie" },
             { "data": "dataAngajare" },
-            { "data": "dataConcediere" },
+            {
+                "data": "dataConcediere",
+                "defaultContent": "<i>Not set</i>"
+            },
             {
                 "data": "salariatId",
                 "render": function (data) {

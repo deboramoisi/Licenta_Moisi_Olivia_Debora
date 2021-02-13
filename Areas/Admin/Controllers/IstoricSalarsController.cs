@@ -51,7 +51,7 @@ namespace Licenta.Areas.Admin.Views
         public IActionResult Create()
         {
             ViewData["SalariatId"] = new SelectList(_context.Salariat, "SalariatId", "NumePrenume");
-            return View();
+            return PartialView("_IstoricSalarModalPartial");
         }
 
         // POST: Admin/IstoricSalars/Create
@@ -157,5 +157,31 @@ namespace Licenta.Areas.Admin.Views
         {
             return _context.IstoricSalar.Any(e => e.IstoricSalarId == id);
         }
+
+        // API CALLS
+        #region
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var allObj = _context.IstoricSalar.Include(c => c.Salariat).ToList();
+            return Json(new { data = allObj });
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteAPI(int id)
+        {
+            IstoricSalar istoricSalar= _context.IstoricSalar.Find(id);
+            if (istoricSalar == null)
+            {
+                return Json(new { success = false, message = "Eroare la stergerea salariului!" });
+            }
+            else
+            {
+                _context.Remove(istoricSalar);
+                _context.SaveChanges();
+                return Json(new { success = true, message = "Salariu sters cu succes!" });
+            }
+        }
+        #endregion
     }
 }
