@@ -16,58 +16,35 @@
 </div>
 <br />
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ClientId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Nume)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Prenume)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Pozitie)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataAngajare)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataConcediere)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Client.Denumire)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nume)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Prenume)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Pozitie)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataAngajare)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataConcediere)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.SalariatId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.SalariatId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.SalariatId">Delete</a>
-            </td>
-        </tr>
-        }
-    </tbody>
-</table>
+<div class="table-responsive-md p-4 rounded border">
+
+    <table class="table table-hover" id="tblData">
+        <thead>
+            <tr class="thead-dark">
+                <th>
+                    @Html.DisplayNameFor(model => model.ClientId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nume)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Prenume)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Pozitie)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DataAngajare)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DataConcediere)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="~/js/salariat.js"></script>
+}

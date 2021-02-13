@@ -35,6 +35,7 @@ namespace Licenta.Areas.Admin.Controllers
             }
 
             var salariat = await _context.Salariat
+                .Include(c => c.Client)
                 .FirstOrDefaultAsync(m => m.SalariatId == id);
             if (salariat == null)
             {
@@ -81,6 +82,7 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", salariat.ClientId);
             return View(salariat);
         }
 
@@ -89,7 +91,7 @@ namespace Licenta.Areas.Admin.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SalariatId,Nume,Prenume,Pozitie,DataAngajare,DataConcediere")] Salariat salariat)
+        public async Task<IActionResult> Edit(int id, [Bind("SalariatId,Nume,Prenume,Pozitie,DataAngajare,DataConcediere,ClientId")] Salariat salariat)
         {
             if (id != salariat.SalariatId)
             {
@@ -116,6 +118,7 @@ namespace Licenta.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", salariat.ClientId);
             return View(salariat);
         }
 
@@ -152,5 +155,31 @@ namespace Licenta.Areas.Admin.Controllers
         {
             return _context.Salariat.Any(e => e.SalariatId == id);
         }
+
+        // API CALLS
+        #region
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var allObj = _context.Salariat.Include(c => c.Client).Include(c => c.IstoricSalar).ToList();
+            return Json(new { data = allObj });
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteAPI(int id)
+        {
+            Salariat salariat = _context.Salariat.Find(id);
+            if (salariat == null)
+            {
+                return Json(new { success = false, message = "Eroare la stergerea salariatului!" });
+            }
+            else
+            {
+                _context.Remove(salariat);
+                _context.SaveChanges();
+                return Json(new { success = true, message = "Salariat sters cu succes!" });
+            }
+        }
+        #endregion
     }
 }

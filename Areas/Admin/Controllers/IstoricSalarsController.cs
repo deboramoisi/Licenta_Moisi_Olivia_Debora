@@ -23,7 +23,9 @@ namespace Licenta.Areas.Admin.Views
         // GET: Admin/IstoricSalars
         public async Task<IActionResult> Index()
         {
-            return View(await _context.IstoricSalar.ToListAsync());
+            return View(await _context.IstoricSalar
+                .Include(c => c.Salariat)
+                .ToListAsync());
         }
 
         // GET: Admin/IstoricSalars/Details/5
@@ -35,6 +37,7 @@ namespace Licenta.Areas.Admin.Views
             }
 
             var istoricSalar = await _context.IstoricSalar
+                .Include(c => c.Salariat)
                 .FirstOrDefaultAsync(m => m.IstoricSalarId == id);
             if (istoricSalar == null)
             {
@@ -47,6 +50,7 @@ namespace Licenta.Areas.Admin.Views
         // GET: Admin/IstoricSalars/Create
         public IActionResult Create()
         {
+            ViewData["SalariatId"] = new SelectList(_context.Salariat, "SalariatId", "NumePrenume");
             return View();
         }
 
@@ -63,6 +67,7 @@ namespace Licenta.Areas.Admin.Views
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["SalariatId"] = new SelectList(_context.Salariat, "SalariatId", "NumePrenume");
             return View(istoricSalar);
         }
 
@@ -79,6 +84,7 @@ namespace Licenta.Areas.Admin.Views
             {
                 return NotFound();
             }
+            ViewData["SalariatId"] = new SelectList(_context.Salariat, "SalariatId", "NumePrenume", istoricSalar.SalariatId);
             return View(istoricSalar);
         }
 
@@ -114,6 +120,7 @@ namespace Licenta.Areas.Admin.Views
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["SalariatId"] = new SelectList(_context.Salariat, "SalariatId", "NumePrenume", istoricSalar.SalariatId);
             return View(istoricSalar);
         }
 

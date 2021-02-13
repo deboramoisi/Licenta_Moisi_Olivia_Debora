@@ -43,6 +43,7 @@ namespace Licenta.Areas.Admin.Controllers
             var client = await _context.Client
                 // Includem detalii din Sediu Social
                 .Include(b => b.SediuSocial)
+                .Include(b => b.Salariati)
                 .Include(b => b.ClientFurnizori)
                                 .ThenInclude(b => b.Furnizor)
                 .FirstOrDefaultAsync(m => m.ClientId == id);

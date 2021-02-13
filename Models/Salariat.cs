@@ -20,7 +20,7 @@ namespace Licenta.Models
         [Required]
         public string Pozitie { get; set; }
         
-        [Required, DataType(DataType.Date),Display(Name = "Data Angajare")]
+        [Required, DataType(DataType.Date), Display(Name = "Data Angajare"), DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime DataAngajare { get; set; }
         
         [DataType(DataType.Date), Display(Name = "Data concediere")]
@@ -31,8 +31,19 @@ namespace Licenta.Models
 
         [ForeignKey("Client"), Display(Name = "Client")]
         public int ClientId { get; set; }
-        
+
         // Navigation Property Client
         public Client Client { get; set; }
+
+        // Nume complet pentru select list sau diferite afisari
+        [NotMapped]
+        [Display(Name = "Nume Prenume")]
+        public string NumePrenume
+        {
+            get
+            {
+                return Nume + " " + Prenume;
+            }
+        }
     }
 }

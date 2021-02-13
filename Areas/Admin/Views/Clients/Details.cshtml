@@ -71,15 +71,42 @@
             @Html.DisplayNameFor(model => model.ClientFurnizori)
         </dt>
         <dd class="col-sm-10">
-                @{
-                    foreach (var furnizor in Model.ClientFurnizori)
+            @{
+                foreach (var furnizor in Model.ClientFurnizori)
+                {
+                    if (furnizor.Furnizor != null)
                     {
-                        if (furnizor.Furnizor != null)
-                        {
-                           @furnizor.Furnizor.Denumire <br />
-                        }
+                        @furnizor.Furnizor.Denumire <br />
                     }
                 }
+            }
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Salariati)
+        </dt>
+        <dd class="col-sm-10">
+            <table class="table-bordered p-2">
+                <thead>
+                    <tr>
+                        <th class="p-2">Nume Prenume</th>
+                        <th class="p-2">Pozitie</th>
+                        <th class="p-2">Salariu</th>
+                    </tr>
+                </thead>
+                <tbody>
+            @{
+                foreach (var salariat in Model.Salariati)
+                {
+                    <tr>
+                        <td class="p-2">@salariat.NumePrenume </td>
+                        <td class="p-2">@salariat.Pozitie </td>
+                        <td class="p-2"></td>
+                    </tr>
+                }
+            }
+                </tbody>
+            </table>
         </dd>
 
 
