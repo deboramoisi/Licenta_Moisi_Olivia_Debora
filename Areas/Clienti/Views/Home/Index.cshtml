@@ -2,19 +2,70 @@
     ViewData["Title"] = "Contsal";
 }
 
-<section id="banner-area">
+<section class="m-0">
+    <section id="banner-area">
 
-    <div class="owl-carousel owl-theme">
+        <div class="owl-carousel owl-theme">
 
-        <div class="item">
-            <img src="~/img/Accounting-Banner1.png" alt="Accounting Banner">
+            <div class="item">
+                <img src="~/img/Accounting-Banner1.png" alt="Accounting Banner">
+            </div>
+
+            <div class="item">
+                <img src="~/img/accounting2.jpg" alt="Accounting picture 2">
+            </div>
+
         </div>
 
-        <div class="item">
-            <img src="~/img/accounting2.jpg" alt = "Accounting picture 2">
+    </section>
+
+    <div style="margin-top: 40px"></div>
+
+    <section id="services">
+        <div>
+            <h1 class="text-center">Servicii</h1>
         </div>
+    </section>
 
-    </div>
-
+    <!-- Intro -->
+    <section id="services" style="margin:auto">
+        <div class="mt-5 services">
+            <div class="services_box">
+                <img class="services_img" src="https://www.alvordschools.org/cms/lib/CA01900929/Centricity/Domain/1211/resources.jpg" alt="Card image cap">
+                <div class="card-body">
+                    <h4 class="card-title text-center">Gestionare resurse</h4>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <center><a href="#" class="card-link btn btn-primary text-center">Read more</a></center>
+                </div>
+            </div>
+            <div class="services_box">
+                <img class="card-img-top" src="https://santoracpagroup.com/wp-content/uploads/2017/05/santore_accounting.jpg" alt="Card image cap">
+                <div class="card-body">
+                    <h4 class="card-title text-center">Contabilitate si gestiunea afacerii</h4>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <center><a href="#" class="card-link btn btn-primary text-center">Read more</a></center>
+                </div>
+            </div>
+            <div class="services_box">
+                <img class="services_img" src="https://digital.hbs.edu/platform-digit/wp-content/uploads/sites/2/2018/04/accounting-fraud.jpg" alt="Card image cap">
+                <div class="card-body">
+                    <h4 class="card-title text-center">Intocmire situatii si declaratii</h4>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <center><a href="#" class="card-link btn btn-primary text-center">Read more</a></center>
+                </div>
+            </div>
+            <div class="services_box">
+                <img class="services_img" src="http://assets.nerdwallet.com/blog/wp-content/uploads/2015/10/8-student-faqs-about-taxes.jpg" alt="Card image cap">
+                <div class="card-body">
+                    <h4 class="card-title text-center">Administrarea taxelor si impozitelor</h4>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <center><a href="#" class="card-link btn btn-primary text-center">Read more</a></center>
+                </div>
+            </div>
+        </div>
+    </section>
 </section>
 
+@section Styles {
+    <link href="~/css/home.css" rel="stylesheet" type="text/css" />
+}

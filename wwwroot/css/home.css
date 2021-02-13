@@ -1,0 +1,24 @@
+﻿.services {
+    display: flex;
+    flex-wrap: wrap; 
+    align-items: center;
+    justify-content: center;
+}
+
+.services_box {
+    padding: 4px;
+    background: #efe9e9;
+    margin: 10px 10px 20px 10px;
+    width: 255px;
+    height: 350px;
+    border-radius: 5px 5px;
+}
+
+.services_img {
+    width: 247px;
+    height: 90px;
+}
+
+.card-title {
+    font-style: italic;
+}

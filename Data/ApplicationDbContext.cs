@@ -19,5 +19,7 @@ namespace Licenta.Data
         public DbSet<SediuSocial> SediuSocial { get; set; }
         public DbSet<Furnizor> Furnizor { get; set; }
         public DbSet<ClientFurnizor> ClientFurnizor { get; set; }
+        public DbSet<Salariat> Salariat { get; set; }
+        public DbSet<IstoricSalar> IstoricSalar { get; set; }
     }
 }

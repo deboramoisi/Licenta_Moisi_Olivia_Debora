@@ -19,18 +19,14 @@ function loadDataTable() {
             { "data": "tva" },
             {
                 "data": "sediuSocial.telefon",
-                "render": function (data) {
-                    if (data != null || data != undefined || data != "") {
-                        return `${data}`;
-                    }
-                    else {
-                        return `<i>Not set yet</i>`;
-                    }
-                }
+                "defaultContent": "<i>Not set</i>"
             },
-            { "data": "sediuSocial.email" },
-            { "data": "clientFurnizori.furnizorId",
+            {
+                "data": "sediuSocial.email",
+                "defaultContent": "<i>Not set</i>"
             },
+            {
+                "data": "clientFurnizori" },
             {
                 "data": "clientId",
                 "render": function (data) {
