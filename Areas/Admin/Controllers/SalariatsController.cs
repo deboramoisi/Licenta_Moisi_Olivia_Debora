@@ -23,7 +23,7 @@ namespace Licenta.Areas.Admin.Controllers
         // GET: Admin/Salariats
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Salariat.ToListAsync());
+            return View(await _context.Salariat.Include(c => c.Client).ToListAsync());
         }
 
         // GET: Admin/Salariats/Details/5
@@ -47,6 +47,7 @@ namespace Licenta.Areas.Admin.Controllers
         // GET: Admin/Salariats/Create
         public IActionResult Create()
         {
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire");
             return View();
         }
 
@@ -55,7 +56,7 @@ namespace Licenta.Areas.Admin.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SalariatId,Nume,Prenume,Pozitie,DataAngajare,DataConcediere")] Salariat salariat)
+        public async Task<IActionResult> Create([Bind("SalariatId,Nume,Prenume,Pozitie,DataAngajare,DataConcediere,ClientId")] Salariat salariat)
         {
             if (ModelState.IsValid)
             {
@@ -63,6 +64,7 @@ namespace Licenta.Areas.Admin.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire");
             return View(salariat);
         }
 

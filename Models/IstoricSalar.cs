@@ -11,13 +11,20 @@ namespace Licenta.Models
     {
         [Display(Name = "Istoric Salar")]
         public int IstoricSalarId { get; set; }
+
         [ForeignKey("Salariat"), Display(Name = "Salariat")]
         public int SalariatId { get; set; }
+        
         [Required, DataType(DataType.Date), Display(Name = "Data incepere contract")]
         public DateTime DataInceput { get; set; }
+        
         [DataType(DataType.Date), Display(Name = "Data sfarsit contract")]
-        public DateTime DataSfarsit { get; set; }
+        public DateTime? DataSfarsit { get; set; }
+        
         [Required]
         public float Salariu { get; set; }
+        
+        // Navigation Property Salariat
+        public Salariat Salariat { get; set; }
     }
 }

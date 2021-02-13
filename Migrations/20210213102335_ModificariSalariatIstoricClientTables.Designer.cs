@@ -4,14 +4,16 @@ using Licenta.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Licenta.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210213102335_ModificariSalariatIstoricClientTables")]
+    partial class ModificariSalariatIstoricClientTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,7 +107,7 @@ namespace Licenta.Migrations
                     b.Property<DateTime>("DataInceput")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DataSfarsit")
+                    b.Property<DateTime>("DataSfarsit")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("SalariatId")
@@ -134,7 +136,7 @@ namespace Licenta.Migrations
                     b.Property<DateTime>("DataAngajare")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DataConcediere")
+                    b.Property<DateTime>("DataConcediere")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Nume")

@@ -44,6 +44,8 @@ namespace Licenta.Models
         [Display(Name = "Furnizori")]
         // Navigation Property Furnizor m:n (ClientiFurnizori n:1)
         public ICollection<ClientFurnizor> ClientFurnizori { get; set; }
-
+        
+        // Navigation Property Salariati n:1 
+        public ICollection<Salariat> Salariati { get; set; }
     }
 }
