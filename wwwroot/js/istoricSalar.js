@@ -14,7 +14,10 @@ function loadDataTable() {
             { "data": "salariat.numePrenume" },
             { "data": "salariat.pozitie" },
             { "data": "dataInceput" },
-            { "data": "dataSfarsit" },
+            {
+                "data": "dataSfarsit",
+                "defaultContent": "<i>Not set</i>"
+            },
             { "data": "salariu" },
             {
                 "data": "istoricSalarId",

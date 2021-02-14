@@ -14,7 +14,16 @@ function loadDataTable() {
             { "data": "denumire" },
             { "data": "nrRegComertului" },
             { "data": "codCAEN" },
-            { "data": "tipFirma" },
+            {
+                "data": "tipFirma",
+                "render": function (data) {
+                    if (data == "Persoana fizica") {
+                        return `PF`;
+                    } else if (data == "Persoana juridica") {
+                        return `PJ`;
+                    }
+                }
+            },
             { "data": "capitalSocial" },
             { "data": "tva" },
             {
@@ -26,7 +35,20 @@ function loadDataTable() {
                 "defaultContent": "<i>Not set</i>"
             },
             {
-                "data": "clientFurnizori" },
+                "data": "clientFurnizori",
+                "defaultContent": "<i>Not set yet</i>",
+                "render": function (data) {
+                    var item = "";
+                    for (var i = 0; i < data.length; i++) {
+                        if (i == data.length - 1) {
+                            item += data[i].furnizor.denumire;
+                        } else {
+                            item += data[i].furnizor.denumire + ",";
+                        }
+                    }
+                    return item;
+                }
+            },
             {
                 "data": "clientId",
                 "render": function (data) {
