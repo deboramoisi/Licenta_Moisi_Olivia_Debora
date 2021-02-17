@@ -2,7 +2,9 @@
 
 $(document).ready(function () {
     loadDataTable();
+    DatePicker();
 });
+
 
 function loadDataTable() {
     dataTable = $('#tblData').DataTable({
@@ -15,7 +17,12 @@ function loadDataTable() {
             { "data": "nume" },
             { "data": "prenume" },
             { "data": "pozitie" },
-            { "data": "dataAngajare" },
+            {
+                "data": "dataAngajare",
+                "render": function (data) {
+                    return moment(data).format('MMMM Do YYYY');
+                }
+            },
             {
                 "data": "dataConcediere",
                 "defaultContent": "<i>Not set</i>"
@@ -67,4 +74,13 @@ function Delete(url) {
             });
         }
     });
+}
+
+function DatePicker() {
+    $('input[class=date_year]').datepicker({
+        dateFormat: "dd/M/yy",
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-60:+0"
+    }); 
 }

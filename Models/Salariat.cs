@@ -23,9 +23,10 @@ namespace Licenta.Models
         [Required, DataType(DataType.Date), Display(Name = "Data Angajare"), DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime DataAngajare { get; set; }
         
-        [DataType(DataType.Date), Display(Name = "Data concediere")]
+        [DataType(DataType.Date), Display(Name = "Data concediere"), DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime? DataConcediere { get; set; }
         
+        [Display(Name = "Istoric Salar")]
         // Navigation Property Istoric Salar 
         public ICollection<IstoricSalar> IstoricSalar { get; set; }
 

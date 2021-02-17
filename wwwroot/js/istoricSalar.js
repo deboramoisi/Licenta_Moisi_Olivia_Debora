@@ -13,10 +13,18 @@ function loadDataTable() {
         "columns": [
             { "data": "salariat.numePrenume" },
             { "data": "salariat.pozitie" },
-            { "data": "dataInceput" },
+            {
+                "data": "dataInceput",
+                "render": function (data) {
+                    return moment(data).format('MMMM Do YYYY');
+                }
+            },
             {
                 "data": "dataSfarsit",
-                "defaultContent": "<i>Not set</i>"
+                "defaultContent": "<i>Not set</i>",
+                "render": function (data) {
+                    return moment(data).format('MMMM Do YYYY');
+                }
             },
             { "data": "salariu" },
             {

@@ -23,7 +23,7 @@ namespace Licenta.Areas.Admin.Controllers
         // GET: Admin/Salariats
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Salariat.Include(c => c.Client).ToListAsync());
+            return View(await _context.Salariat.Include(c => c.Client).Include(c => c.IstoricSalar).ToListAsync());
         }
 
         // GET: Admin/Salariats/Details/5
@@ -36,6 +36,7 @@ namespace Licenta.Areas.Admin.Controllers
 
             var salariat = await _context.Salariat
                 .Include(c => c.Client)
+                .Include(c => c.IstoricSalar)
                 .FirstOrDefaultAsync(m => m.SalariatId == id);
             if (salariat == null)
             {

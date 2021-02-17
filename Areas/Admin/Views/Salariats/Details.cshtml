@@ -9,35 +9,71 @@
 <div>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Nume)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Nume)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Prenume)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Prenume)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Pozitie)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Pozitie)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DataAngajare)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.DataAngajare)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DataConcediere)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DataConcediere)
+        <dd class="col-sm-10">
+            @{
+                if (Model.DataConcediere != null)
+                    Html.DisplayFor(model => model.DataConcediere);
+                else
+                {
+                    @:<span>-</span>
+                }
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IstoricSalar)
+        </dt>
+        <dd class="col-sm-10">
+            <table class="table table-sm table-bordered col-sm-6">
+                <thead class="thead-dark">
+                    <tr>
+                        <th class="p-2">Data inceput</th>
+                        <th class="p-2">Data sfarsit</th>
+                        <th class="p-2">Salariu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (Model.IstoricSalar?.Count > 0)
+                        { 
+                            foreach (var istoric in Model.IstoricSalar)
+                            {
+                                <tr>
+                                    <td class="p-2">@istoric.DataInceput </td>
+                                    <td class="p-2">@istoric.DataSfarsit </td>
+                                    <td class="p-2">@istoric.Salariu</td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
         </dd>
     </dl>
 </div>

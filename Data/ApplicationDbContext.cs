@@ -21,5 +21,6 @@ namespace Licenta.Data
         public DbSet<ClientFurnizor> ClientFurnizor { get; set; }
         public DbSet<Salariat> Salariat { get; set; }
         public DbSet<IstoricSalar> IstoricSalar { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     }
 }

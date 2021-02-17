@@ -17,10 +17,12 @@ function loadDataTable() {
             {
                 "data": "tipFirma",
                 "render": function (data) {
-                    if (data == "Persoana fizica") {
+                    if (data == "Persoana Fizica") {
                         return `PF`;
                     } else if (data == "Persoana juridica") {
                         return `PJ`;
+                    } else {
+                        return 'S.Coop';
                     }
                 }
             },
@@ -34,21 +36,21 @@ function loadDataTable() {
                 "data": "sediuSocial.email",
                 "defaultContent": "<i>Not set</i>"
             },
-            {
-                "data": "clientFurnizori",
-                "defaultContent": "<i>Not set yet</i>",
-                "render": function (data) {
-                    var item = "";
-                    for (var i = 0; i < data.length; i++) {
-                        if (i == data.length - 1) {
-                            item += data[i].furnizor.denumire;
-                        } else {
-                            item += data[i].furnizor.denumire + ",";
-                        }
-                    }
-                    return item;
-                }
-            },
+            //{
+            //    "data": "clientFurnizori",
+            //    "defaultContent": "<i>Not set yet</i>",
+            //    "render": function (data) {
+            //        var item = "";
+            //        for (var i = 0; i < data.length; i++) {
+            //            if (i == data.length - 1) {
+            //                item += data[i].furnizor.denumire;
+            //            } else {
+            //                item += data[i].furnizor.denumire + ",";
+            //            }
+            //        }
+            //        return item;
+            //    }
+            //},
             {
                 "data": "clientId",
                 "render": function (data) {

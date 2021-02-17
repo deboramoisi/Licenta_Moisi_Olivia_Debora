@@ -33,12 +33,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="DataAngajare" class="control-label"></label>
-                <input asp-for="DataAngajare" class="form-control" />
+                <input asp-for="DataAngajare" class="form-control date_year" />
                 <span asp-validation-for="DataAngajare" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DataConcediere" class="control-label"></label>
-                <input asp-for="DataConcediere" class="form-control" />
+                <input asp-for="DataConcediere" class="form-control date_year" />
                 <span asp-validation-for="DataConcediere" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -53,5 +53,7 @@
 </div>
 
 @section Scripts {
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="~/js/salariat.js"></script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
