@@ -87,6 +87,7 @@ namespace Licenta.Areas.Identity.Pages.Account
 
             // Exista si utilizatori individuali care nu apartin unei companii
             // Clienti care doresc doar consultatii
+            [Display(Name = "Selectati firma apartinatoare")]
             public int? ClientId { get; set; }
 
             // pentru dropdown clienti
@@ -190,7 +191,7 @@ namespace Licenta.Areas.Identity.Pages.Account
                         else
                         {
                             // admin-ul adauga noi Useri si il redirectionam spre lista cu toti Userii
-                            return RedirectToAction("Index", "User", new { Area = "Admin"});
+                            return RedirectToAction("Index", "ApplicationUsers", new { Area = "Admin"});
                         }
                     }
                 }
