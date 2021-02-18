@@ -7,10 +7,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Licenta.Data;
 using Licenta.Models;
+using Licenta.Utility;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Licenta.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = ConstantVar.Rol_Admin + "," + ConstantVar.Rol_Admin_Firma)]
+
     public class SalariatsController : Controller
     {
         private readonly ApplicationDbContext _context;

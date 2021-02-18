@@ -40,10 +40,26 @@ namespace Licenta
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
             services.AddRazorPages();
-            
+            // Pentru autorizare
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = $"/Identity/Account/Login";
+                options.LogoutPath = $"/Identity/Account/Logout";
+                options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+            });
+            // serviciu de autentificare folosind facebook
+            services.AddAuthentication().AddFacebook(options =>
+            {
+                options.AppId = "466176558139835";
+                options.AppSecret = "f0dbe3c21dd052fae97744ea9babcbc7";
+            });
+            // serviciu de autentificare folosind Google
+            services.AddAuthentication().AddGoogle(options =>
+            {
+                options.ClientId = "827539349601-15h9pfogf11vm5h9ou58virjt6qf8pfj.apps.googleusercontent.com";
+                options.ClientSecret = "zMxhfOPRE6-qm219iagk3wX_";
+            });
 
-            //services.AddDbContext<LicentaContext>(options =>
-            //        options.UseSqlServer(Configuration.GetConnectionString("LicentaContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

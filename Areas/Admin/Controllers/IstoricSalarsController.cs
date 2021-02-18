@@ -7,10 +7,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Licenta.Data;
 using Licenta.Models;
+using Microsoft.AspNetCore.Authorization;
+using Licenta.Utility;
 
 namespace Licenta.Areas.Admin.Views
 {
     [Area("Admin")]
+    [Authorize(Roles = ConstantVar.Rol_Admin + "," + ConstantVar.Rol_Admin_Firma)]
     public class IstoricSalarsController : Controller
     {
         private readonly ApplicationDbContext _context;

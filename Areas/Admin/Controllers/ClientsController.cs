@@ -8,10 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using Licenta.Data;
 using Licenta.Models;
 using Licenta.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Licenta.Utility;
 
 namespace Licenta.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = ConstantVar.Rol_Admin)]
     public class ClientsController : Controller
     {
         private readonly ApplicationDbContext _context;

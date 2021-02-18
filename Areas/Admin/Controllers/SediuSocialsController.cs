@@ -7,10 +7,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Licenta.Data;
 using Licenta.Models;
+using Microsoft.AspNetCore.Authorization;
+using Licenta.Utility;
 
 namespace Licenta.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = ConstantVar.Rol_Admin)]
+
     public class SediuSocialsController : Controller
     {
         private readonly ApplicationDbContext _context;

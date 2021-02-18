@@ -8,10 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using Licenta.Data;
 using Licenta.Models;
 using Licenta.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Licenta.Utility;
 
 namespace Licenta.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = ConstantVar.Rol_Admin)]
     public class ApplicationUsersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -73,6 +76,30 @@ namespace Licenta.Areas.Admin.Controllers
                 return Json(new { success = true, message = "User sters cu succes!" });
             }
         }
+
+        [HttpPost]
+        // [Route("/Admin/ApplicationUsers/LockUnlock")]
+        public IActionResult LockUnlock([FromBody] string id)
+        {
+            ApplicationUser applicationUser = _context.ApplicationUsers.FirstOrDefault(m => m.Id == id);
+            if (applicationUser == null)
+            {
+                return Json(new { success = false, message = "Error while Locking/Unlocking!" });
+            }
+            if (applicationUser.LockoutEnd != null && applicationUser.LockoutEnd > DateTime.Now)
+            {
+                // user is currently locked, we will unlock them
+                applicationUser.LockoutEnd = DateTime.Now;
+            }
+            else
+            {
+                // user is unlocked, we will lock them
+                applicationUser.LockoutEnd = DateTime.Now.AddYears(1000);
+            }
+            _context.SaveChanges();
+            return Json(new { success = true, message = "Operation Successful!" });
+        }
+
         #endregion
 
     }

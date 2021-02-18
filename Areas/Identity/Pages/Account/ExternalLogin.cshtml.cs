@@ -6,6 +6,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Licenta.Models;
+using Licenta.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -51,6 +53,15 @@ namespace Licenta.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+            
+            [Display(Name = "Telefon")]
+            public string PhoneNumber { get; set; }
+
+            [RegularExpression(@"^[A-Z][a-z]+\s[A-Z][a-z]+$", ErrorMessage = "Numele trebuie sa fie de tip: 'Nume Prenume'. Va rugam reincercati."), Required, StringLength(50, MinimumLength = 3)]
+            public string Nume { get; set; }
+
+            [Required, StringLength(50, MinimumLength = 3, ErrorMessage = "Pozitia ocupata in firma trebuie sa fie de minim 3 caractere."), Display(Name = "Pozitie ocupata")]
+            public string PozitieFirma { get; set; }
         }
 
         public IActionResult OnGetAsync()
@@ -101,7 +112,9 @@ namespace Licenta.Areas.Identity.Pages.Account
                 {
                     Input = new InputModel
                     {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                        Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                        // Nume va fi populat, preluat de la facebook si user-ul nu va mai trebui sa il introduca
+                        Nume = info.Principal.FindFirstValue(ClaimTypes.Name)
                     };
                 }
                 return Page();
@@ -121,11 +134,22 @@ namespace Licenta.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
-
+                // var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
+                // creare ApplicationUser, nu IdentityUser - avem proprietati noi adaugate
+                // clasa mosteneste IdentityUser
+                var user = new ApplicationUser
+                {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    PhoneNumber = Input.PhoneNumber,
+                    PozitieFirma = Input.PozitieFirma,
+                    Nume = Input.Nume
+                };
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
+                    // !!! asign a role - doar un user individual se poate inregistra/loga cu facebook!!!
+                    await _userManager.AddToRoleAsync(user, ConstantVar.Rol_User_Individual);
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
