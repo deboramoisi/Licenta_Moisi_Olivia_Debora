@@ -64,9 +64,6 @@ function LockUnlock(id) {
         url: '/Admin/ApplicationUsers/LockUnlock',
         data: JSON.stringify(id),
         contentType: "application/json",
-        // headers: {
-        //    "RequestVerificationToken": "@(antiForgeryToken)"
-        // },
         success: function (data) {
             if (data.success) {
                 toastr.success(data.message);

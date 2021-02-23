@@ -1,0 +1,37 @@
+﻿@model IndexModel
+
+<div class="modal fade" id="editProfilePic">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                @* titlu *@
+                <h4 class="modal-title" id="editProfilePicLabel">Modificare Poza de Profil</h4>
+                @* "X" pentru Close *@
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>x</span>
+                </button>
+            </div>
+
+            @* body: formular pentru creare istoric salar nou *@
+            <div class="modal-body">
+                <form asp-action="UpdateImage" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input asp-for="Username" hidden />
+                    <div class="form-group">
+                        <label asp-for="Input.ProfileImageUrl" class="control-label"></label>
+                        <input type="file" name="files" id="uploadBox" />
+                        <span asp-validation-for="Input.ProfileImageUrl" class="text-danger"></span>
+                    </div>
+                </form>
+            </div>
+
+            @* footer: buton de Save si Close *@
+            <div class="modal-footer">
+                <button type="button" class="close btn btn-primary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-save="modal">Save</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+

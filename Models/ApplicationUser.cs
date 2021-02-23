@@ -27,5 +27,8 @@ namespace Licenta.Models
         // Navigation Property
         [ForeignKey("ClientId")]
         public Client Client { get; set; }
+
+        public string Descriere { get; set; }
+        public string ProfileImageUrl { get; set; }
     }
 }

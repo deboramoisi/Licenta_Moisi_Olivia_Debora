@@ -78,7 +78,6 @@ namespace Licenta.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        // [Route("/Admin/ApplicationUsers/LockUnlock")]
         public IActionResult LockUnlock([FromBody] string id)
         {
             ApplicationUser applicationUser = _context.ApplicationUsers.FirstOrDefault(m => m.Id == id);

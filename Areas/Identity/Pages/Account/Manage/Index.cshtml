@@ -5,12 +5,20 @@
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
+@* div PlaceHolder contine cod markup modal (incarcat), trebuie sa atasam modala DOM-ului *@
+<div id="PlaceHolderHereModal"></div>
+
 <h4>@ViewData["Title"]</h4>
 <partial name="_StatusMessage" model="Model.StatusMessage" />
 <div class="row">
     <div class="col-md-6">
-        <form id="profile-form" method="post">
+        <form id="profile-form" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Input.Nume"></label>
+                <input asp-for="Input.Nume" class="form-control" />
+                <span asp-validation-for="Input.Nume" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Username"></label>
                 <input asp-for="Username" class="form-control" disabled />
@@ -20,11 +28,81 @@
                 <input asp-for="Input.PhoneNumber" class="form-control" />
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Input.PozitieFirma"></label>
+                <input asp-for="Input.PozitieFirma" class="form-control" />
+                <span asp-validation-for="Input.PozitieFirma" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Rolul dumneavoastra</label>
+                <input asp-for="Input.Rol" class="form-control" disabled />
+            </div>
+            <div>
+                <div class="form-group">
+                    <label asp-for="Input.Descriere"></label>
+                    <textarea asp-for="Input.Descriere" class="form-control"></textarea>
+                    <span asp-validation-for="Input.Descriere" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <strong>Incarcati poza noua de profil</strong>
+                <input asp-for="Input.ImageUrl" class="form-control" />
+                <span asp-validation-for="Input.ImageUrl" class="text-danger"></span>
+            </div>
             <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
         </form>
     </div>
+
+    <form>
+        <div class="col-md-6 m-3">
+            <div class="form-group row">
+                <div class="col-md-12 offset-md-11">
+                    <img src="@Model.profileImageUrl" width="250" height="400" alt="No image yet." />
+                    <button type="button" class="btn btn-outline-primary text-center mt-3" data-toggle="ajaxx-modal" data-target="#editProfilePic" asp-page-handler="UpdateImage"><i class="fa fa-camera" aria-hidden="true"></i>&nbsp;&nbsp;Editare poza profil</button>
+                </div>
+            </div>
+        </div>
+
+    </form>
 </div>
+
+<!--<div class="modal fade" id="editProfilePic">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">-->
+                @*titlu*@ 
+                <!--<h4 class="modal-title" id="editProfilePicLabel">Modificare Poza de Profil</h4>-->
+                 @*"X" pentru Close*@ 
+                <!--<button type="button" class="close" data-dismiss="modal">
+                    <span>x</span>
+                </button>
+            </div>-->
+
+            @*body: formular pentru editare poza de profil user*@ 
+            <!--<div class="modal-body">
+                <form asp-method="post" asp-page-handler="UpdateImage" enctype="multipart/form-data" >
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input asp-for="Username" hidden />
+                    <div class="form-group">
+                        <strong>Incarcati poza de profil</strong>
+                        <input asp-for="Input.ImageUrl" class="form-control" />
+                        <span asp-validation-for="Input.ImageUrl" class="text-danger"></span>
+                    </div>
+                </form>
+            </div>-->
+
+             @*footer: buton de Save si Close*@ 
+            <!--<div class="modal-footer">
+                <button type="button" class="close btn btn-primary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-save="modal">Save</button>
+            </div>
+
+        </div>
+    </div>
+</div>-->
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/profile.js"></script>
 }

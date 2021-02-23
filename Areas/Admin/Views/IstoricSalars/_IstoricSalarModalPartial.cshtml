@@ -6,13 +6,12 @@
             <div class="modal-header">
                 @* titlu *@
                 <h4 class="modal-title" id="addIstoricSalarLabel">Adaugare Istoric Salar</h4>
-                @* "X" pentru Close *@
                 <button type="button" class="close" data-dismiss="modal">
-                    <span>X</span>
+                    <span>x</span>
                 </button>
             </div>
 
-            @* body: formular pentru creare istoric salar nou *@
+            @* Formular adaugare Istoric Salar nou *@
             <div class="modal-body">
                 <form asp-action="Create">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -38,7 +37,6 @@
                 </form>
             </div>
 
-            @* footer: buton de Save si Close *@
             <div class="modal-footer">
                 <button type="button" class="close btn btn-primary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" data-save="modal">Save</button>

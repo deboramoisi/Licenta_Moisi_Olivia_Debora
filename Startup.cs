@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Licenta.Utility;
+using Licenta.Services.FileManager;
 
 namespace Licenta
 {
@@ -60,6 +61,9 @@ namespace Licenta
                 options.ClientSecret = "zMxhfOPRE6-qm219iagk3wX_";
             });
 
+            // serviciu de file Manager, imagini de profil
+            services.AddTransient<IFileManager, FileManager>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,7 +72,6 @@ namespace Licenta
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {

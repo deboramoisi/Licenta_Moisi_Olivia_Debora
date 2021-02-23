@@ -1,0 +1,5 @@
+﻿img {
+    display: flex;
+    align-content: flex-end;
+    justify-items: flex-end;
+}
