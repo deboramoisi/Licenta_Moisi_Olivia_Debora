@@ -15,7 +15,10 @@ function loadDataTable() {
             { "data": "email" },
             { "data": "phoneNumber" },
             { "data": "pozitieFirma" },
-            { "data": "client.denumire" },
+            {
+                "data": "client.denumire",
+                "defaultContent": "<i> -- Client individual --</i>"
+            },
             {
                 "data": {
                     id: "id", lockoutEnd: "lockoutEnd"

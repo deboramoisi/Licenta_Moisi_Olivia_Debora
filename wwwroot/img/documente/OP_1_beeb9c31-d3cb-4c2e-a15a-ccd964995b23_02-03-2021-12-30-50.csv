@@ -1,0 +1,68 @@
+Id,Name,Shape Library,Page ID,Contained By,Group,Line Source,Line Destination,Source Arrow,Destination Arrow,Text Area 1,Text Area 2,Text Area 3,Text Area 4,Text Area 5,Text Area 6,Text Area 7,Text Area 8,Text Area 9,Text Area 10,Text Area 11,Text Area 12,Text Area 13,Text Area 14,Text Area 15,Text Area 16,Text Area 17,Text Area 18,Text Area 19,Text Area 20,Text Area 21
+1,Page,,,,,,,,,ERD with colored entities (UML notation),,,,,,,,,,,,,,,,,,,,
+2,Entity,Entity Relationship,1,,48,,,,,,ContBancarId,IBAN,Titular,Data_expirare,CVV,BancaId,,,,,,,,,,,,,,
+3,Process,Flowchart Shapes,1,,48,,,,,ContBancar,,,,,,,,,,,,,,,,,,,,
+4,Entity,Entity Relationship,1,,49,,,,,,SediuSocialId,Localitate,Judet,Sector,Strada,Numar,CodPostal,Bl,Sc,Et,Ap,Telefon,Email,ClientId,,,,,,
+5,Process,Flowchart Shapes,1,,49,,,,,SediuSocial,,,,,,,,,,,,,,,,,,,,
+6,Entity,Entity Relationship,1,,50,,,,,d,BancaId,Denumire,Filiala,ContBancarId,,,,,,,,,,,,,,,,
+7,Process,Flowchart Shapes,1,,50,,,,,Banca	,,,,,,,,,,,,,,,,,,,,
+8,Entity,Entity Relationship,1,,51,,,,,,FurnizorId,Denumire,CUI,ClientFurnizor,,,,,,,,,,,,,,,,
+9,Process,Flowchart Shapes,1,,51,,,,,Furnizor	,,,,,,,,,,,,,,,,,,,,
+10,Entity,Entity Relationship,1,,52,,,,,,ClientFurnizorId,ClientId,FurnizorId,,,,,,,,,,,,,,,,,
+11,Process,Flowchart Shapes,1,,52,,,,,ClientFurnizor	,,,,,,,,,,,,,,,,,,,,
+12,Entity,Entity Relationship,1,,53,,,,,,ClientId,Denumire,NrRegComertului,CUI,CodCAEN,TipFirma,CapitalSocial,CasaDeMarcat,TVA,SediuSocial,ClientFurnizor,ContBancar,Salariati,Solduri,State,Plati,Adeverinte,Bilanturi,Declaratii,OP-uri
+13,Process,Flowchart Shapes,1,,53,,,,,Client,,,,,,,,,,,,,,,,,,,,
+14,Text,Standard,1,,54,,,,,ERD Licenta,,,,,,,,,,,,,,,,,,,,
+15,Text,Standard,1,,54,,,,,"Moisi Olivia-Debora  |  February 6, 2021",,,,,,,,,,,,,,,,,,,,
+16,Rectangle Container,Flowchart Shapes,1,,55,,,,,,,,,,,,,,,,,,,,,,,,,
+17,Text,Standard,1,16,55,,,,,Learn how to edit ERD shapes,,,,,,,,,,,,,,,,,,,,
+18,Text,Standard,1,16,55,,,,,"To manually customize this ERD:
+Double-click on any text in an entity shape and add/edit text by typing.
+Click on an entity shape and toggle the amount of fields using the advanced shape bar at the top of the canvas.
+Add and remove lines to show relationships between entities.
+To update cardinality, click on a line and then click ""Endpoint"" on the properties bar at the top of the canvas.  
+To automatically create your own ERD:
+Click ""     Import Data"" in the Entity Relationship shape library to the left of the canvas.",,,,,,,,,,,,,,,,,,,,
+19,Text,Standard,1,16,55,,,,,"Tutorials (Hold Shift + ⌘ or Ctrl, then click)",,,,,,,,,,,,,,,,,,,,
+20,SVGPathBlock2,,1,16,56,,,,,,,,,,,,,,,,,,,,,,,,,
+21,Button,UI Mockups,1,16,55,,,,,Read about how to create entity relationship diagrams,,,,,,,,,,,,,,,,,,,,
+22,Button,UI Mockups,1,16,55,,,,,Watch a tutorial on how to import  your ERD,,,,,,,,,,,,,,,,,,,,
+23,Button,UI Mockups,1,16,55,,,,,Watch a tutorial on how to export  your ERD,,,,,,,,,,,,,,,,,,,,
+24,Button,UI Mockups,1,16,55,,,,,Read about ERD symbols and notation,,,,,,,,,,,,,,,,,,,,
+25,Button,UI Mockups,1,16,55,,,,,"See an example (Hold Shift + ⌘ or Ctrl, then click)",,,,,,,,,,,,,,,,,,,,
+26,User Image,User Images,1,16,55,,,,,,,,,,,,,,,,,,,,,,,,,
+27,Entity,Entity Relationship,1,,57,,,,,,SalariatId,Nume,Prenume,Pozitie,Data_angajare,IstoricSalar,Data_concediere,,,,,,,,,,,,,
+28,Process,Flowchart Shapes,1,,57,,,,,Salariat	,,,,,,,,,,,,,,,,,,,,
+29,Entity,Entity Relationship,1,,58,,,,,d,SalariatId,Data_inceput,Data_sfarsit,Salariu,,,,,,,,,,,,,,,,
+30,Process,Flowchart Shapes,1,,58,,,,,IstoricSalar	,,,,,,,,,,,,,,,,,,,,
+31,Entity,Entity Relationship,1,,59,,,,,,SoldId,ClientId,Sold_casa,Sold_banca,Sold_marfa,Sold_imobilizari,Sold_furnizori,Sold_clienti,Luna,An,,,,,,,,,,
+32,Process,Flowchart Shapes,1,,59,,,,,Sold,,,,,,,,,,,,,,,,,,,,
+33,Entity,Entity Relationship,1,,60,,,,,d,StatId,ClientId,Stat_de_plata,State_salarii,Luna,An,,,,,,,,,,,,,,
+34,Process,Flowchart Shapes,1,,60,,,,, Stat	,,,,,,,,,,,,,,,,,,,,
+35,Entity,Entity Relationship,1,,61,,,,,,PlataId,ClientId,Contributii_Stat,TVA_de_plata,Impozit_pe_salar,Impozit_pe_venit,DataConcediere,,,,,,,,,,,,,
+36,Process,Flowchart Shapes,1,,61,,,,,Plata,,,,,,,,,,,,,,,,,,,,
+37,Entity,Entity Relationship,1,,,,,,,AdeverintaMedicala,AdeverintaId,ClientId,Data,Adeverinta,,,,,,,,,,,,,,,,
+38,Line,,1,,54,14,14,None,None,,,,,,,,,,,,,,,,,,,,,
+39,Line,,1,,,4,12,CFN ERD One Arrow,CFN ERD One Arrow,Apartine / Detine,,,,,,,,,,,,,,,,,,,,
+40,Line,,1,,,8,10,CFN ERD One Arrow,CFN ERD Many Arrow,,,,,,,,,,,,,,,,,,,,,
+41,Line,,1,,,10,12,CFN ERD Many Arrow,CFN ERD One Arrow,,,,,,,,,,,,,,,,,,,,,
+42,Line,,1,,,13,3,CFN ERD One Arrow,CFN ERD Many Arrow,,,,,,,,,,,,,,,,,,,,,
+43,Line,,1,,,2,6,CFN ERD One Arrow,CFN ERD One Arrow,,,,,,,,,,,,,,,,,,,,,
+44,Line,,1,,,12,27,CFN ERD One Arrow,CFN ERD Many Arrow,,,,,,,,,,,,,,,,,,,,,
+45,Line,,1,,,28,29,CFN ERD Many Arrow,CFN ERD One Arrow,,,,,,,,,,,,,,,,,,,,,
+46,Line,,1,,,32,12,CFN ERD Many Arrow,CFN ERD One Arrow,,,,,,,,,,,,,,,,,,,,,
+47,Line,,1,,,33,12,CFN ERD Many Arrow,CFN ERD One Arrow,,,,,,,,,,,,,,,,,,,,,
+48,Group 1,,1,,,,,,,,,,,,,,,,,,,,,,,,,,,
+49,Group 2,,1,,,,,,,,,,,,,,,,,,,,,,,,,,,
+50,Group 3,,1,,,,,,,,,,,,,,,,,,,,,,,,,,,
+51,Group 4,,1,,,,,,,,,,,,,,,,,,,,,,,,,,,
+52,Group 5,,1,,,,,,,,,,,,,,,,,,,,,,,,,,,
+53,Group 6,,1,,,,,,,,,,,,,,,,,,,,,,,,,,,
+54,Group 7,,1,,,,,,,,,,,,,,,,,,,,,,,,,,,
+55,Group 8,,1,,,,,,,,,,,,,,,,,,,,,,,,,,,
+56,Group 9,,1,,55,,,,,,,,,,,,,,,,,,,,,,,,,
+57,Group 10,,1,,,,,,,,,,,,,,,,,,,,,,,,,,,
+58,Group 11,,1,,,,,,,,,,,,,,,,,,,,,,,,,,,
+59,Group 12,,1,,,,,,,,,,,,,,,,,,,,,,,,,,,
+60,Group 13,,1,,,,,,,,,,,,,,,,,,,,,,,,,,,
+61,Group 14,,1,,,,,,,,,,,,,,,,,,,,,,,,,,,

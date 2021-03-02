@@ -1,0 +1,75 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using Licenta.Utility 
+@model Licenta.ViewModels.ViewDocumentVM
+
+@{
+    ViewData["Title"] = "Documente contabile";
+}
+
+@{
+    var userName = "";
+
+    if (User.IsInRole(ConstantVar.Rol_Admin) || User.IsInRole(ConstantVar.Rol_Admin_Firma))
+    {
+        userName = User.Identity.Name;
+    }
+}
+
+<br />
+<h2>Documente</h2>
+
+<hr />
+<br/>
+
+<style>
+    label {
+        font-weight: bold;
+    }
+</style>
+
+<div class="d-flex justify-content-center">
+    <div class="w-50 bg-secondary m-1 p-4 rounded">
+        <form method="post" asp-controller="Documente" asp-action="TakeForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <div class="col-5">
+                    <label>Selectati luna</label>
+                </div>
+                <div class="col-7">
+                    <select asp-for="Month" asp-items="Model.Months" class="form-control"></select>
+                    <span asp-validation-for="Month"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-5">
+                    <label>Selectati anul</label>
+                </div>
+                <div class="col-7">
+                    <select asp-for="Year" asp-items="Model.Years" class="form-control"></select>
+                    <span asp-validation-for="Year"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-5">
+                    <label>Selectati tipul documentului</label>
+                </div>
+                <div class="col-7">
+                    <select asp-for="TipulDoc" asp-items="Model.TipDocumente" class="form-control"></select>
+                    <span asp-validation-for="TipulDoc"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-7 offset-5">
+                    <input type="submit" value="Vizualizare Documente" class="btn btn-outline-primary form-control" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+

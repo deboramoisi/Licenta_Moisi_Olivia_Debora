@@ -17,7 +17,7 @@ namespace Licenta.Models
         [Required, StringLength(50, MinimumLength = 3, ErrorMessage = "Pozitia ocupata in firma trebuie sa fie de minim 3 caractere.")]
         public string PozitieFirma { get; set; }
 
-        [NotMapped, Required]
+        [NotMapped]
         public string Rol { get; set; }
 
         // Exista si utilizatori individuali care nu apartin unei companii

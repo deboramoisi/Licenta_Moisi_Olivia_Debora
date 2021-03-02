@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Document>
+
+@{
+    ViewData["Title"] = ViewBag.TipDoc;
+}
+
+<br/>
+<h2>@ViewBag.TipDoc</h2>
+<hr />
+<br/>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DocumentPath)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Client)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationUserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipDocument)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @{
+                        var filePath = "/img/documente/" + item.DocumentPath;
+                    }
+                    <a href="@filePath" target="_blank">Your File</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Client.Denumire)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplicationUser.Nume)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipDocument.Denumire)
+                </td>
+            </tr>
+          }
+    </tbody>
+</table>

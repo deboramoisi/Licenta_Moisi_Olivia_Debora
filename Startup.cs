@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Licenta.Utility;
 using Licenta.Services.FileManager;
+using Licenta.Models;
 
 namespace Licenta
 {

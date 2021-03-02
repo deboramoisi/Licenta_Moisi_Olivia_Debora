@@ -4,14 +4,16 @@ using Licenta.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Licenta.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210226161402_AddTipDocumentToDb")]
+    partial class AddTipDocumentToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,36 +79,6 @@ namespace Licenta.Migrations
                     b.HasIndex("FurnizorId");
 
                     b.ToTable("ClientFurnizor");
-                });
-
-            modelBuilder.Entity("Licenta.Models.Document", b =>
-                {
-                    b.Property<int>("DocumentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DocumentPath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TipDocumentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DocumentId");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("ClientId");
-
-                    b.HasIndex("TipDocumentId");
-
-                    b.ToTable("Document");
                 });
 
             modelBuilder.Entity("Licenta.Models.Furnizor", b =>
@@ -502,31 +474,6 @@ namespace Licenta.Migrations
                     b.Navigation("Client");
 
                     b.Navigation("Furnizor");
-                });
-
-            modelBuilder.Entity("Licenta.Models.Document", b =>
-                {
-                    b.HasOne("Licenta.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("Licenta.Models.Client", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Licenta.Models.TipDocument", "TipDocument")
-                        .WithMany()
-                        .HasForeignKey("TipDocumentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("Client");
-
-                    b.Navigation("TipDocument");
                 });
 
             modelBuilder.Entity("Licenta.Models.IstoricSalar", b =>

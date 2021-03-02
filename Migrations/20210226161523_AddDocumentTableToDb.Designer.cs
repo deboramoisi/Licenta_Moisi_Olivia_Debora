@@ -4,14 +4,16 @@ using Licenta.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Licenta.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210226161523_AddDocumentTableToDb")]
+    partial class AddDocumentTableToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,7 +89,7 @@ namespace Licenta.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
@@ -95,14 +97,17 @@ namespace Licenta.Migrations
                     b.Property<string>("DocumentPath")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("TipDocumentId")
                         .HasColumnType("int");
 
                     b.HasKey("DocumentId");
 
-                    b.HasIndex("ApplicationUserId");
-
                     b.HasIndex("ClientId");
+
+                    b.HasIndex("Id");
 
                     b.HasIndex("TipDocumentId");
 
@@ -506,15 +511,15 @@ namespace Licenta.Migrations
 
             modelBuilder.Entity("Licenta.Models.Document", b =>
                 {
-                    b.HasOne("Licenta.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("Licenta.Models.Client", "Client")
                         .WithMany()
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Licenta.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("Id");
 
                     b.HasOne("Licenta.Models.TipDocument", "TipDocument")
                         .WithMany()

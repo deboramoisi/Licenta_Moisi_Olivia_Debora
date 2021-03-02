@@ -22,5 +22,7 @@ namespace Licenta.Data
         public DbSet<Salariat> Salariat { get; set; }
         public DbSet<IstoricSalar> IstoricSalar { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<TipDocument> TipDocument { get; set; }
+        public DbSet<Document> Document { get; set; }
     }
 }
