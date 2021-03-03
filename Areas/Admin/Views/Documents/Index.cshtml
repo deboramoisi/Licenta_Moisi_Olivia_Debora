@@ -1,58 +1,48 @@
 ﻿@model IEnumerable<Licenta.Models.Document>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Documente transmise";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<br />
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.DocumentPath)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Client)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ApplicationUserId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TipDocument)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model)
-{
-        <tr>
-            <td>
-                @{
-                    var filePath = "/img/documente/" + item.DocumentPath;
-                }
-                <a href="@filePath" target="_blank">Your File</a>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Client.Denumire)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApplicationUser.Nume)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TipDocument.Denumire)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.DocumentId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.DocumentId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.DocumentId">Delete</a>
-            </td>
-        </tr>
+<div class="row">
+    <div class="col-6">
+        <h2>Documente transmise</h2>
+    </div>
+    <div class="col-6 text-right">
+        <a asp-action="Create" class="btn btn-outline-primary"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Transmitere document nou</a>
+    </div>
+</div>
+<br />
+
+<div class="table-responsive-md p-4 rounded border">
+    <table class="table table-hover" id="tblData">
+        <thead>
+            <tr class="thead-dark">
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentPath)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Client)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ApplicationUserId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TipDocument)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Data)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+
+    </table>
+</div>
+
+@section Scripts {
+    <script src="~/js/documenteAdmin.js"></script>
 }
-    </tbody>
-</table>

@@ -53,15 +53,16 @@
                                 </div>
                             </li>
                         }
-                        @* Afisare dropdown doar pentru admin *@
-                        @if (!User.IsInRole(ConstantVar.Rol_User_Individual))
+                        @* Afisare dropdown doar pentru clienti, admin *@
+                        @if (User.IsInRole(ConstantVar.Rol_Admin) || User.IsInRole(ConstantVar.Rol_Admin_Firma))
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                                     Documente
                                 </a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" asp-area="Clienti" asp-controller="Documente" asp-action="Index">Documente</a>
+                                    <a class="dropdown-item" asp-area="Clienti" asp-controller="Documente" asp-action="Index">Vizualizare documente</a>
+                                    <a class="dropdown-item" asp-area="Clienti" asp-controller="IncarcariClient" asp-action="Index">Incarcari documente</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#">Link</a>
                                 </div>

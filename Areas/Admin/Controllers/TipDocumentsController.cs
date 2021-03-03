@@ -7,10 +7,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Licenta.Data;
 using Licenta.Models;
+using Microsoft.AspNetCore.Authorization;
+using Licenta.Utility;
 
 namespace Licenta.Areas.Admin.Views
 {
     [Area("Admin")]
+    [Authorize(Roles = ConstantVar.Rol_Admin)]
     public class TipDocumentsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -51,8 +54,6 @@ namespace Licenta.Areas.Admin.Views
         }
 
         // POST: Admin/TipDocuments/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TipDocumentId,Denumire")] TipDocument tipDocument)
@@ -83,8 +84,6 @@ namespace Licenta.Areas.Admin.Views
         }
 
         // POST: Admin/TipDocuments/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("TipDocumentId,Denumire")] TipDocument tipDocument)
@@ -116,36 +115,7 @@ namespace Licenta.Areas.Admin.Views
             }
             return View(tipDocument);
         }
-
-        // GET: Admin/TipDocuments/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tipDocument = await _context.TipDocument
-                .FirstOrDefaultAsync(m => m.TipDocumentId == id);
-            if (tipDocument == null)
-            {
-                return NotFound();
-            }
-
-            return View(tipDocument);
-        }
-
-        // POST: Admin/TipDocuments/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var tipDocument = await _context.TipDocument.FindAsync(id);
-            _context.TipDocument.Remove(tipDocument);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
+        
         private bool TipDocumentExists(int id)
         {
             return _context.TipDocument.Any(e => e.TipDocumentId == id);

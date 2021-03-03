@@ -58,8 +58,6 @@ namespace Licenta.Areas.Admin.Views
         }
 
         // POST: Admin/IstoricSalars/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IstoricSalarId,SalariatId,DataInceput,DataSfarsit,Salariu")] IstoricSalar istoricSalar)
@@ -92,8 +90,6 @@ namespace Licenta.Areas.Admin.Views
         }
 
         // POST: Admin/IstoricSalars/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IstoricSalarId,SalariatId,DataInceput,DataSfarsit,Salariu")] IstoricSalar istoricSalar)
@@ -126,36 +122,7 @@ namespace Licenta.Areas.Admin.Views
             ViewData["SalariatId"] = new SelectList(_context.Salariat, "SalariatId", "NumePrenume", istoricSalar.SalariatId);
             return View(istoricSalar);
         }
-
-        // GET: Admin/IstoricSalars/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var istoricSalar = await _context.IstoricSalar
-                .FirstOrDefaultAsync(m => m.IstoricSalarId == id);
-            if (istoricSalar == null)
-            {
-                return NotFound();
-            }
-
-            return View(istoricSalar);
-        }
-
-        // POST: Admin/IstoricSalars/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var istoricSalar = await _context.IstoricSalar.FindAsync(id);
-            _context.IstoricSalar.Remove(istoricSalar);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
+        
         private bool IstoricSalarExists(int id)
         {
             return _context.IstoricSalar.Any(e => e.IstoricSalarId == id);

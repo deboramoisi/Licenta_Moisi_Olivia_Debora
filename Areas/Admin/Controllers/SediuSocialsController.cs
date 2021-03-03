@@ -58,8 +58,6 @@ namespace Licenta.Areas.Admin.Controllers
         }
 
         // POST: SediuSocials/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("SediuSocialId,Localitate,Judet,Sector,Strada,Numar,CodPostal,Bl,Sc,Et,Ap,Telefon,Email")] SediuSocial sediuSocial)
@@ -92,8 +90,6 @@ namespace Licenta.Areas.Admin.Controllers
         }
 
         // POST: SediuSocials/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("SediuSocialId,Localitate,Judet,Sector,Strada,Numar,CodPostal,Bl,Sc,Et,Ap,Telefon,Email")] SediuSocial sediuSocial)
@@ -125,36 +121,6 @@ namespace Licenta.Areas.Admin.Controllers
             }
             ViewData["SediuSocialId"] = new SelectList(_context.Client, "ClientId", "Denumire", sediuSocial.SediuSocialId);
             return View(sediuSocial);
-        }
-
-        // GET: SediuSocials/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var sediuSocial = await _context.SediuSocial
-                .Include(s => s.Client)
-                .FirstOrDefaultAsync(m => m.SediuSocialId == id);
-            if (sediuSocial == null)
-            {
-                return NotFound();
-            }
-
-            return View(sediuSocial);
-        }
-
-        // POST: SediuSocials/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var sediuSocial = await _context.SediuSocial.FindAsync(id);
-            _context.SediuSocial.Remove(sediuSocial);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         private bool SediuSocialExists(int id)

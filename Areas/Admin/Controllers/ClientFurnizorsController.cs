@@ -61,8 +61,6 @@ namespace Licenta.Areas.Admin.Controllers
         }
 
         // POST: ClientFurnizors/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ClientFurnizorId,ClientId,FurnizorId")] ClientFurnizor clientFurnizor)
@@ -97,8 +95,6 @@ namespace Licenta.Areas.Admin.Controllers
         }
 
         // POST: ClientFurnizors/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ClientFurnizorId,ClientId,FurnizorId")] ClientFurnizor clientFurnizor)
@@ -132,38 +128,7 @@ namespace Licenta.Areas.Admin.Controllers
             ViewData["FurnizorId"] = new SelectList(_context.Furnizor, "FurnizorID", "Denumire", clientFurnizor.FurnizorId);
             return View(clientFurnizor);
         }
-
-        // GET: ClientFurnizors/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var clientFurnizor = await _context.ClientFurnizor
-                .Include(c => c.Client)
-                .Include(c => c.Furnizor)
-                .FirstOrDefaultAsync(m => m.ClientFurnizorId == id);
-            if (clientFurnizor == null)
-            {
-                return NotFound();
-            }
-
-            return View(clientFurnizor);
-        }
-
-        // POST: ClientFurnizors/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var clientFurnizor = await _context.ClientFurnizor.FindAsync(id);
-            _context.ClientFurnizor.Remove(clientFurnizor);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
+        
         private bool ClientFurnizorExists(int id)
         {
             return _context.ClientFurnizor.Any(e => e.ClientFurnizorId == id);

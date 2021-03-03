@@ -54,8 +54,6 @@ namespace Licenta.Areas.Admin.Controllers
         }
 
         // POST: Furnizors/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FurnizorID,Denumire")] Furnizor furnizor)
@@ -86,8 +84,6 @@ namespace Licenta.Areas.Admin.Controllers
         }
 
         // POST: Furnizors/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("FurnizorID,Denumire")] Furnizor furnizor)
@@ -118,35 +114,6 @@ namespace Licenta.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(furnizor);
-        }
-
-        // GET: Furnizors/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var furnizor = await _context.Furnizor
-                .FirstOrDefaultAsync(m => m.FurnizorID == id);
-            if (furnizor == null)
-            {
-                return NotFound();
-            }
-
-            return View(furnizor);
-        }
-
-        // POST: Furnizors/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var furnizor = await _context.Furnizor.FindAsync(id);
-            _context.Furnizor.Remove(furnizor);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         private bool FurnizorExists(int id)

@@ -64,7 +64,8 @@ namespace Licenta.Areas.Identity.Pages.Account.Manage
             // Clienti care doresc doar consultatii
             [Display(Name = "Selectati firma apartinatoare")]
             public int? ClientId { get; set; }
-
+            [Display(Name = "Companie")]
+            public string ClientName { get; set; } = "";
             public string Descriere { get; set; }
 
             [BindProperty]
@@ -86,6 +87,7 @@ namespace Licenta.Areas.Identity.Pages.Account.Manage
             {
                 PhoneNumber = phoneNumber,
                 ClientId = applicationUser.ClientId,
+                ClientName = (applicationUser.ClientId != 0) ? (_context.Client.Find(applicationUser.ClientId).Denumire) : "",
                 PozitieFirma = applicationUser.PozitieFirma,
                 Nume = applicationUser.Nume,
                 Rol = _userManager.GetRolesAsync(user).Result.FirstOrDefault(),

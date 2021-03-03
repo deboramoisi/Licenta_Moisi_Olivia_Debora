@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Licenta.Models.Document>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Documente incarcate</h2>
+
+<p>
+    <a asp-action="Create">Incarca document nou</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DocumentPath)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Client)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationUserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipDocumentId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model)
+{
+        <tr>
+            <td>
+                @{
+                    var filePath = "/img/documente/" + item.DocumentPath;
+                }
+                <a href="@filePath" target="_blank">Vizualizare document transmis</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.Denumire)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationUser.Nume)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipDocument.Denumire)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.DocumentId">Editare</a> |
+                <a asp-action="Details" asp-route-id="@item.DocumentId">Detalii</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

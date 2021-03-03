@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Document>
+﻿@using Licenta.Utility 
+@model IEnumerable<Document>
 
 @{
     ViewData["Title"] = ViewBag.TipDoc;
@@ -18,11 +19,16 @@
             <th>
                 @Html.DisplayNameFor(model => model.Client)
             </th>
+            @{ 
+                if (User.IsInRole(ConstantVar.Rol_Admin))
+                {
+                <th>
+                    @Html.DisplayNameFor(model => model.ApplicationUserId)
+                </th>
+                }
+            }
             <th>
-                @Html.DisplayNameFor(model => model.ApplicationUserId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TipDocument)
+                @Html.DisplayNameFor(model => model.TipDocumentId)
             </th>
             <th></th>
         </tr>
@@ -30,19 +36,22 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @{
-                        var filePath = "/img/documente/" + item.DocumentPath;
-                    }
-                    <a href="@filePath" target="_blank">Your File</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Client.Denumire)
-                </td>
+        <tr>
+            <td>
+                @{
+                    var filePath = "/img/documente/" + item.DocumentPath;
+                }
+                <a href="@filePath" target="_blank">Vizualizare document</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.Denumire)
+            </td>
+                @if (User.IsInRole(ConstantVar.Rol_Admin))
+                {
                 <td>
                     @Html.DisplayFor(modelItem => item.ApplicationUser.Nume)
                 </td>
+                }
                 <td>
                     @Html.DisplayFor(modelItem => item.TipDocument.Denumire)
                 </td>

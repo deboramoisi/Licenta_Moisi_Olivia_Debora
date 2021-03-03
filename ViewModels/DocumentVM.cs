@@ -14,6 +14,7 @@ namespace Licenta.ViewModels
         [Key]
         public int DocumentId { get; set; }
 
+        [Display(Name = "Incarcati documentul dumneavoastra")]
         public IFormFile DocumentPathUrl { get; set; }
 
         [Display(Name = "Client")]
@@ -29,6 +30,11 @@ namespace Licenta.ViewModels
         [Display(Name = "Tip Document")]
         public int TipDocumentId { get; set; }
         [ForeignKey("TipDocumentId")]
+
+        [Display(Name = "Tip Document")]
         public TipDocument TipDocument { get; set; }
+
+        [DataType(DataType.Date), Display(Name = "Data document")]
+        public DateTime Data { get; set; }
     }
 }

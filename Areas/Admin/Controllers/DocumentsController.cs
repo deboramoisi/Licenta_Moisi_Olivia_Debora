@@ -9,10 +9,13 @@ using Licenta.Data;
 using Licenta.Models;
 using Licenta.ViewModels;
 using Licenta.Services.FileManager;
+using Microsoft.AspNetCore.Authorization;
+using Licenta.Utility;
 
 namespace Licenta.Areas.Admin.Views
 {
     [Area("Admin")]
+    [Authorize(Roles = ConstantVar.Rol_Admin)]
     public class DocumentsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -62,8 +65,6 @@ namespace Licenta.Areas.Admin.Views
         }
 
         // POST: Admin/Documents/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DocumentVM documentVM)
@@ -78,7 +79,8 @@ namespace Licenta.Areas.Admin.Views
                 ApplicationUserId = documentVM.ApplicationUserId,
                 ClientId = documentVM.ClientId,
                 TipDocumentId = documentVM.TipDocumentId,
-                DocumentPath = await _fileManager.SaveDocument(documentVM.DocumentPathUrl, denumireDocument.Denumire, documentVM.ClientId, documentVM.ApplicationUserId)
+                DocumentPath = await _fileManager.SaveDocument(documentVM.DocumentPathUrl, denumireDocument.Denumire, documentVM.ClientId, documentVM.ApplicationUserId),
+                Data = documentVM.Data
             };
 
             if (ModelState.IsValid)
@@ -113,7 +115,8 @@ namespace Licenta.Areas.Admin.Views
                 DocumentId = document.DocumentId,
                 TipDocumentId = document.TipDocumentId,
                 ClientId = document.ClientId,
-                ApplicationUserId = document.ApplicationUserId
+                ApplicationUserId = document.ApplicationUserId,
+                Data = document.Data
             };
 
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", document.ClientId);
@@ -147,7 +150,8 @@ namespace Licenta.Areas.Admin.Views
                 {
                     document.ApplicationUserId = documentVM.ApplicationUserId;
                     document.ClientId = documentVM.ClientId;
-                    document.TipDocumentId = document.TipDocumentId;
+                    document.TipDocumentId = documentVM.TipDocumentId;
+                    document.Data = documentVM.Data;
                     _context.Update(document);
                     await _context.SaveChangesAsync();
                 }
@@ -170,45 +174,41 @@ namespace Licenta.Areas.Admin.Views
             return View(documentVM);
         }
 
-        // GET: Admin/Documents/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var document = await _context.Document
-                .Include(d => d.Client)
-                .Include(d => d.TipDocument)
-                .Include(d => d.ApplicationUser)
-                .FirstOrDefaultAsync(m => m.DocumentId == id);
-            if (document == null)
-            {
-                return NotFound();
-            }
-
-            return View(document);
-        }
-
-        // POST: Admin/Documents/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var document = await _context.Document.FindAsync(id);
-            _context.Document.Remove(document);
-            await _context.SaveChangesAsync();
-            if (_fileManager.DeleteDocument(document.DocumentPath) == "Success")
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            return NotFound();
-        }
-
         private bool DocumentExists(int id)
         {
             return _context.Document.Any(e => e.DocumentId == id);
         }
+
+        // API CALLS
+        #region
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var allObj = _context.Document.Include(d => d.TipDocument).Include(d => d.Client).Include(d => d.ApplicationUser).ToList();
+            return Json(new { data = allObj });
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteAPI(int id)
+        {
+            Document document = _context.Document.Find(id);
+            if (document == null)
+            {
+                return Json(new { success = false, message = "Eroare la stergerea documentului!" });
+            }
+            else
+            {
+                _context.Document.Remove(document);
+                _context.SaveChanges();
+                if (_fileManager.DeleteDocument(document.DocumentPath) == "Success")
+                {
+                    return Json(new { success = true, message = "Document sters cu succes!" });
+                } else
+                {
+                    return Json(new { success = false, message = "Eroare la stergerea documentului!" });
+                }
+            }
+        }
+        #endregion
     }
 }

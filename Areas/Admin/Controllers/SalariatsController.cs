@@ -58,8 +58,6 @@ namespace Licenta.Areas.Admin.Controllers
         }
 
         // POST: Admin/Salariats/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("SalariatId,Nume,Prenume,Pozitie,DataAngajare,DataConcediere,ClientId")] Salariat salariat)
@@ -92,8 +90,6 @@ namespace Licenta.Areas.Admin.Controllers
         }
 
         // POST: Admin/Salariats/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("SalariatId,Nume,Prenume,Pozitie,DataAngajare,DataConcediere,ClientId")] Salariat salariat)
@@ -126,36 +122,7 @@ namespace Licenta.Areas.Admin.Controllers
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", salariat.ClientId);
             return View(salariat);
         }
-
-        // GET: Admin/Salariats/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var salariat = await _context.Salariat
-                .FirstOrDefaultAsync(m => m.SalariatId == id);
-            if (salariat == null)
-            {
-                return NotFound();
-            }
-
-            return View(salariat);
-        }
-
-        // POST: Admin/Salariats/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var salariat = await _context.Salariat.FindAsync(id);
-            _context.Salariat.Remove(salariat);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
+       
         private bool SalariatExists(int id)
         {
             return _context.Salariat.Any(e => e.SalariatId == id);

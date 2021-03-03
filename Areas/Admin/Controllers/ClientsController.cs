@@ -66,8 +66,6 @@ namespace Licenta.Areas.Admin.Controllers
         }
 
         // POST: Clients/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ClientVM clientVM)
@@ -139,8 +137,6 @@ namespace Licenta.Areas.Admin.Controllers
         }
 
         // POST: Clients/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ClientId,Denumire,NrRegComertului,CodCAEN,TipFirma,CapitalSocial,CasaDeMarcat,TVA,ClientFurnizori")] Client client)
@@ -172,35 +168,6 @@ namespace Licenta.Areas.Admin.Controllers
             }
             ViewData["FurnizorId"] = new SelectList(_context.Furnizor, "FurnizorID", "Denumire");
             return View(client);
-        }
-
-        // GET: Clients/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var client = await _context.Client
-                .FirstOrDefaultAsync(m => m.ClientId == id);
-            if (client == null)
-            {
-                return NotFound();
-            }
-
-            return View(client);
-        }
-
-        // POST: Clients/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var client = await _context.Client.FindAsync(id);
-            _context.Client.Remove(client);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         private bool ClientExists(int id)

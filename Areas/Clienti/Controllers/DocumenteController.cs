@@ -2,6 +2,7 @@
 using Licenta.Models;
 using Licenta.Utility;
 using Licenta.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 namespace Licenta.Areas.Clienti.Controllers
 {
     [Area("Clienti")]
+    [Authorize(Roles = ConstantVar.Rol_Admin + "," + ConstantVar.Rol_Admin_Firma)]
     public class DocumenteController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -36,7 +38,8 @@ namespace Licenta.Areas.Clienti.Controllers
                     Text = item.Denumire
                 })
             };
-            return View(viewDocumentVM);
+            
+            return View(viewDocumentVM);   
         }
 
         [HttpPost]
@@ -54,18 +57,21 @@ namespace Licenta.Areas.Clienti.Controllers
 
             if (await _userManager.IsInRoleAsync(appUser, ConstantVar.Rol_Admin))
             {
+
                 // daca e logat un admin, acesta poate vedea toate documentele din anul, luna, tipul selectat
-                documents = _context.Document.Include(d => d.TipDocument)
-                    .Where(d => d.DocumentPath.Contains(viewDocumentVM.Year)
+                documents = _context.Document.Include(d => d.Client).Include(d => d.ApplicationUser).Include(d => d.TipDocument)
+                    .Where(d => d.Data.Year.ToString().Equals(viewDocumentVM.Year)
+                            && d.Data.Month.ToString().Equals(viewDocumentVM.Month)
                             && d.TipDocumentId == viewDocumentVM.TipulDoc)
                     .ToList();
             }
             else if (!await _userManager.IsInRoleAsync(appUser, ConstantVar.Rol_User_Individual))
             {
                 // se cauta documentele clientului, respectand anul ales, luna si tipul documentului de catre utilizator
-                documents = _context.Document.Include(d => d.TipDocument)
+                documents = _context.Document.Include(d => d.Client).Include(d => d.TipDocument)
                     .Where(d => d.ClientId == appUser.ClientId 
-                            && d.DocumentPath.Contains(viewDocumentVM.Year) 
+                            && d.Data.Year.ToString().Equals(viewDocumentVM.Year)
+                            && d.Data.Month.ToString().Equals(viewDocumentVM.Month)
                             && d.TipDocumentId == viewDocumentVM.TipulDoc)
                     .ToList();
             }
@@ -74,7 +80,7 @@ namespace Licenta.Areas.Clienti.Controllers
             // urmeaza implementarea acestei pagini
             if (documents.Count == 0)
             {
-                return NotFound();
+                return View("DocumentNotFound");
             }
 
             foreach (var document in documents)

@@ -5,9 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<br/>
+<h2>Incarcare document nou</h2>
 
-<h4>Document</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -20,22 +20,15 @@
             </div>
             <div class="form-group">
                 <label asp-for="ClientId" class="control-label"></label>
-                <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
+                <input asp-for="ClientId" class ="form-control" readonly />
             </div>
             <div class="form-group">
                 <label asp-for="ApplicationUserId" class="control-label"></label>
-                <select asp-for="ApplicationUserId" class="form-control" asp-items="ViewBag.ApplicationUserId"></select>
-                <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
+                <input asp-for="ApplicationUserId" class="form-control" readonly />
             </div>
             <div class="form-group">
                 <label asp-for="TipDocumentId" class="control-label"></label>
-                <select asp-for="TipDocumentId" class="form-control" asp-items="ViewBag.TipDocumentId"></select>
-                <span asp-validation-for="TipDocumentId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Data" class="control-label"></label>
-                <input asp-for="Data" class="form-control" />
-                <span asp-validation-for="Data" class="text-danger"></span>
+                <select asp-for="TipDocumentId" class ="form-control" asp-items="ViewBag.TipDocumentId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
