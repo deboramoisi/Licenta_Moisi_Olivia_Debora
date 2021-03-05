@@ -4,14 +4,16 @@ using Licenta.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Licenta.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210305171335_AddQuestionTbToDb")]
+    partial class AddQuestionTbToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,9 +169,6 @@ namespace Licenta.Migrations
                     b.Property<DateTime>("DataAdaugare")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Descriere")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Intrebare")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -202,30 +201,6 @@ namespace Licenta.Migrations
                     b.HasKey("QuestionCategoryId");
 
                     b.ToTable("QuestionCategory");
-                });
-
-            modelBuilder.Entity("Licenta.Models.QandA.Response", b =>
-                {
-                    b.Property<int>("ResponseId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("DataAdaugare")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Raspuns")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ResponseId");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("Response");
                 });
 
             modelBuilder.Entity("Licenta.Models.Salariat", b =>
@@ -634,17 +609,6 @@ namespace Licenta.Migrations
                     b.Navigation("QuestionCategory");
                 });
 
-            modelBuilder.Entity("Licenta.Models.QandA.Response", b =>
-                {
-                    b.HasOne("Licenta.Models.QandA.Question", "Question")
-                        .WithMany("Responses")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-                });
-
             modelBuilder.Entity("Licenta.Models.Salariat", b =>
                 {
                     b.HasOne("Licenta.Models.Client", "Client")
@@ -739,11 +703,6 @@ namespace Licenta.Migrations
             modelBuilder.Entity("Licenta.Models.Furnizor", b =>
                 {
                     b.Navigation("ClientFurnizori");
-                });
-
-            modelBuilder.Entity("Licenta.Models.QandA.Question", b =>
-                {
-                    b.Navigation("Responses");
                 });
 
             modelBuilder.Entity("Licenta.Models.Salariat", b =>

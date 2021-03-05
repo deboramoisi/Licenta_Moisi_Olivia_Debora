@@ -11,6 +11,7 @@ using Licenta.ViewModels;
 using Licenta.Services.FileManager;
 using Microsoft.AspNetCore.Authorization;
 using Licenta.Utility;
+using Microsoft.AspNetCore.Identity;
 
 namespace Licenta.Areas.Admin.Views
 {
@@ -20,11 +21,13 @@ namespace Licenta.Areas.Admin.Views
     {
         private readonly ApplicationDbContext _context;
         private readonly IFileManager _fileManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public DocumentsController(ApplicationDbContext context, IFileManager fileManager)
+        public DocumentsController(ApplicationDbContext context, IFileManager fileManager, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _fileManager = fileManager;
+            _userManager = userManager;
         }
 
         // GET: Admin/Documents
@@ -32,6 +35,23 @@ namespace Licenta.Areas.Admin.Views
         {
             var applicationDbContext = _context.Document.Include(d => d.Client).Include(d => d.ApplicationUser).Include(d => d.TipDocument);
             return View(await applicationDbContext.ToListAsync());
+        }
+
+        // GET: Admin/Documents/IncarcariUtilizatori
+        public async Task<IActionResult> IncarcariUtilizatori()
+        {
+            var applicationDbContext = _context.Document.Include(d => d.Client).Include(d => d.ApplicationUser).Include(d => d.TipDocument);
+            return View(await applicationDbContext.ToListAsync());
+        }
+
+        private async Task<bool> AdminOrNot(string id)
+        {
+            var user = _context.ApplicationUsers.Find(id);
+            if (await _userManager.IsInRoleAsync(user, ConstantVar.Rol_Admin))
+            {
+                return false;
+            }
+            return true;
         }
 
         // GET: Admin/Documents/Details/5
@@ -186,6 +206,21 @@ namespace Licenta.Areas.Admin.Views
         {
             var allObj = _context.Document.Include(d => d.TipDocument).Include(d => d.Client).Include(d => d.ApplicationUser).ToList();
             return Json(new { data = allObj });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllUser()
+        {
+            var allDocuments = _context.Document.Include(d => d.ApplicationUser).Include(d => d.TipDocument).Include(d => d.Client);
+            var myList = new List<Document>();
+            foreach (var doc in allDocuments)
+            {
+                if (await _userManager.IsInRoleAsync(doc.ApplicationUser, ConstantVar.Rol_Admin_Firma) || await _userManager.IsInRoleAsync(doc.ApplicationUser, ConstantVar.Rol_User_Individual))
+                {
+                    myList.Add(doc);
+                }
+            }
+            return Json(new { data = myList });
         }
 
         [HttpDelete]

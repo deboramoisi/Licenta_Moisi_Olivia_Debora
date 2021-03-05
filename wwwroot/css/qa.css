@@ -1,0 +1,12 @@
+﻿.question-card, .categories {
+    border-radius: 5px 5px;
+    margin-top: 6px;
+    margin-bottom: 13px;
+    padding: 25px;
+    transition: ease-in;
+    background-color: #e0ebeb;
+}
+
+    .question-card:hover, .categories:hover {
+        transform: scale(1.01);
+    }

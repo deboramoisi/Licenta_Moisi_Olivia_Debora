@@ -1,18 +1,15 @@
 ﻿@model IEnumerable<Licenta.Models.Document>
 
 @{
-    ViewData["Title"] = "Documente transmise";
+    ViewData["Title"] = "Documente primite";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <br />
 
 <div class="row">
-    <div class="col-6">
-        <h2>Documente transmise</h2>
-    </div>
-    <div class="col-6 text-right">
-        <a asp-action="Create" class="btn btn-outline-primary"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Transmitere document nou</a>
+    <div class="col-12">
+        <h2>Documente primite de la utilizatori</h2>
     </div>
 </div>
 <br />
@@ -39,10 +36,9 @@
                 <th></th>
             </tr>
         </thead>
-
     </table>
 </div>
 
 @section Scripts {
-    <script src="~/js/documenteAdmin.js"></script>
+    <script src="~/js/documenteUserPrimite.js"></script>
 }

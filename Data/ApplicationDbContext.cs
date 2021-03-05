@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Licenta.Models;
+using Licenta.Models.QandA;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,5 +25,10 @@ namespace Licenta.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<TipDocument> TipDocument { get; set; }
         public DbSet<Document> Document { get; set; }
+        public DbSet<QuestionCategory> QuestionCategory { get; set; }
+        public DbSet<Question> Question { get; set; }
+        public DbSet<Response> Response { get; set; }
+
+
     }
 }

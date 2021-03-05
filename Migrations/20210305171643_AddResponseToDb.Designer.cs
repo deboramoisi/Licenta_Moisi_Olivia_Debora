@@ -4,14 +4,16 @@ using Licenta.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Licenta.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210305171643_AddResponseToDb")]
+    partial class AddResponseToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,9 +169,6 @@ namespace Licenta.Migrations
                     b.Property<DateTime>("DataAdaugare")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Descriere")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Intrebare")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -214,11 +213,10 @@ namespace Licenta.Migrations
                     b.Property<DateTime>("DataAdaugare")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("QuestionId")
+                    b.Property<int?>("QuestionId")
                         .HasColumnType("int");
 
                     b.Property<string>("Raspuns")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ResponseId");
@@ -636,13 +634,9 @@ namespace Licenta.Migrations
 
             modelBuilder.Entity("Licenta.Models.QandA.Response", b =>
                 {
-                    b.HasOne("Licenta.Models.QandA.Question", "Question")
+                    b.HasOne("Licenta.Models.QandA.Question", null)
                         .WithMany("Responses")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
+                        .HasForeignKey("QuestionId");
                 });
 
             modelBuilder.Entity("Licenta.Models.Salariat", b =>

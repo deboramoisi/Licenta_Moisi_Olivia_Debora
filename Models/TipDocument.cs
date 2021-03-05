@@ -9,6 +9,7 @@ namespace Licenta.Models
     public class TipDocument
     {
         [Key]
+        [Required]
         public int TipDocumentId { get; set; }
         
         [Required]

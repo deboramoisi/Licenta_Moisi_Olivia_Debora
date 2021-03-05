@@ -58,6 +58,7 @@ namespace Licenta.Areas.Admin.Views
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TipDocumentId,Denumire")] TipDocument tipDocument)
         {
+            
             if (ModelState.IsValid)
             {
                 _context.Add(tipDocument);
@@ -120,5 +121,29 @@ namespace Licenta.Areas.Admin.Views
         {
             return _context.TipDocument.Any(e => e.TipDocumentId == id);
         }
+
+        // API CALLS
+        #region
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var tipDocuments = _context.TipDocument.ToList();
+            return Json(new { data = tipDocuments });
+        }
+
+        // apel api folosind metoda delete din js
+        [HttpDelete]
+        public IActionResult DeleteAPI(int id)
+        {
+            var tipDocument = _context.TipDocument.Find(id);
+            if (tipDocument == null)
+            {
+                return Json(new { success = false, message = "Eroare la stergerea tipului!" });
+            }
+            _context.Remove(tipDocument);
+            _context.SaveChanges();
+            return Json(new { success = true, message = "Tipul documentului a fost sters cu succes!" });
+        }
+        #endregion
     }
 }

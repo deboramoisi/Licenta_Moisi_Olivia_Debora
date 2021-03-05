@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Licenta.Models.QandA.Response>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<div class="container mt-5">
+    @foreach (var item in Model)
+    {
+    <div class="w-75 bg-info mt-2 mb-2 p-3">
+        @Html.DisplayFor(modelItem => item.Question.Intrebare)
+    </div>
+    }
+</div>
+
+        

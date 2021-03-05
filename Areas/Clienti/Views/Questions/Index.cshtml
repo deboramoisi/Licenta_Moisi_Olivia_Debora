@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Licenta.Models.QandA.Question>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+
+<div class="row">
+    <div class="col-6">
+        <h2>Q&A</h2>
+    </div>
+    <div class="col-6 text-right">
+        <a asp-action="Create" class="btn btn-outline-primary"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Adauga intrebare noua!</a>
+    </div>
+</div>
+<br />
+
+<div class=" container mt-5">
+    <div class="row">
+        <div class="col-8 text-left">
+            @foreach (var item in Model)
+            {
+                <div class="question-card">
+                    <div>
+                        @Html.DisplayFor(modelItem => item.Intrebare)
+                    </div>
+                    <div class="row">
+                        <div class="col-6 font-italic">
+                            By @Html.DisplayFor(modelItem => item.ApplicationUser.Nume)
+                            <span class="ml-3"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp; At @Html.DisplayFor(modelItem => item.DataAdaugare)</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="col-4">
+            <div class="categories">
+                <div>
+                    <h4>Categorii</h4>
+                </div>
+                @foreach (var item in Model)
+                {
+                    <div>
+                        <input type="checkbox" /> &nbsp;
+                        <a href="#">@item.QuestionCategory.Denumire</a>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Styles {
+    <link href="~/css/qa.css" rel="stylesheet" />
+} 
