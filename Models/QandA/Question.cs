@@ -14,7 +14,8 @@ namespace Licenta.Models.QandA
         
         [Required, MinLength(length: 10, ErrorMessage = "Intrebarea adresata trebuie sa aiba minim 10 caractere!" )]
         public string Intrebare { get; set; }
-
+        
+        [Display(Name = "Detaliati intrebarea")]
         public string Descriere { get; set; }
 
         [DataType(DataType.Date)]

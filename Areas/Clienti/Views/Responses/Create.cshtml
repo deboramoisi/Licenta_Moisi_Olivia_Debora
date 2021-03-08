@@ -1,40 +1,69 @@
 ﻿@model Licenta.Models.QandA.Response
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Adauga raspuns";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<br />
+<h3>Adaugare raspuns</h3>
 
-<h4>Response</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+<div class="container">
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="QuestionId" />
+
+        <div class="form-group row">
+            <div class="col-4">
+                Intrebare
+            </div>
+            <div class="col-6">
+                <select asp-items="ViewBag.QuestionId" class="form-control" disabled></select>
+            </div>
+        </div>
+
+        @if (!String.IsNullOrEmpty(ViewBag.Descriere))
+        {
+            <div class="form-group row">
+                <div class="col-4">
+                    Intrebare detaliata
+                </div>
+                <div class="col-6">
+                    <textarea asp-for="Question.Descriere" class="form-control" rows="8" readonly></textarea>
+                </div>
+            </div>
+        }
+        <div class="form-group row">
+            <div class="col-4">
                 <label asp-for="Raspuns" class="control-label"></label>
-                <textarea asp-for="Raspuns" class="form-control" ></textarea>
+            </div>
+            <div class="col-6">
+                <textarea asp-for="Raspuns" class="form-control" rows="8"></textarea>
                 <span asp-validation-for="Raspuns" class="text-danger"></span>
             </div>
-            <div class="form-group">
+        </div>
+
+        <div class="form-group row">
+            <div class="col-4">
                 <label asp-for="DataAdaugare" class="control-label"></label>
-                <input asp-for="DataAdaugare" class="form-control" />
+            </div>
+            <div class="col-6">
+                <input asp-for="DataAdaugare" class="form-control" readonly />
                 <span asp-validation-for="DataAdaugare" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="QuestionId" class="control-label"></label>
-                <select asp-for="QuestionId" class ="form-control" asp-items="ViewBag.QuestionId"></select>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3 offset-4">
+                <input type="submit" value="Adauga raspuns" class="btn btn-success form-control" />
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="col-3">
+                <a asp-controller="Questions" asp-action="Index" class="btn btn-primary form-control">Inapoi</a>
             </div>
-        </form>
-    </div>
+        </div>
+
+    </form>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 

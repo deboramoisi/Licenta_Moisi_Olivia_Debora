@@ -1,8 +1,10 @@
-﻿@model IEnumerable<Licenta.Models.QandA.Question>
+﻿@using Licenta.Utility 
+@model Licenta.ViewModels.QAIndexVM
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var admin = User.IsInRole(ConstantVar.Rol_Admin);
 }
 
 <br />
@@ -17,19 +19,112 @@
 </div>
 <br />
 
+@* Dropdown sortare *@
+
+<div class="row">
+    <div class="dropdown show col-6">
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-sort" aria-hidden="true"></i>&nbsp; Sort by
+        </a>
+
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["QuestionSortParam"]">
+                Intrebare &nbsp;
+                @if (ViewData["QuestionSortParam"].ToString() == "Question")
+                {
+                    @: <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                }
+                else
+                {
+                    @: <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                }
+            </a>
+            <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">
+                Data adaugarii &nbsp;
+                @if (ViewData["DateSortParam"].ToString() == "Date")
+                {
+                    @: <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                }
+                else
+                {
+                    @: <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                }
+            </a>
+            <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["CategorySortParam"]">
+                Categorii &nbsp;
+                @if (ViewData["CategorySortParam"].ToString() == "Category")
+                {
+                    @: <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                }
+                else
+                {
+                    @: <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                }
+            </a>
+        </div>
+    </div>
+    
+    @* Search *@
+    <div class="col-6 text-right">
+        <form asp-action="Index" method="get">
+            <div class="form-actions no-color">
+                Cauta intrebare: &nbsp;
+                <input type="text" name="searchQuestion" value="@ViewData["CurrentSearch"]" />
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Inapoi</a>
+            </div>
+        </form>
+    </div>
+
+</div>
 <div class=" container mt-5">
     <div class="row">
         <div class="col-8 text-left">
-            @foreach (var item in Model)
+            @foreach (var item in Model.questions)
             {
                 <div class="question-card">
-                    <div>
-                        @Html.DisplayFor(modelItem => item.Intrebare)
+                    <div class="row">
+                        <div class="col-10">
+                            <a asp-controller="Questions" asp-action="Details" asp-route-id=@item.QuestionId>
+                                @if (!item.Rezolvata)
+                                {
+                                <span class="text-danger font-weight-bold">NEW! &nbsp;</span> 
+                                } 
+                                @Html.DisplayFor(modelItem => item.Intrebare)
+                            </a>
+                        </div>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @if (admin || User.Identity.Name == item.ApplicationUser.Email)
+                            {
+                        <div class="col-2 text-right">
+                            <a asp-controller="Questions" asp-action="Edit" asp-route-id="@item.QuestionId" class="text-right">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            </a>
+                            @if (admin)
+                            {
+                            <a asp-controller="Responses" asp-action="Create" asp-route-id="@item.QuestionId" class="text-right">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                            </a>
+                            }
+                        </div>
+                            }
+                        }
                     </div>
+
                     <div class="row">
                         <div class="col-6 font-italic">
                             By @Html.DisplayFor(modelItem => item.ApplicationUser.Nume)
-                            <span class="ml-3"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp; At @Html.DisplayFor(modelItem => item.DataAdaugare)</span>
+                            <span class="ml-3"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp; 
+                            At @Html.DisplayFor(modelItem => item.DataAdaugare)</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6 font-italic">
+                            # @Html.DisplayFor(modelItem => item.QuestionCategory.Denumire)
                         </div>
                     </div>
                 </div>
@@ -41,14 +136,21 @@
                 <div>
                     <h4>Categorii</h4>
                 </div>
-                @foreach (var item in Model)
+                @foreach (var item in Model.questionCategories)
                 {
                     <div>
-                        <input type="checkbox" /> &nbsp;
-                        <a href="#">@item.QuestionCategory.Denumire</a>
+                        @if (ViewData["filterBy"].ToString() == item.Denumire || ViewData["filterBy"].ToString() == "All")
+                        {
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                        }
+                        <a asp-controller="Questions" asp-action="Index" asp-route-filterBy="@item.Denumire">@item.Denumire</a>
                     </div>
-
                 }
+                @if (ViewData["filterBy"].ToString() == "All")
+                {
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                }
+                <a asp-controller="Questions" asp-action="Index" asp-route-filterBy="All">Toate</a>
             </div>
         </div>
     </div>

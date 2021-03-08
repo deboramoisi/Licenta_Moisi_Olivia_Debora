@@ -1,49 +1,85 @@
-﻿@model Licenta.Models.QandA.Question
+﻿@using Licenta.Utility 
+@model Licenta.Models.QandA.Question
 
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var admin = User.IsInRole(ConstantVar.Rol_Admin);
+    var clientCuDrepturi = User.Identity.Name == Model.ApplicationUser.Email;
 }
 
-<h1>Details</h1>
+<br />
+
+<div class="row">
+    <div class="col-9">
+        <h4>@Model.Intrebare</h4>
+        <h6 class="row font-italic ml-1">
+            By @Model.ApplicationUser.Nume
+        <span class="ml-3">
+            <i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;
+            At @Model.DataAdaugare
+        </span>
+        </h6>
+    </div>
+    <div class="col-3 text-right">
+    @if (admin)
+    {
+       <a asp-controller="Responses" asp-action="Create" asp-route-id="@Model.QuestionId" class="btn btn-outline-primary"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Adauga raspuns nou!</a>
+        
+    }
+    @if (admin || clientCuDrepturi)
+    {
+        @: &nbsp;
+        <a asp-controller="Responses" asp-action="Edit" asp-route-id="@Model.QuestionId" class="text-right">
+            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+        </a>
+    }
+    </div>
+
+
+</div>
 
 <div>
-    <h4>Question</h4>
     <hr />
+    <br />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Intrebare)
+        @if (Model.Descriere != null)
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Descriere)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Descriere)
+            </dd>
+        }
+        @foreach (var response in Model.Responses)
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => response.Raspuns)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => response.Raspuns)
+            </dd>
+        }
+        <dt class="col-sm-2">
+            Categorie
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Intrebare)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DataAdaugare)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DataAdaugare)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Rezolvata)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Rezolvata)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.QuestionCategory)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.QuestionCategory.QuestionCategoryId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ApplicationUser)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ApplicationUser.Id)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.QuestionCategory.Denumire)
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.QuestionId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="form-group row">
+    @if (admin || clientCuDrepturi)
+    {
+    <div class="col-2 offset-2">
+        <a asp-controller="Responses" asp-action="Edit" asp-route-id="@Model.QuestionId" class="btn btn-success form-control">Editare</a>
+    </div>
+    }
+    
+    <div class="col-2">
+        <a asp-controller="Questions" asp-action="Index" class="btn btn-primary form-control">Inapoi</a>
+    </div>
+    
 </div>

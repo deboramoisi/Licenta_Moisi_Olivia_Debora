@@ -1,4 +1,6 @@
-﻿@model Licenta.Models.QandA.Question
+﻿@using Licenta.Utility
+@model Licenta.Models.QandA.Question
+
 
 @{
     ViewData["Title"] = "Create";
@@ -11,43 +13,36 @@
 <hr />
 <div class="container mt-2">
     <br/>
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
-            <div class="form-group row">
-                <div class="col-3">
-                    <label asp-for="Intrebare" class="control-label"></label>
-                </div>
-                <div class="col-6">
-                    <textarea asp-for="Intrebare" class="form-control"></textarea>
-                    <span asp-validation-for="Intrebare" class="text-danger"></span>
-                </div>
-            </div>
-            
-            <div class="form-group row">
-                <div class="col-3">
-                    <label asp-for="DataAdaugare" class="control-label"></label>
-                </div>
-                <div class="col-6">
-                    <input asp-for="DataAdaugare" class="form-control" />
-                    <span asp-validation-for="DataAdaugare" class="text-danger"></span>
-                </div>
-            </div>
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Intrebare" class="control-label"></label>
+            </div>
+            <div class="col-6">
+                <textarea asp-for="Intrebare" class="form-control"></textarea>
+                <span asp-validation-for="Intrebare" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Descriere" class="control-label"></label>
+            </div>
+            <div class="col-6">
+                <textarea asp-for="Descriere" class="form-control" rows="8"></textarea>
+                <span asp-validation-for="Descriere" class="text-danger"></span>
+            </div>
+        </div>
+
+        @if (User.IsInRole(ConstantVar.Rol_Admin))
+        {
             <div class="form-group form-check row">
                 <div class="col-6 offset-3">
                     <label class="form-check-label">
                         <input class="form-check-input" asp-for="Rezolvata" /> @Html.DisplayNameFor(model => model.Rezolvata)
                     </label>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <div class="col-3">
-                    <label asp-for="QuestionCategoryId" class="control-label"></label>
-                </div>
-                <div class="col-6">
-                    <select asp-for="QuestionCategoryId" class="form-control" asp-items="ViewBag.QuestionCategoryId"></select>
                 </div>
             </div>
 
@@ -59,16 +54,26 @@
                     <select asp-for="ApplicationUserId" class="form-control" asp-items="ViewBag.ApplicationUserId"></select>
                 </div>
             </div>
+        }
 
-            <div class="form-group row">
-                <div class="col-3 offset-3">
-                    <a asp-action="Index" class="btn btn-primary form-control">Inapoi</a>
-                </div>
-                <div class="col-3">
-                    <input type="submit" value="Adauga" class="btn btn-success form-control" />
-                </div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="QuestionCategoryId" class="control-label"></label>
             </div>
-        </form>
+            <div class="col-6">
+                <select asp-for="QuestionCategoryId" class="form-control" asp-items="ViewBag.QuestionCategoryId"></select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3 offset-3">
+                <a asp-action="Index" class="btn btn-primary form-control">Inapoi</a>
+            </div>
+            <div class="col-3">
+                <input type="submit" value="Adauga" class="btn btn-success form-control" />
+            </div>
+        </div>
+    </form>
 </div>
 
 

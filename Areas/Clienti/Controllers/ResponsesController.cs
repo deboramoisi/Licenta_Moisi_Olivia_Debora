@@ -47,22 +47,41 @@ namespace Licenta.Areas.Clienti.Views
         }
 
         // GET: Clienti/Responses/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
+
+            Response response = new Response()
+            {
+                DataAdaugare = DateTime.Now,
+            };
+
+            if (id != 0)
+            {
+                response.QuestionId = id.Value;
+                if (_context.Question.Find(id).Descriere != null)
+                {
+                    ViewBag.Descriere = _context.Question.Find(id).Descriere;
+                }
+            }
+
             ViewData["QuestionId"] = new SelectList(_context.Question, "QuestionId", "Intrebare");
-            return View();
+            return View(response);
         }
 
         // POST: Clienti/Responses/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ResponseId,Raspuns,DataAdaugare,QuestionId")] Response response)
         {
+            var question = _context.Question.Find(response.QuestionId);
+
             if (ModelState.IsValid)
             {
                 _context.Add(response);
+
+                question.Rezolvata = true;
+                _context.Update(question);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -88,8 +107,6 @@ namespace Licenta.Areas.Clienti.Views
         }
 
         // POST: Clienti/Responses/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ResponseId,Raspuns,DataAdaugare,QuestionId")] Response response)
