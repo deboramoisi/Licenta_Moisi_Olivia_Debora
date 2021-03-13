@@ -1,4 +1,4 @@
-﻿@using Licenta.Utility 
+﻿@using Licenta.Utility
 @model Licenta.ViewModels.QAIndexVM
 
 @{
@@ -9,12 +9,17 @@
 
 <br />
 
+<!-- Modal Placeholder -->
+<div id="question-modal"></div>
+
 <div class="row">
     <div class="col-6">
         <h2>Q&A</h2>
     </div>
     <div class="col-6 text-right">
-        <a asp-action="Create" class="btn btn-outline-primary"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Adauga intrebare noua!</a>
+        <button type="button" class="btn btn-outline-primary" data-toggle="ajax-question-modal" data-target="#add-question" data-url="@Url.Action("Create")">
+            <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Adauga intrebare noua
+        </button>
     </div>
 </div>
 <br />
@@ -63,7 +68,7 @@
             </a>
         </div>
     </div>
-    
+
     @* Search *@
     <div class="col-6 text-right">
         <form asp-action="Index" method="get">
@@ -79,7 +84,7 @@
     </div>
 
 </div>
-<div class=" container mt-5">
+<div class="container mt-5" id="questions_table">
     <div class="row">
         <div class="col-8 text-left">
             @foreach (var item in Model.questions)
@@ -90,8 +95,8 @@
                             <a asp-controller="Questions" asp-action="Details" asp-route-id=@item.QuestionId>
                                 @if (!item.Rezolvata)
                                 {
-                                <span class="text-danger font-weight-bold">NEW! &nbsp;</span> 
-                                } 
+                                    <span class="text-danger font-weight-bold">NEW! &nbsp;</span>
+                                }
                                 @Html.DisplayFor(modelItem => item.Intrebare)
                             </a>
                         </div>
@@ -99,17 +104,20 @@
                         {
                             @if (admin || User.Identity.Name == item.ApplicationUser.Email)
                             {
-                        <div class="col-2 text-right">
-                            <a asp-controller="Questions" asp-action="Edit" asp-route-id="@item.QuestionId" class="text-right">
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                            </a>
-                            @if (admin)
-                            {
-                            <a asp-controller="Responses" asp-action="Create" asp-route-id="@item.QuestionId" class="text-right">
-                                <i class="fa fa-plus" aria-hidden="true"></i>
-                            </a>
-                            }
-                        </div>
+                            <div class="col-2 text-right">
+                                <a asp-controller="Questions" asp-action="Edit" asp-route-id="@item.QuestionId" class="text-right">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </a>
+                                @if (admin)
+                                {
+                                    <a id="DeleteQuestion" onclick="DeleteQuestion('/Clienti/Questions/DeleteAPI/@item.QuestionId')" class="text-right text-danger">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </a>
+                                    <a asp-controller="Responses" asp-action="Create" asp-route-id="@item.QuestionId" class="text-right">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </a>
+                                }
+                            </div>
                             }
                         }
                     </div>
@@ -117,8 +125,10 @@
                     <div class="row">
                         <div class="col-6 font-italic">
                             By @Html.DisplayFor(modelItem => item.ApplicationUser.Nume)
-                            <span class="ml-3"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp; 
-                            At @Html.DisplayFor(modelItem => item.DataAdaugare)</span>
+                            <span class="ml-3">
+                                <i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;
+                                At @Html.DisplayFor(modelItem => item.DataAdaugare)
+                            </span>
                         </div>
                     </div>
 
@@ -159,4 +169,8 @@
 
 @section Styles {
     <link href="~/css/qa.css" rel="stylesheet" />
+} 
+
+@section Scripts {
+    <script src="~/js/questions.js"></script>
 } 

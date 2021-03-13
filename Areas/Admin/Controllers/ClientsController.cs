@@ -28,14 +28,10 @@ namespace Licenta.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             return View(await _context.Client
-                // Includem Sediu Social pentru a putea afisa detaliile din acel model relatia 1:1 cu clienti
                                 .Include(c => c.SediuSocial)
-                                .Include(c => c.ClientFurnizori)
-                                .ThenInclude(c => c.Furnizor)
                                 .ToListAsync());
         }
 
-        // GET: Clients/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -47,8 +43,6 @@ namespace Licenta.Areas.Admin.Controllers
                 // Includem detalii din Sediu Social
                 .Include(b => b.SediuSocial)
                 .Include(b => b.Salariati)
-                .Include(b => b.ClientFurnizori)
-                                .ThenInclude(b => b.Furnizor)
                 .FirstOrDefaultAsync(m => m.ClientId == id);
             if (client == null)
             {
@@ -58,44 +52,26 @@ namespace Licenta.Areas.Admin.Controllers
             return View(client);
         }
 
-        // GET: Clients/Create
         public IActionResult Create()
         {
-            ViewData["FurnizorId"] = new SelectList(_context.Furnizor, "FurnizorID", "Denumire");
             return View();
         }
 
-        // POST: Clients/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ClientVM clientVM)
+        public async Task<IActionResult> Create(Client client)
         {
-            ViewData["FurnizorId"] = new SelectList(_context.Furnizor, "FurnizorID", "Denumire");
-
-            Client client = clientVM.Client;
 
             if (ModelState.IsValid)
             {
                 _context.Add(client);
                 _context.SaveChanges();
-                foreach (var furnizor in clientVM.SelectedFurnizors)
-                {
-                    if (furnizor != 0)
-                    {
-                        _context.Add(new ClientFurnizor()
-                        {
-                            ClientId = client.ClientId,
-                            FurnizorId = furnizor
-                        });
-                    }
-                }
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(clientVM);
+            return View(client);
         }
 
-        // GET: Clients/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -105,8 +81,6 @@ namespace Licenta.Areas.Admin.Controllers
 
             var client = await _context.Client
                 .Include(b => b.SediuSocial)
-                .Include(b => b.ClientFurnizori)
-                    .ThenInclude(b => b.Furnizor)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ClientId == id);
 
@@ -114,32 +88,12 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
-            var clientFurnizori = _context.ClientFurnizor;
-            List<int> selectedFurnizors = new List<int>();
-
-            foreach (var item in clientFurnizori)
-            {
-                if (item.ClientId == client.ClientId)
-                {
-                    selectedFurnizors.Add(item.FurnizorId);
-                }
-            }
-
-            ClientVM clientVM = new ClientVM()
-            {
-                Client = client,
-                SelectedFurnizors = selectedFurnizors
-            };
-
-            ViewData["FurnizorId"] = new SelectList(_context.Furnizor, "FurnizorID", "Denumire");
-            return View(clientVM);
+            return View(client);
         }
 
-        // POST: Clients/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClientId,Denumire,NrRegComertului,CodCAEN,TipFirma,CapitalSocial,CasaDeMarcat,TVA,ClientFurnizori")] Client client)
+        public async Task<IActionResult> Edit(int id, [Bind("ClientId,Denumire,NrRegComertului,CodCAEN,TipFirma,CapitalSocial,CasaDeMarcat,TVA")] Client client)
         {
             if (id != client.ClientId)
             {
@@ -166,7 +120,6 @@ namespace Licenta.Areas.Admin.Controllers
                     }
                 }
             }
-            ViewData["FurnizorId"] = new SelectList(_context.Furnizor, "FurnizorID", "Denumire");
             return View(client);
         }
 
@@ -180,7 +133,7 @@ namespace Licenta.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var allObj = _context.Client.Include(c => c.SediuSocial).Include(c => c.ClientFurnizori).ThenInclude(c => c.Furnizor).ToList();
+            var allObj = _context.Client.Include(c => c.SediuSocial).ToList();
             return Json(new { data = allObj });
         }
 

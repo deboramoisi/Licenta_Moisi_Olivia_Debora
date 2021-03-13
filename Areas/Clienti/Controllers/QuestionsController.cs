@@ -45,49 +45,32 @@ namespace Licenta.Areas.Clienti.Views
             // Filtrare in functie de categorie
             ViewData["filterBy"] = (String.IsNullOrEmpty(filterBy)) ? "All" : filterBy;
 
-            switch (ViewData["filterBy"].ToString())
+            questions = (ViewData["filterBy"].ToString()) switch
             {
-                case "All":
-                    questions = questions.ToList();
-                    break;
-                default:
-                    questions = questions.Where(q => q.QuestionCategory.Denumire == filterBy).ToList();
-                    break;
-            }
+                "All" => questions.ToList(),
+                _ => questions.Where(q => q.QuestionCategory.Denumire == filterBy).ToList(),
+            };
 
             // sortare
-            switch (sortOrder)
+            questions = sortOrder switch
             {
-                case "name_desc":
-                    questions = questions.OrderByDescending(s => s.Intrebare).ToList();
-                    break;
-                case "Question":
-                    questions = questions.OrderBy(s => s.Intrebare).ToList();
-                    break;
-                case "Date":
-                    questions = questions.OrderBy(s => s.DataAdaugare).ToList();
-                    break;
-                case "date_desc":
-                    questions = questions.OrderByDescending(s => s.DataAdaugare).ToList();
-                    break;
-                case "Category":
-                    questions = questions.OrderBy(s => s.QuestionCategory.Denumire).ToList();
-                    break;
-                case "Category_desc":
-                    questions = questions.OrderByDescending(s => s.QuestionCategory.Denumire).ToList();
-                    break;
-                default:
-                    questions = questions.OrderBy(s => s.Rezolvata).ToList();
-                    break;
-            }
+                "name_desc" => questions.OrderByDescending(s => s.Intrebare).ToList(),
+                "Question" => questions.OrderBy(s => s.Intrebare).ToList(),
+                "Date" => questions.OrderBy(s => s.DataAdaugare).ToList(),
+                "date_desc" => questions.OrderByDescending(s => s.DataAdaugare).ToList(),
+                "Category" => questions.OrderBy(s => s.QuestionCategory.Denumire).ToList(),
+                "Category_desc" => questions.OrderByDescending(s => s.QuestionCategory.Denumire).ToList(),
+                _ => questions.OrderBy(s => s.Rezolvata).ToList(),
+            };
 
             // totalitatea categoriilor
             var questionCategories = await _context.QuestionCategory.ToListAsync();
-            return View(new QAIndexVM() { 
+            return View(new QAIndexVM()
+            {
                 questions = questions,
                 questionCategories = questionCategories
             });
-        }
+        } 
 
         // GET: Clienti/Questions/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -121,7 +104,7 @@ namespace Licenta.Areas.Clienti.Views
                 };
                 ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Nume");
                 ViewData["QuestionCategoryId"] = new SelectList(_context.QuestionCategory, "QuestionCategoryId", "Denumire");
-                return View(question);
+                return PartialView("_AddQuestion", question);
             }
             else
             {
@@ -146,11 +129,10 @@ namespace Licenta.Areas.Clienti.Views
             {
                 _context.Add(question);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Nume", question.ApplicationUserId);
             ViewData["QuestionCategoryId"] = new SelectList(_context.QuestionCategory, "QuestionCategoryId", "Denumire", question.QuestionCategoryId);
-            return View(question);
+            return PartialView("_AddQuestion", question);
         }
 
         // GET: Clienti/Questions/Edit/5
@@ -241,5 +223,24 @@ namespace Licenta.Areas.Clienti.Views
         {
             return _context.Question.Any(e => e.QuestionId == id);
         }
+
+        // API CALLS
+        #region
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAPI(int id)
+        {
+            Question question = await _context.Question.FindAsync(id);
+            if (question == null)
+            {
+                return Json(new { success = false, message = "Intrebarea nu a fost gasita!" });
+            }
+            else
+            {
+                _context.Remove(question);
+                await _context.SaveChangesAsync();
+                return Json(new { success = true, message = "Intrebare stearsa cu succes!" });
+            }
+        }
+        #endregion
     }
 }

@@ -1,4 +1,4 @@
-﻿@model Licenta.ViewModels.ClientVM
+﻿@model Licenta.Models.Client
 
 @{
     ViewData["Title"] = "Edit client";
@@ -11,105 +11,105 @@
 <div class="container">
     <form asp-action="Edit">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="Client.ClientId" />
+        <input type="hidden" asp-for="ClientId" />
         <div class="form-group row">
             <div class="col-3">
-                <label asp-for="Client.Denumire" class="control-label"></label>
+                <label asp-for="Denumire" class="control-label"></label>
             </div>
             <div class="col-6">
-                <input asp-for="Client.Denumire" class="form-control" />
-                <span asp-validation-for="Client.Denumire" class="text-danger"></span>
+                <input asp-for="Denumire" class="form-control" />
+                <span asp-validation-for="Denumire" class="text-danger"></span>
             </div>
         </div>
 
         <div class="form-group row">
             <div class="col-3">
-                <label asp-for="Client.NrRegComertului" class="control-label"></label>
+                <label asp-for="NrRegComertului" class="control-label"></label>
             </div>
             <div class="col-6">
-                <input asp-for="Client.NrRegComertului" class="form-control" />
-                <span asp-validation-for="Client.NrRegComertului" class="text-danger"></span>
+                <input asp-for="NrRegComertului" class="form-control" />
+                <span asp-validation-for="NrRegComertului" class="text-danger"></span>
             </div>
         </div>
 
         <div class="form-group row">
             <div class="col-3">
-                <label asp-for="Client.CodCAEN" class="control-label"></label>
+                <label asp-for="CodCAEN" class="control-label"></label>
             </div>
             <div class="col-6">
-                <input asp-for="Client.CodCAEN" class="form-control" />
-                <span asp-validation-for="Client.CodCAEN" class="text-danger"></span>
+                <input asp-for="CodCAEN" class="form-control" />
+                <span asp-validation-for="CodCAEN" class="text-danger"></span>
             </div>
         </div>
 
         <div class="form-group row">
             <div class="col-3">
-                <label asp-for="Client.TipFirma" class="control-label"></label>
+                <label asp-for="TipFirma" class="control-label"></label>
             </div>
             <div class="col-6">
                 @* Radio Button for Tip firma *@
-                Persoana Fizica @Html.RadioButtonFor(model => model.Client.TipFirma, "Persoana Fizica")
+                Persoana Fizica @Html.RadioButtonFor(model => model.TipFirma, "Persoana Fizica")
             </div>
         </div>
 
         <div class="form-group row">
             <div class="col-6 offset-3">
-                Persoana Juridica @Html.RadioButtonFor(model => model.Client.TipFirma, "Persoana juridica")
-                <span asp-validation-for="Client.TipFirma" class="text-danger"></span>
+                Persoana Juridica @Html.RadioButtonFor(model => model.TipFirma, "Persoana juridica")
+                <span asp-validation-for="TipFirma" class="text-danger"></span>
 
             </div>
         </div>
 
         <div class="form-group row">
             <div class="col-3">
-                <label asp-for="Client.CapitalSocial" class="control-label font-weight-bold"></label>
+                <label asp-for="CapitalSocial" class="control-label font-weight-bold"></label>
             </div>
             <div class="col-6">
-                <input asp-for="Client.CapitalSocial" class="form-control" />
-                <span asp-validation-for="Client.CapitalSocial" class="text-danger"></span>
+                <input asp-for="CapitalSocial" class="form-control" />
+                <span asp-validation-for="CapitalSocial" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group row">
             <div class="col-3">
-                <label asp-for="Client.CasaDeMarcat" class="control-label font-weight-bold"></label>
+                <label asp-for="CasaDeMarcat" class="control-label font-weight-bold"></label>
             </div>
             <div class="col-6">
                 @* Radio Button for Casa de marcat *@
                 Da
-                @Html.RadioButtonFor(model => model.Client.CasaDeMarcat, "Da")
+                @Html.RadioButtonFor(model => model.CasaDeMarcat, "Da")
             </div>
         </div>
         <div class="form-group row">
             <div class="col-6 offset-3">
                 Nu
-                @Html.RadioButtonFor(model => model.Client.CasaDeMarcat, "Nu")
-                <span asp-validation-for="Client.CasaDeMarcat" class="text-danger"></span>
+                @Html.RadioButtonFor(model => model.CasaDeMarcat, "Nu")
+                <span asp-validation-for="CasaDeMarcat" class="text-danger"></span>
             </div>
         </div>
 
         <div class="form-group row">
             <div class="col-3">
-                <label asp-for="Client.TVA" class="control-label font-weight-bold"></label>
+                <label asp-for="TVA" class="control-label font-weight-bold"></label>
             </div>
             <div class="col-6">
                 @* Radio Button for TVA *@
-                Lunar @Html.RadioButtonFor(model => model.Client.TVA, "Lunar")
+                Lunar @Html.RadioButtonFor(model => model.TVA, "Lunar")
             </div>
         </div>
         <div class="form-group row">
             <div class="col-6 offset-3">
-                Trimestrial @Html.RadioButtonFor(model => model.Client.TVA, "Trimestrial")
+                Trimestrial @Html.RadioButtonFor(model => model.TVA, "Trimestrial")
             </div>
         </div>
         <div class="form-group row">
             <div class="col-6 offset-3">
-                Neplatitor @Html.RadioButtonFor(model => model.Client.TVA, "Neplatitor")
+                Neplatitor @Html.RadioButtonFor(model => model.TVA, "Neplatitor")
             </div>
         </div>
         <div class="form-group row">
             <div class="col-6 offset-3">
-                TVA colectata la incasare @Html.RadioButtonFor(model => model.Client.TVA, "TVA colectata la incasare")
-                <span asp-validation-for="Client.TVA" class="text-danger"></span>
+                TVA colectata la incasare @Html.RadioButtonFor(model => model.TVA, "TVA colectata la incasare")
+                <span asp-validation-for="TVA" class="text-danger"></span>
             </div>
         </div>
 

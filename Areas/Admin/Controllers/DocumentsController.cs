@@ -12,6 +12,9 @@ using Licenta.Services.FileManager;
 using Microsoft.AspNetCore.Authorization;
 using Licenta.Utility;
 using Microsoft.AspNetCore.Identity;
+using System.Xml.Linq;
+using Licenta.Areas.Admin.Models;
+using System.Xml;
 
 namespace Licenta.Areas.Admin.Views
 {
@@ -75,12 +78,13 @@ namespace Licenta.Areas.Admin.Views
             return View(document);
         }
 
+        [HttpGet]
         // GET: Admin/Documents/Create
         public IActionResult Create()
         {
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire");
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Nume");
-            ViewData["TipDocumentId"] = new SelectList(_context.TipDocument, "TipDocumentId", "Denumire");
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(u => u.Denumire), "ClientId", "Denumire");
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers.OrderBy(u => u.Nume), "Id", "Nume");
+            ViewData["TipDocumentId"] = new SelectList(_context.TipDocument.OrderBy(u => u.Denumire), "TipDocumentId", "Denumire");
             return View();
         }
 
@@ -204,14 +208,14 @@ namespace Licenta.Areas.Admin.Views
         [HttpGet]
         public IActionResult GetAll()
         {
-            var allObj = _context.Document.Include(d => d.TipDocument).Include(d => d.Client).Include(d => d.ApplicationUser).ToList();
+            var allObj = _context.Document.Include(d => d.TipDocument).Include(d => d.Client).Include(d => d.ApplicationUser).OrderBy(u => u.Client.Denumire).ToList();
             return Json(new { data = allObj });
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllUser()
         {
-            var allDocuments = _context.Document.Include(d => d.ApplicationUser).Include(d => d.TipDocument).Include(d => d.Client);
+            var allDocuments = _context.Document.Include(d => d.ApplicationUser).Include(d => d.TipDocument).Include(d => d.Client).OrderBy(u => u.ApplicationUser.Nume);
             var myList = new List<Document>();
             foreach (var doc in allDocuments)
             {
@@ -243,6 +247,40 @@ namespace Licenta.Areas.Admin.Views
                     return Json(new { success = false, message = "Eroare la stergerea documentului!" });
                 }
             }
+        }
+        #endregion
+
+        // XML parsing
+        #region
+        public IActionResult XMLParsingExample()
+        {
+            List<CustomerModel> customers = new List<CustomerModel>();
+
+            XDocument doc = XDocument.Load("C:/Users/user/source/repos/Licenta/wwwroot/xml/Customers.xml");
+
+            // XmlDocument doc = new XmlDocument();
+            // doc.Load("C:/Users/user/source/repos/Licenta/wwwroot/xml/Customers.xml");
+
+            var q = from el in doc.Root.Elements()
+                    select el;
+
+            foreach (XElement e in q) {
+                customers.Add(new CustomerModel {
+                    CustomerId = int.Parse(e.Element("Id").Value),
+                    Name = e.Element("Name").Value.ToString(),
+                    Country = e.Element("Country").Value.ToString()
+                });
+            }
+
+            //foreach (XmlNode node in doc.SelectNodes("/Customers/Customer"))
+            //{
+            //    customers.Add(new CustomerModel {
+            //        CustomerId = int.Parse(node["Id"].InnerText),
+            //        Name = node["Name"].InnerText,
+            //        Country = node["Country"].InnerText
+            //    });
+            //}
+            return View(customers);
         }
         #endregion
     }

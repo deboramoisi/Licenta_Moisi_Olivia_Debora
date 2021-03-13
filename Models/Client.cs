@@ -40,12 +40,10 @@ namespace Licenta.Models
         // Navigation Property Sediu Social 1:1
         [Display(Name="Sediu Social")]
         public SediuSocial SediuSocial { get; set; }
-
-        [Display(Name = "Furnizori")]
-        // Navigation Property Furnizor m:n (ClientiFurnizori n:1)
-        public ICollection<ClientFurnizor> ClientFurnizori { get; set; }
         
         // Navigation Property Salariati n:1 
         public ICollection<Salariat> Salariati { get; set; }
+    
+        public ICollection<Furnizori> Furnizori { get; set; }
     }
 }

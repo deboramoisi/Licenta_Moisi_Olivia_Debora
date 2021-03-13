@@ -41,8 +41,7 @@
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" asp-area="Admin" asp-controller="Clients" asp-action="Index">Clienti</a>
                                     <a class="dropdown-item" asp-area="Admin" asp-controller="SediuSocials" asp-action="Index">Sedii Sociale</a>
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Furnizors" asp-action="Index">Furnizori</a>
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="ClientFurnizors" asp-action="Index">Clienti - Furnizori</a>
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Furnizori" asp-action="Index">Furnizori</a>
                                     <a class="dropdown-item" asp-area="Admin" asp-controller="Salariats" asp-action="Index">Salariati</a>
                                     <a class="dropdown-item" asp-area="Admin" asp-controller="IstoricSalars" asp-action="Index">Istoric Salarii</a>
                                     <div class="dropdown-divider"></div>
@@ -97,6 +96,10 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#">Link</a>
                             </div>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="Clienti" asp-controller="Home" asp-action="Chat">Chat</a>
                         </li>
                     </ul>
                 </div>

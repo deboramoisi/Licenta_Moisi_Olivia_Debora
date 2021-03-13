@@ -32,5 +32,9 @@ namespace Licenta.Models
 
         [DataType(DataType.Date), Display(Name = "Data document")]
         public DateTime Data { get; set; }
+
+        public Document() {
+            Data = DateTime.Now;
+        }
     }
 }

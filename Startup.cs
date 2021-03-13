@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Licenta.Utility;
 using Licenta.Services.FileManager;
 using Licenta.Models;
+using Licenta.Hubs;
 
 namespace Licenta
 {
@@ -34,6 +35,11 @@ namespace Licenta
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
+            // SignalR pentru chat
+            services.AddSignalR();
+                // .AddAzureSignalR();
+
             // Identity user & roles: options => options.SignIn.RequireConfirmedAccount = true
             services.AddIdentity<IdentityUser,IdentityRole>().AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -49,6 +55,7 @@ namespace Licenta
                 options.LogoutPath = $"/Identity/Account/Logout";
                 options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
             });
+
             // serviciu de autentificare folosind facebook
             services.AddAuthentication().AddFacebook(options =>
             {
@@ -95,6 +102,9 @@ namespace Licenta
                     name: "default",
                     pattern: "{area=Clienti}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                
+                // pentru chat
+                endpoints.MapHub<ChatHub>("/chathub");
             });
         }
     }

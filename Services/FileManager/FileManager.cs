@@ -16,12 +16,14 @@ namespace Licenta.Services.FileManager
         // preluare cale imagine din appsettings
         private readonly string _imagePath;
         private readonly string _documentPath;
+        private readonly string _xmlPath;
         private readonly ApplicationDbContext _context;
 
         public FileManager(IConfiguration config, ApplicationDbContext context)
         {
             _imagePath = config["Path:ProfileImage"];
             _documentPath = config["Path:Documente"];
+            _xmlPath = config["Path:Xml"];
             _context = context;
         }
 
@@ -121,6 +123,15 @@ namespace Licenta.Services.FileManager
             return "Success";
         }
 
+        public void DeleteDocumentXML(string fileName)
+        {
+            string fullPath = "wwwroot" + fileName;
+            if (File.Exists(fullPath))
+            {
+                File.Delete(fullPath);
+            }
+        }
+
         // Metoda de Update Document - se cauta documentul vechi, se sterge de pe server si se adauga documentul nou folosind metoda SaveDocumentOnServer
         public async Task<string> UpdateDocument(IFormFile document, int oldDocumentId, string Denumire, int ClientId, string UserId)
         {
@@ -155,6 +166,9 @@ namespace Licenta.Services.FileManager
         {
             // extragere extensie document
             var extension = Path.GetExtension(document.FileName);
+            if (extension.Contains("xml")) {
+                save_path = _xmlPath;
+            }
             // numele im va fi de tip img_zi-luna-an-ora-minut-secunda.extensie
             var fileName = $"{Denumire}_{ClientId}_{UserId}_{DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss")}{extension}";
 
@@ -163,10 +177,10 @@ namespace Licenta.Services.FileManager
                 // folosim FileStream pentru a copia documentul in director, pe server
                 await document.CopyToAsync(fileStream);
             }
-            // returnam numele documentului pentru a fi salvata in baza de date (fara calea absoluta - pentru securitate) 
+            // returnam numele documentului pentru a fi salvata in baza de date (fara calea absoluta - pentru securitate)
+            fileName = $"/xml/{Denumire}_{ClientId}_{UserId}_{DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss")}{extension}";
             return fileName;
         }
-
         #endregion
     }
 }

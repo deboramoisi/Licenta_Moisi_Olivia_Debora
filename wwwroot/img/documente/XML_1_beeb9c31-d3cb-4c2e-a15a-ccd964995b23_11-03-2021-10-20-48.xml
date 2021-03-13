@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<comanda> 
+    <!-- acesta e un comentariu --> 
+    <produs denumire="Televizor" id="p1" pret="100"/> 
+    <produs id="p2" pret="200">Calculator</produs> 
+    <produs> 
+        <id>p3</id> 
+        <pret>300</pret> 
+        <denumire>Ipod</denumire> 
+    </produs> 
+    <prettotal>600</prettotal> 
+    Aceasta este o comanda de produse 
+</comanda>

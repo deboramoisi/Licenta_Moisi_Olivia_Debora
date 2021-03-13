@@ -18,8 +18,6 @@ namespace Licenta.Data
 
         public DbSet<Client> Client { get; set; }
         public DbSet<SediuSocial> SediuSocial { get; set; }
-        public DbSet<Furnizor> Furnizor { get; set; }
-        public DbSet<ClientFurnizor> ClientFurnizor { get; set; }
         public DbSet<Salariat> Salariat { get; set; }
         public DbSet<IstoricSalar> IstoricSalar { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
@@ -28,6 +26,7 @@ namespace Licenta.Data
         public DbSet<QuestionCategory> QuestionCategory { get; set; }
         public DbSet<Question> Question { get; set; }
         public DbSet<Response> Response { get; set; }
+        public DbSet<Licenta.Models.Furnizori> Furnizori { get; set; }
 
 
     }
