@@ -16,19 +16,57 @@ namespace Licenta.Models
         
         [Required]
         public string Prenume { get; set; }
-        
+
+        [Display(Name = "Locatie")]
+        public string locatie { get; set; }
+
         [Required]
-        public string Pozitie { get; set; }
+        public string functie { get; set; }
+
+        [DataType(DataType.Date), Display(Name = "Data incepere"), DisplayFormat(DataFormatString = "{0:yyyy-mm-dd}")]
+        public DateTime? datai { get; set; }
+
+        [Display(Name = "Tip pozitie")]
+        public string tip { get; set; }
         
-        [Required, DataType(DataType.Date), Display(Name = "Data Angajare"), DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
-        public DateTime DataAngajare { get; set; }
+        [Display(Name = "Ore zi")]
+        public int ore_zi { get; set; }
+
+        [Display(Name = "Grupa")]
+        public string grupa { get; set; }
+
+        [Display(Name = "Numar zile concediu")]
+        public int nr_zile_co { get; set; }
+
+        [Display(Name = "Tip remuneratie")]
+        public string tip_rem { get; set; }
+
+        [Display(Name = "Salar brut")]
+        public int salar_brut { get; set; }
+
+        [Display(Name = "CNP")]
+        public string cn { get; set; }
+
+        [Display(Name = "Judet")]
+        public string judet { get; set; }
+
+        [Display(Name = "Localitate")]
+        public string localitate { get; set; }
+
+        [Display(Name = "Strada")]
+        public string str { get; set; }
+
+        [Display(Name = "Numar")]
+        public string nr { get; set; }
+
+        [Display(Name = "Cod postal"), MinLength(length: 6, ErrorMessage = "Codul postal trebuie sa aiba 6 caractere"), MaxLength(length: 6, ErrorMessage = "Codul postal nu poate avea mai mult de 6 caractere")]
+        public string cod_post { get; set; }
+
+        [Display(Name = "Numar contract")]
+        public int nr_contr { get; set; }
         
-        [DataType(DataType.Date), Display(Name = "Data concediere"), DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
-        public DateTime? DataConcediere { get; set; }
-        
-        [Display(Name = "Istoric Salar")]
-        // Navigation Property Istoric Salar 
-        public ICollection<IstoricSalar> IstoricSalar { get; set; }
+        [DataType(DataType.Date), Display(Name = "Data contract"), DisplayFormat(DataFormatString = "{0:yyyy-mm-dd}")]
+        public DateTime? d_contract { get; set; }
 
         [ForeignKey("Client"), Display(Name = "Client")]
         public int ClientId { get; set; }

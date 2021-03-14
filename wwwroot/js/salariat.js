@@ -16,17 +16,7 @@ function loadDataTable() {
             { "data": "client.denumire" },
             { "data": "nume" },
             { "data": "prenume" },
-            { "data": "pozitie" },
-            {
-                "data": "dataAngajare",
-                "render": function (data) {
-                    return moment(data).format('MMMM Do YYYY');
-                }
-            },
-            {
-                "data": "dataConcediere",
-                "defaultContent": "<i>Not set</i>"
-            },
+            { "data": "functie" },
             {
                 "data": "salariatId",
                 "render": function (data) {

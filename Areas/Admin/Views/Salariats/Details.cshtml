@@ -1,80 +1,137 @@
 ﻿@model Licenta.Models.Salariat
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Info Salariat";
 }
 
-<h1>Detalii Salariati</h1>
+<br />
+<h3>Detalii Salariat</h3>
+<hr />
 
 <div>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
+        <dt class="col-sm-2 offset-1">
+            @Html.DisplayNameFor(model => model.Client.Denumire)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Client.Denumire)
+        </dd>
+        <dt class="col-sm-2 offset-1">
             @Html.DisplayNameFor(model => model.Nume)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Nume)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-2 offset-1">
             @Html.DisplayNameFor(model => model.Prenume)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Prenume)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Pozitie)
+        <dt class="col-sm-2 offset-1">
+            @Html.DisplayNameFor(model => model.functie)
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Pozitie)
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.functie)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DataAngajare)
+        <dt class="col-sm-2 offset-1">
+            @Html.DisplayNameFor(model => model.locatie)
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DataAngajare)
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.locatie)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DataConcediere)
+        <dt class="col-sm-2 offset-1">
+            @Html.DisplayNameFor(model => model.datai)
         </dt>
-        <dd class="col-sm-10">
-            @{
-                if (Model.DataConcediere != null)
-                    Html.DisplayFor(model => model.DataConcediere);
-                else
-                {
-                    @:<span>-</span>
-                }
-            }
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.datai)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.IstoricSalar)
+        <dt class="col-sm-2 offset-1">
+            @Html.DisplayNameFor(model => model.tip)
         </dt>
-        <dd class="col-sm-10">
-            <table class="table table-sm table-bordered col-sm-6">
-                <thead class="thead-dark">
-                    <tr>
-                        <th class="p-2">Data inceput</th>
-                        <th class="p-2">Data sfarsit</th>
-                        <th class="p-2">Salariu</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{
-                        if (Model.IstoricSalar?.Count > 0)
-                        { 
-                            foreach (var istoric in Model.IstoricSalar)
-                            {
-                                <tr>
-                                    <td class="p-2">@istoric.DataInceput </td>
-                                    <td class="p-2">@istoric.DataSfarsit </td>
-                                    <td class="p-2">@istoric.Salariu</td>
-                                </tr>
-                            }
-                        }
-                    }
-                </tbody>
-            </table>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.tip)
         </dd>
+        <dt class="col-sm-2 offset-1">
+            @Html.DisplayNameFor(model => model.ore_zi)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.ore_zi)
+        </dd>
+        <dt class="col-sm-2 offset-1">
+            @Html.DisplayNameFor(model => model.grupa)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.grupa)
+        </dd>
+        <dt class="col-sm-2 offset-1">
+            @Html.DisplayNameFor(model => model.nr_zile_co)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.nr_zile_co)
+        </dd>
+        <dt class="col-sm-2 offset-1">
+            @Html.DisplayNameFor(model => model.tip_rem)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.tip_rem)
+        </dd>
+        <dt class="col-sm-2 offset-1">
+            @Html.DisplayNameFor(model => model.salar_brut)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.salar_brut)
+        </dd>
+        <dt class="col-sm-2 offset-1">
+            @Html.DisplayNameFor(model => model.cn)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.cn)
+        </dd>
+        <dt class="col-sm-2 offset-1">
+            @Html.DisplayNameFor(model => model.judet)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.judet)
+        </dd>
+        <dt class="col-sm-2 offset-1">
+            @Html.DisplayNameFor(model => model.localitate)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.localitate)
+        </dd>
+        <dt class="col-sm-2 offset-1">
+            @Html.DisplayNameFor(model => model.str)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.str)
+        </dd>
+        <dt class="col-sm-2 offset-1">
+            @Html.DisplayNameFor(model => model.nr)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.nr)
+        </dd>
+        <dt class="col-sm-2 offset-1">
+            @Html.DisplayNameFor(model => model.cod_post)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.cod_post)
+        </dd>
+        <dt class="col-sm-2 offset-1">
+            @Html.DisplayNameFor(model => model.nr_contr)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.nr_contr)
+        </dd>
+        <dt class="col-sm-2 offset-1">
+            @Html.DisplayNameFor(model => model.d_contract)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.d_contract)
+        </dd>
+
     </dl>
 </div>
 <div>

@@ -9,6 +9,10 @@ using Licenta.Data;
 using Licenta.Models;
 using Licenta.Utility;
 using Microsoft.AspNetCore.Authorization;
+using Licenta.ViewModels;
+using Licenta.Services.FileManager;
+using System.Xml.Linq;
+using Licenta.Areas.Admin.Models.ViewModels;
 
 namespace Licenta.Areas.Admin.Controllers
 {
@@ -18,16 +22,18 @@ namespace Licenta.Areas.Admin.Controllers
     public class SalariatsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IFileManager _fileManager;
 
-        public SalariatsController(ApplicationDbContext context)
+        public SalariatsController(ApplicationDbContext context, IFileManager fileManager)
         {
             _context = context;
+            _fileManager = fileManager;
         }
 
         // GET: Admin/Salariats
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Salariat.Include(c => c.Client).Include(c => c.IstoricSalar).ToListAsync());
+            return View(await _context.Salariat.Include(c => c.Client).ToListAsync());
         }
 
         // GET: Admin/Salariats/Details/5
@@ -40,7 +46,6 @@ namespace Licenta.Areas.Admin.Controllers
 
             var salariat = await _context.Salariat
                 .Include(c => c.Client)
-                .Include(c => c.IstoricSalar)
                 .FirstOrDefaultAsync(m => m.SalariatId == id);
             if (salariat == null)
             {
@@ -60,7 +65,7 @@ namespace Licenta.Areas.Admin.Controllers
         // POST: Admin/Salariats/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SalariatId,Nume,Prenume,Pozitie,DataAngajare,DataConcediere,ClientId")] Salariat salariat)
+        public async Task<IActionResult> Create(Salariat salariat)
         {
             if (ModelState.IsValid)
             {
@@ -92,7 +97,7 @@ namespace Licenta.Areas.Admin.Controllers
         // POST: Admin/Salariats/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SalariatId,Nume,Prenume,Pozitie,DataAngajare,DataConcediere,ClientId")] Salariat salariat)
+        public async Task<IActionResult> Edit(int id, Salariat salariat)
         {
             if (id != salariat.SalariatId)
             {
@@ -133,7 +138,7 @@ namespace Licenta.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var allObj = _context.Salariat.Include(c => c.Client).Include(c => c.IstoricSalar).ToList();
+            var allObj = _context.Salariat.Include(c => c.Client).ToList();
             return Json(new { data = allObj });
         }
 
@@ -153,5 +158,103 @@ namespace Licenta.Areas.Admin.Controllers
             }
         }
         #endregion
+
+        [HttpGet]
+        public IActionResult ImportSalariati()
+        {
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(u => u.Denumire), "ClientId", "Denumire");
+            return PartialView("_AddSalariatiImport");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ImportSalariati(int? id)
+        {
+            DocumentVM documentVM = new DocumentVM() { };
+            documentVM.ApplicationUserId = _context.ApplicationUsers.FirstOrDefault(u => u.UserName == User.Identity.Name).Id;
+            var documentTip = await _context.TipDocument.FirstOrDefaultAsync(u => u.Denumire == "Salariati XML");
+
+            if (id != 0)
+            {
+                documentVM.ClientId = id.Value;
+            }
+
+            // preluam documentele primite prin ajax
+            var files = Request.Form.Files;
+
+            // parcurgem fiecare document si il adaugam
+            foreach (var file in files)
+            {
+                Document document = new Document()
+                {
+                    ApplicationUserId = documentVM.ApplicationUserId,
+                    ClientId = documentVM.ClientId,
+                    TipDocumentId = documentTip.TipDocumentId,
+                    DocumentPath = await _fileManager.SaveDocument(file, documentTip.Denumire, documentVM.ClientId, documentVM.ApplicationUserId),
+                    Data = DateTime.Now
+                };
+
+                if (ModelState.IsValid)
+                {
+                    _context.Add(document);
+
+                    // procesam XML-ul
+                    // adaugam salariatii preluati din acesta clientului ales de utilizator
+
+                    var fullPath = $"C:/Users/user/source/repos/Licenta/wwwroot{document.DocumentPath}";
+                    XDocument doc = XDocument.Load(fullPath);
+
+                    var salariati = from salariat in doc.Root.Elements()
+                                    select salariat;
+
+                    foreach (XElement salariat in salariati)
+                    {
+                        Salariat salariatNou = new Salariat
+                        {
+                            Nume = salariat.Element("nume").Value.ToString(),
+                            Prenume = salariat.Element("prenume").Value.ToString(),
+                            locatie = salariat.Element("locatie").Value.ToString(),
+                            functie = salariat.Element("functie").Value.ToString(),
+                            datai = DateTime.Parse(salariat.Element("datai").Value),
+                            tip = salariat.Element("tip").Value.ToString(),
+                            ore_zi = int.Parse(salariat.Element("ore_zi").Value),
+                            grupa = salariat.Element("grupa").Value.ToString(),
+                            nr_zile_co = int.Parse(salariat.Element("nr_zile_co").Value),
+                            tip_rem = salariat.Element("tip_rem").Value.ToString(),
+                            salar_brut = int.Parse(salariat.Element("salar_brut").Value),
+                            cn = salariat.Element("cn").Value.ToString(),
+                            judet = salariat.Element("judet").Value.ToString(),
+                            localitate = salariat.Element("localitate").Value.ToString(),
+                            str = salariat.Element("str").Value.ToString(),
+                            nr = salariat.Element("nr").Value.ToString(),
+                            cod_post = salariat.Element("cod_post").Value.ToString(),
+                            nr_contr = int.Parse(salariat.Element("nr_contr").Value),
+                            d_contract = DateTime.Parse(salariat.Element("d_contract").Value),
+                            ClientId = document.ClientId
+                        };
+
+                        _context.Add(salariatNou);
+                    }
+                    // stergem din memorie: bd si server XML-ul
+                    _fileManager.DeleteDocumentXML(document.DocumentPath);
+                    _context.Remove(document);
+                    _context.SaveChanges();
+                }
+            }
+            return PartialView("_AddSalariatiImport", documentVM);
+        }
+
+        public IActionResult DeleteSalariati()
+        {
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(u => u.Denumire), "ClientId", "Denumire");
+            return PartialView("_DeleteSalariatiClient");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteSalariati(DeleteFurnizoriVM salariatVM)
+        {
+            _context.Salariat.RemoveRange(_context.Salariat.Where(x => x.ClientId == salariatVM.ClientId));
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
     }
 }

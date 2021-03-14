@@ -4,55 +4,225 @@
     ViewData["Title"] = "Edit";
 }
 
-<br>
-<h2>Editare Salariat</h2>
+<br />
+<h3>Editeaza salariat</h3>
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="SalariatId" />
-            <div class="form-group">
+<hr class="mb-5" />
+
+<div class="container">
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="SalariatId" />
+        <div class="form-group row">
+            <div class="col-3">
                 <label asp-for="ClientId" class="control-label"></label>
-                <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
-                <span asp-validation-for="ClientId" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="col-5">
+                <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
                 <label asp-for="Nume" class="control-label"></label>
+            </div>
+            <div class="col-5">
                 <input asp-for="Nume" class="form-control" />
                 <span asp-validation-for="Nume" class="text-danger"></span>
             </div>
-            <div class="form-group">
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
                 <label asp-for="Prenume" class="control-label"></label>
+            </div>
+            <div class="col-5">
                 <input asp-for="Prenume" class="form-control" />
                 <span asp-validation-for="Prenume" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Pozitie" class="control-label"></label>
-                <input asp-for="Pozitie" class="form-control" />
-                <span asp-validation-for="Pozitie" class="text-danger"></span>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="locatie" class="control-label"></label>
             </div>
-            <div class="form-group">
-                <label asp-for="DataAngajare" class="control-label"></label>
-                <input asp-for="DataAngajare" class="form-control" />
-                <span asp-validation-for="DataAngajare" class="text-danger"></span>
+            <div class="col-5">
+                <input asp-for="locatie" class="form-control" />
+                <span asp-validation-for="locatie" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="DataConcediere" class="control-label"></label>
-                <input asp-for="DataConcediere" class="form-control" />
-                <span asp-validation-for="DataConcediere" class="text-danger"></span>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="functie" class="control-label"></label>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-success" />
+            <div class="col-5">
+                <input asp-for="functie" class="form-control" />
+                <span asp-validation-for="functie" class="text-danger"></span>
             </div>
-        </form>
-    </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="datai" class="control-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="datai" class="form-control" />
+                <span asp-validation-for="datai" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="tip" class="control-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="tip" class="form-control" />
+                <span asp-validation-for="tip" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="ore_zi" class="control-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="ore_zi" class="form-control" />
+                <span asp-validation-for="ore_zi" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="grupa" class="control-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="grupa" class="form-control" />
+                <span asp-validation-for="grupa" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="nr_zile_co" class="control-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="nr_zile_co" class="form-control" />
+                <span asp-validation-for="nr_zile_co" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="tip_rem" class="control-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="tip_rem" class="form-control" />
+                <span asp-validation-for="tip_rem" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="salar_brut" class="control-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="salar_brut" class="form-control" />
+                <span asp-validation-for="salar_brut" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="cn" class="control-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="cn" class="form-control" />
+                <span asp-validation-for="cn" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="judet" class="control-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="judet" class="form-control" />
+                <span asp-validation-for="judet" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="localitate" class="control-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="localitate" class="form-control" />
+                <span asp-validation-for="localitate" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="str" class="control-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="str" class="form-control" />
+                <span asp-validation-for="str" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="nr" class="control-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="nr" class="form-control" />
+                <span asp-validation-for="nr" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="cod_post" class="control-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="cod_post" class="form-control" />
+                <span asp-validation-for="cod_post" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="nr_contr" class="control-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="nr_contr" class="form-control" />
+                <span asp-validation-for="nr_contr" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="d_contract" class="control-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="d_contract" class="form-control" />
+                <span asp-validation-for="d_contract" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="offset-3 col-3">
+                <input type="submit" value="Update" class="btn btn-success form-control" />
+            </div>
+            <div class="col-2">
+                <a asp-action="Index" class="btn btn-primary form-control">Inapoi</a>
+            </div>
+        </div>
+    </form>
 </div>
 
-<div>
-    <a asp-action="Index" class="btn btn-primary">Inapoi</a>
-</div>
 
 @section Scripts {
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
