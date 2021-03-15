@@ -8,7 +8,6 @@ $(function () {
         var url = $(this).data('url');
         $.get(url).done(function (data) {
             placeholderElement.html(data);
-            // cautam elementul cu clasa modal
             placeholderElement.find('.modal').modal('show');
         });
     });
@@ -23,7 +22,6 @@ $(function () {
 
         var fileInput = $('#fileUpload').get(0);
         var files = fileInput.files;
-        console.log(files[0].name, files[0]);
         formData.append(files[0].name, files[0]);
 
         var clientIdInput = $('#clientId').val();
@@ -36,15 +34,10 @@ $(function () {
             contentType: false,
             processData: false,
             data: formData,
-            success: function (message) {
-                //var newBody = $('.modal-body', data);
-                //placeholderElement.find('.modal-body').replaceWith(newBody);
-
-                //var isValid = newBody.find('[name="IsValid"]').val() == 'True';
-                //if (isValid) {
+            success: function () {
+               
                 placeholderElement.find('.modal').modal('hide');
 
-                // toastr pentru succes
                 toastr["success"]("Salariati importati cu succes!")
 
                 toastr.options = {
@@ -68,10 +61,7 @@ $(function () {
                 dataTable.ajax.reload();
 
             }
-            //},
-            //error: function (err) {
-            //    alert(err.message);
-            //}
+            
         });
 
     })

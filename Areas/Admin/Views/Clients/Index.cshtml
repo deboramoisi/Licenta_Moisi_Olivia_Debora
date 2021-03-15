@@ -4,7 +4,9 @@
     ViewData["Title"] = "Clienti";
 }
 
-<br/>
+<div id="modal-clienti-import-ph"></div>
+
+<br />
 
 <div class="row">
     <div class="col-6">
@@ -14,7 +16,17 @@
         <a asp-action="Create" class="btn btn-outline-primary"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Creare client nou</a>
     </div>
 </div>
-<br/>
+
+<div class="row">
+    <div class="col-12 text-right">
+        <button type="button" data-target="#add-clienti-import" data-url="@Url.Action("ImportClienti")" data-toggle="ajax-clienti-modal" class="btn btn-outline-primary">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            &nbsp;&nbsp;Import clienti Saga
+        </button>
+    </div>
+</div>
+
+<br />
 
 <div class="table-responsive-md p-4 rounded border">
     <table class="table table-hover" id="tblData">
@@ -24,29 +36,11 @@
                     @Html.DisplayNameFor(model => model.Denumire)
                 </th>
                 <th scope="col">
+                    @Html.DisplayNameFor(model => model.CodFiscal)
+                </th>
+                <th scope="col">
                     @Html.DisplayNameFor(model => model.NrRegComertului)
                 </th>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.CodCAEN)
-                </th>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.TipFirma)
-                </th>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.CapitalSocial)
-                </th>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.TVA)
-                </th>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.SediuSocial.Telefon)
-                </th>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.SediuSocial.Email)
-                </th>
-                @*<th scope="col">
-                    @Html.DisplayNameFor(model => model.ClientFurnizori)
-                </th>*@
                 <th scope="col"></th>
             </tr>
         </thead>

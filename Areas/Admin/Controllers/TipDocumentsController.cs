@@ -23,13 +23,13 @@ namespace Licenta.Areas.Admin.Views
             _context = context;
         }
 
-        // GET: Admin/TipDocuments
+        // Index, Details
+        #region
         public async Task<IActionResult> Index()
         {
             return View(await _context.TipDocument.ToListAsync());
         }
 
-        // GET: Admin/TipDocuments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,14 +46,15 @@ namespace Licenta.Areas.Admin.Views
 
             return View(tipDocument);
         }
+        #endregion
 
-        // GET: Admin/TipDocuments/Create
+        // Create si Edit
+        #region
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Admin/TipDocuments/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TipDocumentId,Denumire")] TipDocument tipDocument)
@@ -68,7 +69,6 @@ namespace Licenta.Areas.Admin.Views
             return View(tipDocument);
         }
 
-        // GET: Admin/TipDocuments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -84,7 +84,6 @@ namespace Licenta.Areas.Admin.Views
             return View(tipDocument);
         }
 
-        // POST: Admin/TipDocuments/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("TipDocumentId,Denumire")] TipDocument tipDocument)
@@ -121,8 +120,9 @@ namespace Licenta.Areas.Admin.Views
         {
             return _context.TipDocument.Any(e => e.TipDocumentId == id);
         }
+        #endregion
 
-        // API CALLS
+        // API CALLS: get all, delete
         #region
         [HttpGet]
         public IActionResult GetAll()

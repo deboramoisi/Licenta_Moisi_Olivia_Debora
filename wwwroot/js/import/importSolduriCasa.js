@@ -2,9 +2,9 @@
 
 $(function () {
     loadDataTable();
-    deleteFurnizori();
-    var placeholderElement = $('#modal-furnizori-import-ph');
-    $('button[data-toggle="ajax-furnizori-modal"]').click(function (event) {
+    deleteSolduri();
+    var placeholderElement = $('#modal-solduri-import-ph');
+    $('button[data-toggle="ajax-solduri-modal"]').click(function (event) {
         var url = $(this).data('url');
         $.get(url).done(function (data) {
             placeholderElement.html(data);
@@ -38,7 +38,7 @@ $(function () {
                
                     placeholderElement.find('.modal').modal('hide');
 
-                    toastr["success"]("Furnizori importati cu succes!")
+                    toastr["success"]("Solduri importate cu succes!")
 
                     toastr.options = {
                         "closeButton": false,
@@ -70,38 +70,40 @@ $(function () {
 function loadDataTable() {
     dataTable = $('#tblData').DataTable({
         "ajax": {
-            "url": "/Admin/Furnizori/GetAllFurnizori"
+            "url": "/Admin/SolduriCasa/GetAllSolduri"
         },
         "columns": [
-            { "data": "denumire" },
-            { "data": "cod_fiscal" },
-            { "data": "tara" },
-            { "data": "client.denumire" }, 
+            { "data": "client.denumire" },
+            { "data": "data" },
+            { "data": "sold_prec" },
+            { "data": "incasari" },
+            { "data": "plati" },
+            { "data": "sold_zi" }, 
             {
-                "data": "furnizorID",
+                "data": "solduriCasaId",
                 "render": function (data) {
                     return `
                         <div class="text-center">
-                            <a href="/Admin/Furnizori/Edit/${data}" class="btn btn-success">
+                            <a href="/Admin/SolduriCasa/Edit/${data}" class="btn btn-outline-success">
                                 <i class="fa fa-pencil-square" aria-hidden="true"></i>
                             </a> 
-                            <a href="/Admin/Furnizori/Details/${data}" class="btn btn-info">
+                            <a href="/Admin/SolduriCasa/Details/${data}" class="btn btn-outline-info">
                                 <i class="fa fa-info-circle" aria-hidden="true"></i>
                             </a>
-                            <a onclick=Delete("/Admin/Furnizori/DeleteAPI/${data}") class="btn btn-danger">
+                            <a onclick=Delete("/Admin/SolduriCasa/DeleteAPI/${data}") class="btn btn-outline-danger">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                             </a>
                         </div>
                             `;
-                }
+                }, width: "20%"
             }
         ]
     });
 }
 
-function deleteFurnizori() {
-    var placeholderElement = $('#modal-furnizori-import-ph');
-    $('button[data-toggle="ajax-del-furn-modal"]').click(function (event) {
+function deleteSolduri() {
+    var placeholderElement = $('#modal-solduri-import-ph');
+    $('button[data-toggle="ajax-del-sold-modal"]').click(function (event) {
         var url = $(this).data('url');
         $.get(url).done(function (data) {
             placeholderElement.html(data);
@@ -123,7 +125,7 @@ function deleteFurnizori() {
             success: function (message) {
                 placeholderElement.find('.modal').modal('hide');
 
-                toastr["success"]("Furnizori stersi cu succes!")
+                toastr["success"]("Solduri sterse cu succes!")
 
                 toastr.options = {
                     "closeButton": false,
@@ -174,8 +176,4 @@ function Delete(url) {
             });
         }
     });
-}
-
-function ReloadPage(timeout) {
-    setTimeout(function () { window.location.reload(true); }, timeout);
 }

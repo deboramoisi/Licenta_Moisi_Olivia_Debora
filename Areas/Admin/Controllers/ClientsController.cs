@@ -10,6 +10,8 @@ using Licenta.Models;
 using Licenta.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Licenta.Utility;
+using System.Xml.Linq;
+using Licenta.Services.FileManager;
 
 namespace Licenta.Areas.Admin.Controllers
 {
@@ -18,13 +20,16 @@ namespace Licenta.Areas.Admin.Controllers
     public class ClientsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IFileManager _fileManager;
 
-        public ClientsController(ApplicationDbContext context)
+        public ClientsController(ApplicationDbContext context, IFileManager fileManager)
         {
             _context = context;
+            _fileManager = fileManager;
         }
 
-        // GET: Clients
+        // Index, Details
+        #region
         public async Task<IActionResult> Index()
         {
             return View(await _context.Client
@@ -51,7 +56,10 @@ namespace Licenta.Areas.Admin.Controllers
 
             return View(client);
         }
+        #endregion
 
+        // Edit, Create
+        #region
         public IActionResult Create()
         {
             return View();
@@ -127,6 +135,7 @@ namespace Licenta.Areas.Admin.Controllers
         {
             return _context.Client.Any(e => e.ClientId == id);
         }
+        #endregion
 
         // API CALLS
         #region
@@ -154,5 +163,72 @@ namespace Licenta.Areas.Admin.Controllers
         }
         #endregion
 
+        // Import Clienti from Saga XML
+        #region
+
+        [HttpGet]
+        public IActionResult ImportClienti()
+        {
+            return PartialView("_AddClientiImport");
+        }
+
+        [HttpPost, ActionName("ImportClienti")]
+        public async Task<IActionResult> ImportClientiPost()
+        {
+            DocumentVM documentVM = new DocumentVM() { };
+            documentVM.ApplicationUserId = _context.ApplicationUsers.FirstOrDefault(u => u.UserName == User.Identity.Name).Id;
+            var documentTip = await _context.TipDocument.FirstOrDefaultAsync(u => u.Denumire == "Clienti XML");
+
+            // preluam documentele primite prin ajax
+            var files = Request.Form.Files;
+
+            // parcurgem fiecare document si il adaugam
+            foreach (var file in files)
+            {
+                Document document = new Document()
+                {
+                    ApplicationUserId = documentVM.ApplicationUserId,
+                    ClientId = 1,
+                    TipDocumentId = documentTip.TipDocumentId,
+                    DocumentPath = await _fileManager.SaveDocument(file, documentTip.Denumire, 1, documentVM.ApplicationUserId),
+                    Data = DateTime.Now
+                };
+
+                if (ModelState.IsValid)
+                {
+                    _context.Add(document);
+                    _context.SaveChanges();
+
+                    // procesam XML-ul
+                    // adaugam furnizorii preluati din acesta clientului ales de utilizator
+
+                    var fullPath = $"C:/Users/user/source/repos/Licenta/wwwroot{document.DocumentPath}";
+                    XDocument doc = new XDocument();
+                    doc = XDocument.Load(document.DocumentPath);
+
+                    var clienti = from client in doc.Root.Elements()
+                                    select client;
+
+                    foreach (XElement client in clienti)
+                    {
+                        Client clientNou = new Client
+                        {
+                           Denumire = client.Element("nume").Value.ToString(),
+                           CodFiscal = int.Parse(client.Element("cod_fiscal").Value.ToString()),
+                           NrRegComertului = client.Element("reg_com").Value.ToString()
+                        };
+
+                        _context.Add(clientNou);
+                    }
+                    // stergem din memorie: bd si server XML-ul
+                    _fileManager.DeleteDocumentXML(document.DocumentPath);
+                    _context.Remove(document);
+                    _context.SaveChanges();
+                }
+            }
+
+            return PartialView("_AddClientiImport");
+        }
+        #endregion
     }
 }

@@ -10,6 +10,7 @@ using Licenta.Models;
 using Licenta.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Licenta.Utility;
+using Microsoft.AspNetCore.Identity;
 
 namespace Licenta.Areas.Admin.Controllers
 {
@@ -18,21 +19,24 @@ namespace Licenta.Areas.Admin.Controllers
     public class ApplicationUsersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ApplicationUsersController(ApplicationDbContext context)
+        public ApplicationUsersController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        // GET: ApplicationUsers
+        // Index, Details
+        #region
         public async Task<IActionResult> Index()
         {
             return View(await _context.ApplicationUsers
                                 .Include(c => c.Client)
+                                .OrderBy(u => u.Nume)
                                 .ToListAsync());
         }
 
-        // GET: ApplicationUsers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -50,6 +54,74 @@ namespace Licenta.Areas.Admin.Controllers
 
             return View(user);
         }
+        #endregion
+
+        // Edit
+        #region 
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.ApplicationUsers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+            ViewData["ClientId"] = new SelectList(_context.Client.ToList(), "ClientId", "Denumire");
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, ApplicationUser user)
+        {
+            if (id != user.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var applicationUser = _context.ApplicationUsers.Find(id);
+                    applicationUser.ClientId = user.ClientId;
+                    applicationUser.PozitieFirma = user.PozitieFirma;
+                    applicationUser.Nume = user.Nume;
+                    applicationUser.PhoneNumber = user.PhoneNumber;
+
+                    _context.Update(applicationUser);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(user.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+
+            ViewData["ClientId"] = new SelectList(_context.Client.ToList(), "ClientId", "Denumire", user.ClientId);
+            return View(user);
+        }
+
+        private bool UserExists(string id)
+        {
+            return _context.ApplicationUsers.Any(e => e.Id == id);
+        }
+        #endregion
 
         // API CALLS
         #region
@@ -98,7 +170,6 @@ namespace Licenta.Areas.Admin.Controllers
             _context.SaveChanges();
             return Json(new { success = true, message = "Operation Successful!" });
         }
-
         #endregion
 
     }

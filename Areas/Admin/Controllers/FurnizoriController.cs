@@ -26,7 +26,8 @@ namespace Licenta.Areas.Admin.Controllers
             _fileManager = fileManager;
         }
 
-        // GET: Admin/Furnizoris
+        // Index, Details
+        #region
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Furnizori.Include(f => f.Client);
@@ -50,7 +51,10 @@ namespace Licenta.Areas.Admin.Controllers
 
             return View(furnizori);
         }
+        #endregion
 
+        // Create, Edit
+        #region
         public IActionResult Create()
         {
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "CodCAEN");
@@ -124,7 +128,11 @@ namespace Licenta.Areas.Admin.Controllers
         {
             return _context.Furnizori.Any(e => e.FurnizorID == id);
         }
+        #endregion
 
+
+        // Import Furnizori Saga, Delete furnizori Modal
+        #region
         [HttpGet]
         public IActionResult ImportFurnizori()
         {
@@ -209,13 +217,29 @@ namespace Licenta.Areas.Admin.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
+        #endregion
 
         // API CALLS
         #region
         public IActionResult GetAllFurnizori()
         {
-            var furnizori = _context.Furnizori.OrderBy(u => u.ClientId).ToList();
+            var furnizori = _context.Furnizori.Include(u => u.Client).OrderBy(u => u.ClientId).ToList();
             return Json(new { data = furnizori });
+        }
+
+        public async Task<IActionResult> DeleteAPI(int id)
+        {
+            Furnizori furnizori = _context.Furnizori.FirstOrDefault(u => u.FurnizorID == id);
+            if (furnizori == null)
+            {
+                return Json(new { success = false, message = "Eroare la stergerea furnizorului, va rugam reincercati!" });
+            } 
+            else
+            {
+                _context.Remove(furnizori);
+                await _context.SaveChangesAsync();
+                return Json(new { success = true, message = "Furnizor sters cu succes!" });
+            }
         }
         #endregion
 

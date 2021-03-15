@@ -1,4 +1,5 @@
-﻿@model Licenta.Models.Salariat
+﻿@using Licenta.Utility
+@model Licenta.Models.Salariat
 
 @{
     ViewData["Title"] = "Create";
@@ -216,7 +217,14 @@
                 <input type="submit" value="Adauga" class="btn btn-success form-control" />
             </div>
             <div class="col-2">
-                <a asp-action="Index" class="btn btn-primary form-control">Inapoi</a>
+                @if (User.IsInRole(ConstantVar.Rol_Admin))
+                {
+                    <a asp-action="Index" class="btn btn-primary form-control">Inapoi</a>
+                }
+                else
+                {
+                <a asp-area="Clienti" asp-controller="Salariati" asp-action="Index" class="btn btn-primary form-control">Inapoi</a>
+                }
             </div>
         </div>
     </form>
@@ -225,6 +233,5 @@
 
 @section Scripts {
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-    <script src="~/js/salariat.js"></script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Licenta.Models.Salariat>
+
+@{
+    ViewData["Title"] = "Salariati";
+}
+
+<br />
+
+<div class="row">
+    <div class="col-6">
+        <h2>Salariati</h2>
+    </div>
+    <div class="col-6 text-right">
+        <a asp-action="Create" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Adaugare salariat nou</a>
+    </div>
+</div>
+
+<div class="table-responsive-md p-4 rounded border">
+
+    <table class="table table-hover" id="tblData">
+        <thead>
+            <tr class="thead-dark">
+                <th>
+                    @Html.DisplayNameFor(model => model.Nume)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Prenume)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.functie)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.salar_brut)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="~/js/salariat.js"></script>
+}

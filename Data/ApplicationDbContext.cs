@@ -25,8 +25,8 @@ namespace Licenta.Data
         public DbSet<QuestionCategory> QuestionCategory { get; set; }
         public DbSet<Question> Question { get; set; }
         public DbSet<Response> Response { get; set; }
-        public DbSet<Licenta.Models.Furnizori> Furnizori { get; set; }
-
+        public DbSet<Furnizori> Furnizori { get; set; }
+        public DbSet<SolduriCasa> SolduriCasa { get; set; }
 
     }
 }

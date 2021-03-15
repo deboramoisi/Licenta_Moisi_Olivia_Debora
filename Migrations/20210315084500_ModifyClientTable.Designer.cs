@@ -4,14 +4,16 @@ using Licenta.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Licenta.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210315084500_ModifyClientTable")]
+    partial class ModifyClientTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -327,38 +329,6 @@ namespace Licenta.Migrations
                     b.HasKey("SediuSocialId");
 
                     b.ToTable("SediuSocial");
-                });
-
-            modelBuilder.Entity("Licenta.Models.SolduriCasa", b =>
-                {
-                    b.Property<int>("SolduriCasaId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("data")
-                        .HasColumnType("datetime2");
-
-                    b.Property<float>("incasari")
-                        .HasColumnType("real");
-
-                    b.Property<float>("plati")
-                        .HasColumnType("real");
-
-                    b.Property<float>("sold_prec")
-                        .HasColumnType("real");
-
-                    b.Property<float>("sold_zi")
-                        .HasColumnType("real");
-
-                    b.HasKey("SolduriCasaId");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("SolduriCasa");
                 });
 
             modelBuilder.Entity("Licenta.Models.TipDocument", b =>
@@ -693,17 +663,6 @@ namespace Licenta.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("Licenta.Models.SolduriCasa", b =>
-                {
-                    b.HasOne("Licenta.Models.Client", "Client")
-                        .WithMany("SolduriCasa")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -771,8 +730,6 @@ namespace Licenta.Migrations
                     b.Navigation("Salariati");
 
                     b.Navigation("SediuSocial");
-
-                    b.Navigation("SolduriCasa");
                 });
 
             modelBuilder.Entity("Licenta.Models.QandA.Question", b =>

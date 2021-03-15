@@ -33,31 +33,14 @@ namespace Licenta.Areas.Admin.Views
             _userManager = userManager;
         }
 
-        // GET: Admin/Documents
+        // Index, Details
+        #region
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Document.Include(d => d.Client).Include(d => d.ApplicationUser).Include(d => d.TipDocument);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Admin/Documents/IncarcariUtilizatori
-        public async Task<IActionResult> IncarcariUtilizatori()
-        {
-            var applicationDbContext = _context.Document.Include(d => d.Client).Include(d => d.ApplicationUser).Include(d => d.TipDocument);
-            return View(await applicationDbContext.ToListAsync());
-        }
-
-        private async Task<bool> AdminOrNot(string id)
-        {
-            var user = _context.ApplicationUsers.Find(id);
-            if (await _userManager.IsInRoleAsync(user, ConstantVar.Rol_Admin))
-            {
-                return false;
-            }
-            return true;
-        }
-
-        // GET: Admin/Documents/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -77,9 +60,30 @@ namespace Licenta.Areas.Admin.Views
 
             return View(document);
         }
+        #endregion
 
+        // Incarcari utilizator, Admin or not
+        #region
+        public async Task<IActionResult> IncarcariUtilizatori()
+        {
+            var applicationDbContext = _context.Document.Include(d => d.Client).Include(d => d.ApplicationUser).Include(d => d.TipDocument);
+            return View(await applicationDbContext.ToListAsync());
+        }
+
+        private async Task<bool> AdminOrNot(string id)
+        {
+            var user = _context.ApplicationUsers.Find(id);
+            if (await _userManager.IsInRoleAsync(user, ConstantVar.Rol_Admin))
+            {
+                return false;
+            }
+            return true;
+        }
+        #endregion
+
+        // Create, import new document
+        #region
         [HttpGet]
-        // GET: Admin/Documents/Create
         public IActionResult Create()
         {
             ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(u => u.Denumire), "ClientId", "Denumire");
@@ -88,7 +92,6 @@ namespace Licenta.Areas.Admin.Views
             return View();
         }
 
-        // POST: Admin/Documents/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DocumentVM documentVM)
@@ -118,8 +121,10 @@ namespace Licenta.Areas.Admin.Views
             ViewData["TipDocumentId"] = new SelectList(_context.TipDocument, "TipDocumentId", "Denumire", document.TipDocumentId);
             return View(documentVM);
         }
+        #endregion
 
-        // GET: Admin/Documents/Edit/5
+        // Edit, edit uploaded document
+        #region
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -149,8 +154,6 @@ namespace Licenta.Areas.Admin.Views
             return View(documentVM);
         }
 
-        // POST: Admin/Documents/Edit/5
-        // [Bind("DocumentId,DocumentPath,ClientId,ApplicationUserId,TipDocumentId")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, DocumentVM documentVM)
@@ -202,6 +205,7 @@ namespace Licenta.Areas.Admin.Views
         {
             return _context.Document.Any(e => e.DocumentId == id);
         }
+        #endregion
 
         // API CALLS
         #region
@@ -258,9 +262,6 @@ namespace Licenta.Areas.Admin.Views
 
             XDocument doc = XDocument.Load("C:/Users/user/source/repos/Licenta/wwwroot/xml/Customers.xml");
 
-            // XmlDocument doc = new XmlDocument();
-            // doc.Load("C:/Users/user/source/repos/Licenta/wwwroot/xml/Customers.xml");
-
             var q = from el in doc.Root.Elements()
                     select el;
 
@@ -271,15 +272,6 @@ namespace Licenta.Areas.Admin.Views
                     Country = e.Element("Country").Value.ToString()
                 });
             }
-
-            //foreach (XmlNode node in doc.SelectNodes("/Customers/Customer"))
-            //{
-            //    customers.Add(new CustomerModel {
-            //        CustomerId = int.Parse(node["Id"].InnerText),
-            //        Name = node["Name"].InnerText,
-            //        Country = node["Country"].InnerText
-            //    });
-            //}
             return View(customers);
         }
         #endregion

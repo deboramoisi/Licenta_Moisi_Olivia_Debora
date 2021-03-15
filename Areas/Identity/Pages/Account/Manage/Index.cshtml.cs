@@ -167,6 +167,11 @@ namespace Licenta.Areas.Identity.Pages.Account.Manage
             return RedirectToPage();
         }
 
+        //public IActionResult OnGetUpdateImage()
+        //{
+        //    return Page();
+        //}
+
         public async Task<IActionResult> OnPostUpdateImage(string Username, IFormFile ImageUrl)
         {
             var applicationUser = _context.ApplicationUsers.Find(Username);

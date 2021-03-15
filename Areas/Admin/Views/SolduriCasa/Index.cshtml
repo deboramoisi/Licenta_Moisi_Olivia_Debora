@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Licenta.Models.SolduriCasa>
+
+@{
+    ViewData["Title"] = "Solduri casa";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br/>
+
+<h3>Solduri casa</h3>
+<hr />
+<br />
+
+<div class="form-group row">
+    <div class="col-sm-4 offset-sm-2 col-md-2">
+        <a asp-controller="SolduriCasa" asp-action="Create" class="form-control btn btn-outline-primary">
+            <i class="fas fa-plus-square"></i>&nbsp;&nbsp; Add sold nou
+        </a>
+    </div>
+    <div class="col-sm-5 col-md-3">
+        <a class="form-control btn btn-outline-secondary">
+            <i class="fas fa-file-import"></i>&nbsp;&nbsp; Import solduri Saga
+        </a>
+    </div>
+    <div class="col-sm-4 col-md-2">
+        <a class="form-control btn btn-outline-danger">
+            <i class="fas fa-trash"></i>&nbsp;&nbsp; Delete solduri
+        </a>
+    </div>
+</div>
+
+<br />
+<div class="table-responsive-md p-4 border rounded">
+    <table class="table table-hover" id="tblData" style="width:100%">
+        <thead>
+            <tr class="thead-dark">
+                <th>
+                    @Html.DisplayNameFor(model => model.Client)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.data)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.sold_prec)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.incasari)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.plati)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.sold_zi)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+    </div>
+
+    @section Scripts {
+        <script src="~/js/import/importSolduriCasa.js"></script>
+    }

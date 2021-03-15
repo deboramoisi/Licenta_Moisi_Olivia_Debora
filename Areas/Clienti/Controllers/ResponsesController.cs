@@ -20,14 +20,14 @@ namespace Licenta.Areas.Clienti.Views
             _context = context;
         }
 
-        // GET: Clienti/Responses
+        // Index, details
+        #region
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Response.Include(r => r.Question);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Clienti/Responses/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,8 +45,10 @@ namespace Licenta.Areas.Clienti.Views
 
             return View(response);
         }
+        #endregion
 
-        // GET: Clienti/Responses/Create
+        // Create and edit
+        #region
         public IActionResult Create(int? id)
         {
 
@@ -68,7 +70,6 @@ namespace Licenta.Areas.Clienti.Views
             return View(response);
         }
 
-        // POST: Clienti/Responses/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ResponseId,Raspuns,DataAdaugare,QuestionId")] Response response)
@@ -89,7 +90,6 @@ namespace Licenta.Areas.Clienti.Views
             return View(response);
         }
 
-        // GET: Clienti/Responses/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -106,7 +106,6 @@ namespace Licenta.Areas.Clienti.Views
             return View(response);
         }
 
-        // POST: Clienti/Responses/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ResponseId,Raspuns,DataAdaugare,QuestionId")] Response response)
@@ -139,8 +138,10 @@ namespace Licenta.Areas.Clienti.Views
             ViewData["QuestionId"] = new SelectList(_context.Question, "QuestionId", "Intrebare", response.QuestionId);
             return View(response);
         }
+        #endregion
 
-        // GET: Clienti/Responses/Delete/5
+        // Delete
+        #region
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -159,7 +160,6 @@ namespace Licenta.Areas.Clienti.Views
             return View(response);
         }
 
-        // POST: Clienti/Responses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -174,5 +174,6 @@ namespace Licenta.Areas.Clienti.Views
         {
             return _context.Response.Any(e => e.ResponseId == id);
         }
+#endregion
     }
 }

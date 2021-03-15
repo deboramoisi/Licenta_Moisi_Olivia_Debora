@@ -2,55 +2,77 @@
 
 $(document).ready(function () {
     loadDataTable();
+    var placeholderElement = $('#modal-clienti-import-ph');
+    $('button[data-toggle="ajax-clienti-modal"]').click(function (event) {
+        var url = $(this).data('url');
+        $.get(url).done(function (data) {
+            placeholderElement.html(data);
+            placeholderElement.find('.modal').modal('show');
+        });
+    });
+
+    placeholderElement.on('click', '[data-save="modal"]', function (event) {
+        event.preventDefault();
+
+        var form = $(this).parents('.modal').find('form');
+        var actionUrl = form.attr('action');
+        var formData = new FormData();
+        var fileInput = $('#fileUpload').get(0);
+        var files = fileInput.files;
+        formData.append(files[0].name, files[0]);
+
+        $.ajax({
+            type: 'POST',
+            url: actionUrl,
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function (message) {
+                var newBody = $('.modal-body', data);
+                placeholderElement.find('.modal-body').replaceWith(newBody);
+
+                var isValid = newBody.find('[name="IsValid"]').val() == 'True';
+                if (isValid) {
+                    placeholderElement.find('.modal').modal('hide');
+
+                    toastr["success"]("Clienti importati cu succes!")
+
+                    toastr.options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-top-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+
+                    dataTable.ajax.reload();
+
+                }
+            }
+        });
+    })
+    
 });
 
 function loadDataTable() {
     dataTable = $('#tblData').DataTable({
-        // functia ce returneaza toate elementele tabelulului
         "ajax": {
             "url": "/Admin/Clients/GetAll",
         },
         "columns": [
             { "data": "denumire" },
+            { "data": "codFiscal" },
             { "data": "nrRegComertului" },
-            { "data": "codCAEN" },
-            {
-                "data": "tipFirma",
-                "render": function (data) {
-                    if (data == "Persoana Fizica") {
-                        return `PF`;
-                    } else if (data == "Persoana juridica") {
-                        return `PJ`;
-                    } else {
-                        return 'S.Coop';
-                    }
-                }
-            },
-            { "data": "capitalSocial" },
-            { "data": "tva" },
-            {
-                "data": "sediuSocial.telefon",
-                "defaultContent": "<i>Not set</i>"
-            },
-            {
-                "data": "sediuSocial.email",
-                "defaultContent": "<i>Not set</i>"
-            },
-            //{
-            //    "data": "clientFurnizori",
-            //    "defaultContent": "<i>Not set yet</i>",
-            //    "render": function (data) {
-            //        var item = "";
-            //        for (var i = 0; i < data.length; i++) {
-            //            if (i == data.length - 1) {
-            //                item += data[i].furnizor.denumire;
-            //            } else {
-            //                item += data[i].furnizor.denumire + ",";
-            //            }
-            //        }
-            //        return item;
-            //    }
-            //},
             {
                 "data": "clientId",
                 "render": function (data) {

@@ -34,6 +34,9 @@ function loadDataTable() {
                             <a onclick=LockUnlock('${data.id}') class="btn btn-danger">
                                 <i class="fa fa-lock-open" aria-hidden="true"></i> Unlock
                             </a>
+                            <a href="/Admin/ApplicationUsers/Edit/${data.id}" class="btn btn-success">
+                                <i class="fa fa-edit" aria-hidden="true"></i>
+                            </a>
                             <a onclick=Delete("/Admin/ApplicationUsers/DeleteAPI/${data.id}") class="btn btn-danger">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                             </a>
@@ -46,6 +49,9 @@ function loadDataTable() {
                         <div class="text-center">
                             <a onclick=LockUnlock('${data.id}') class="btn btn-success">
                                 <i class="fa fa-lock" aria-hidden="true"></i> Lock
+                            </a>
+                            <a href="/Admin/ApplicationUsers/Edit/${data.id}" class="btn btn-success">
+                                <i class="fa fa-edit" aria-hidden="true"></i>
                             </a>
                             <a onclick=Delete("/Admin/ApplicationUsers/DeleteAPI/${data.id}") class="btn btn-danger">
                                 <i class="fa fa-trash" aria-hidden="true"></i>

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Licenta.Data;
 using Licenta.Models.QandA;
@@ -20,13 +17,13 @@ namespace Licenta.Areas.Clienti.Views
             _context = context;
         }
 
-        // GET: Clienti/QuestionCategories
+        // Index, Details
+        #region
         public async Task<IActionResult> Index()
         {
-            return View(await _context.QuestionCategory.ToListAsync());
+            return View(await _context.QuestionCategory.OrderBy(u => u.Denumire).ToListAsync());
         }
 
-        // GET: Clienti/QuestionCategories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,16 +40,15 @@ namespace Licenta.Areas.Clienti.Views
 
             return View(questionCategory);
         }
+        #endregion
 
-        // GET: Clienti/QuestionCategories/Create
+        // Create_Edit
+        #region
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Clienti/QuestionCategories/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("QuestionCategoryId,Denumire")] QuestionCategory questionCategory)
@@ -66,7 +62,6 @@ namespace Licenta.Areas.Clienti.Views
             return View(questionCategory);
         }
 
-        // GET: Clienti/QuestionCategories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -82,9 +77,6 @@ namespace Licenta.Areas.Clienti.Views
             return View(questionCategory);
         }
 
-        // POST: Clienti/QuestionCategories/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("QuestionCategoryId,Denumire")] QuestionCategory questionCategory)
@@ -116,8 +108,10 @@ namespace Licenta.Areas.Clienti.Views
             }
             return View(questionCategory);
         }
+        #endregion
 
-        // GET: Clienti/QuestionCategories/Delete/5
+        // Delete
+        #region
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,7 +129,6 @@ namespace Licenta.Areas.Clienti.Views
             return View(questionCategory);
         }
 
-        // POST: Clienti/QuestionCategories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -150,5 +143,6 @@ namespace Licenta.Areas.Clienti.Views
         {
             return _context.QuestionCategory.Any(e => e.QuestionCategoryId == id);
         }
+        #endregion
     }
 }

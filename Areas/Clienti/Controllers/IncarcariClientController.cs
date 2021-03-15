@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -27,7 +26,6 @@ namespace Licenta.Areas.Clienti.Controllers
             _fileManager = fileManager;
         }
 
-        // GET: Clienti/IncarcariDocumente
         public async Task<IActionResult> Index()
         {
             var user = _context.ApplicationUsers.FirstOrDefault(d => d.UserName == User.Identity.Name);
@@ -35,7 +33,8 @@ namespace Licenta.Areas.Clienti.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Clienti/IncarcariDocumente/Create
+        // Create - incarcare document
+        #region
         public IActionResult Create()
         {
             var user = _context.ApplicationUsers.FirstOrDefault(d => d.UserName == User.Identity.Name);
@@ -57,7 +56,6 @@ namespace Licenta.Areas.Clienti.Controllers
             return View(documentVM);
         }
 
-        // POST: Admin/Documents/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DocumentVM documentVM)
@@ -85,7 +83,7 @@ namespace Licenta.Areas.Clienti.Controllers
             ViewData["TipDocumentId"] = new SelectList(_context.TipDocument, "TipDocumentId", "Denumire", document.TipDocumentId);
             return View(documentVM);
         }
-
+        #endregion
 
     }
 }

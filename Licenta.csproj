@@ -39,6 +39,7 @@
     <Folder Include="Areas\Clienti\Models\" />
     <Folder Include="Data\Migrations\" />
     <Folder Include="wwwroot\img\documente\" />
+    <Folder Include="wwwroot\xml\" />
   </ItemGroup>
 
 </Project>

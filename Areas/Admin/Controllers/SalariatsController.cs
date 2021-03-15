@@ -30,13 +30,13 @@ namespace Licenta.Areas.Admin.Controllers
             _fileManager = fileManager;
         }
 
-        // GET: Admin/Salariats
+        // Details & Index
+        #region
         public async Task<IActionResult> Index()
         {
             return View(await _context.Salariat.Include(c => c.Client).ToListAsync());
         }
 
-        // GET: Admin/Salariats/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -54,15 +54,16 @@ namespace Licenta.Areas.Admin.Controllers
 
             return View(salariat);
         }
+        #endregion
 
-        // GET: Admin/Salariats/Create
+        // Create, Edit
+        #region
         public IActionResult Create()
         {
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire");
             return View();
         }
 
-        // POST: Admin/Salariats/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Salariat salariat)
@@ -77,7 +78,6 @@ namespace Licenta.Areas.Admin.Controllers
             return View(salariat);
         }
 
-        // GET: Admin/Salariats/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -94,7 +94,6 @@ namespace Licenta.Areas.Admin.Controllers
             return View(salariat);
         }
 
-        // POST: Admin/Salariats/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Salariat salariat)
@@ -132,8 +131,9 @@ namespace Licenta.Areas.Admin.Controllers
         {
             return _context.Salariat.Any(e => e.SalariatId == id);
         }
+        #endregion
 
-        // API CALLS
+        // API CALLS: Get all, Delete
         #region
         [HttpGet]
         public IActionResult GetAll()
@@ -159,6 +159,8 @@ namespace Licenta.Areas.Admin.Controllers
         }
         #endregion
 
+        // Import Saga, Delete Salariati Modal
+        #region
         [HttpGet]
         public IActionResult ImportSalariati()
         {
@@ -256,5 +258,6 @@ namespace Licenta.Areas.Admin.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
+        #endregion
     }
 }

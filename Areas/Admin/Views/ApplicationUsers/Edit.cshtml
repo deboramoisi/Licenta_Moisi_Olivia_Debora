@@ -1,0 +1,90 @@
+﻿@model ApplicationUser
+
+@{
+    ViewData["Title"] = "Editare user";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br/>
+<h3>Modifica user</h3>
+<hr />
+<br />
+
+<div class="container">
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Nume"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Nume" class="form-control" />
+                <span asp-validation-for="Nume" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Email"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Email" class="form-control" readonly />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="PhoneNumber"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="ClientId"></label>
+            </div>
+            <div class="col-6">
+                <select asp-for="ClientId" class="form-control" asp-items=@ViewBag.ClientId></select>
+                <span asp-validation-for="ClientId" class="text-danger"></span>
+            </div>
+        </div>
+
+        @*<div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Rol"></label>
+            </div>
+            <div class="col-6">
+                <input value=@ViewBag.Rol class="form-control" readonly />
+            </div>
+        </div>*@
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="PozitieFirma"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="PozitieFirma" class="form-control" />
+                <span asp-validation-for="PozitieFirma" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="offset-3 col-3">
+                <button type="submit" class="btn btn-success form-control">Update</button>
+            </div>
+            <div class="col-3">
+                <a asp-action="Index" class="btn btn-primary form-control">Inapoi</a>
+            </div>
+        </div>
+
+    </form>
+</div> 
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

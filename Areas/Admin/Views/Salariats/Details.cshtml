@@ -1,4 +1,5 @@
-﻿@model Licenta.Models.Salariat
+﻿@using Licenta.Utility
+@model Licenta.Models.Salariat
 
 @{
     ViewData["Title"] = "Info Salariat";
@@ -134,7 +135,19 @@
 
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.SalariatId" class="btn btn-success">Editare salariat</a> |
-    <a asp-action="Index" class="btn btn-primary">Inapoi</a>
+
+<div class="form-group row">
+    <div class="col-3 offset-3">
+        <a asp-action="Edit" asp-route-id="@Model.SalariatId" class="btn btn-success">Editare salariat</a> |
+    </div>
+    <div class="col-3">
+        @if (User.IsInRole(ConstantVar.Rol_Admin))
+        {
+            <a asp-action="Index" class="btn btn-primary form-control">Inapoi</a>
+        }
+        else
+        {
+            <a asp-area="Clienti" asp-controller="Salariati" asp-action="Index" class="btn btn-primary form-control">Inapoi</a>
+        }
+    </div>
 </div>

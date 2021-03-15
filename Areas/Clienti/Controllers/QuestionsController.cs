@@ -22,7 +22,8 @@ namespace Licenta.Areas.Clienti.Views
             _context = context;
         }
 
-        // GET: Clienti/Questions
+        // Index - sortare, filtrare, cautare
+        #region
         public async Task<IActionResult> Index(string sortOrder, string filterBy, string searchQuestion)
         {
             // Daca sortOrder == Question, atunci aveam sortare crescatoare, deci trecem pe descrescatoare
@@ -70,9 +71,11 @@ namespace Licenta.Areas.Clienti.Views
                 questions = questions,
                 questionCategories = questionCategories
             });
-        } 
+        }
+        #endregion
 
-        // GET: Clienti/Questions/Details/5
+        // Details
+        #region
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -92,8 +95,10 @@ namespace Licenta.Areas.Clienti.Views
 
             return View(question);
         }
+        #endregion
 
-        // GET: Clienti/Questions/Create
+        // Create Question
+        #region
         public IActionResult Create()
         {
             if (User.Identity.IsAuthenticated)
@@ -114,7 +119,6 @@ namespace Licenta.Areas.Clienti.Views
 
         }
 
-        // POST: Clienti/Questions/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("QuestionId,Intrebare,DataAdaugare,Rezolvata,QuestionCategoryId,ApplicationUserId")] Question question)
@@ -134,8 +138,10 @@ namespace Licenta.Areas.Clienti.Views
             ViewData["QuestionCategoryId"] = new SelectList(_context.QuestionCategory, "QuestionCategoryId", "Denumire", question.QuestionCategoryId);
             return PartialView("_AddQuestion", question);
         }
+        #endregion
 
-        // GET: Clienti/Questions/Edit/5
+        // Edit question
+        #region
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -153,7 +159,6 @@ namespace Licenta.Areas.Clienti.Views
             return View(question);
         }
 
-        // POST: Clienti/Questions/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("QuestionId,Intrebare,DataAdaugare,Rezolvata,QuestionCategoryId,ApplicationUserId")] Question question)
@@ -188,43 +193,13 @@ namespace Licenta.Areas.Clienti.Views
             return View(question);
         }
 
-        // GET: Clienti/Questions/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var question = await _context.Question
-                .Include(q => q.ApplicationUser)
-                .Include(q => q.QuestionCategory)
-                .FirstOrDefaultAsync(m => m.QuestionId == id);
-            if (question == null)
-            {
-                return NotFound();
-            }
-
-            return View(question);
-        }
-
-        // POST: Clienti/Questions/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var question = await _context.Question.FindAsync(id);
-            _context.Question.Remove(question);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
         private bool QuestionExists(int id)
         {
             return _context.Question.Any(e => e.QuestionId == id);
         }
+        #endregion
 
-        // API CALLS
+        // API CALLS: delete
         #region
         [HttpDelete]
         public async Task<IActionResult> DeleteAPI(int id)

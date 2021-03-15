@@ -62,7 +62,9 @@
             <div class="form-group row">
                 <div class="col-md-12 offset-md-11">
                     <img src="@Model.profileImageUrl" width="250" height="400" alt="No image yet." />
-                    <button type="button" class="btn btn-outline-primary text-center mt-3" data-toggle="ajaxx-modal" data-target="#editProfilePic" asp-page-handler="UpdateImage"><i class="fa fa-camera" aria-hidden="true"></i>&nbsp;&nbsp;Editare poza profil</button>
+                    <button type="button" class="btn btn-outline-primary text-center mt-3" data-toggle="ajax-profile-modal" data-target="#editProfilePic" asp-page-handler="UpdateImage">
+                        <i class="fa fa-camera" aria-hidden="true"></i>&nbsp;&nbsp;Editare poza profil
+                    </button>
                 </div>
             </div>
         </div>
@@ -70,43 +72,8 @@
     </form>
 </div>
 
-<!--<div class="modal fade" id="editProfilePic">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">-->
-                @*titlu*@ 
-                <!--<h4 class="modal-title" id="editProfilePicLabel">Modificare Poza de Profil</h4>-->
-                 @*"X" pentru Close*@ 
-                <!--<button type="button" class="close" data-dismiss="modal">
-                    <span>x</span>
-                </button>
-            </div>-->
-
-            @*body: formular pentru editare poza de profil user*@ 
-            <!--<div class="modal-body">
-                <form asp-method="post" asp-page-handler="UpdateImage" enctype="multipart/form-data" >
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input asp-for="Username" hidden />
-                    <div class="form-group">
-                        <strong>Incarcati poza de profil</strong>
-                        <input asp-for="Input.ImageUrl" class="form-control" />
-                        <span asp-validation-for="Input.ImageUrl" class="text-danger"></span>
-                    </div>
-                </form>
-            </div>-->
-
-             @*footer: buton de Save si Close*@ 
-            <!--<div class="modal-footer">
-                <button type="button" class="close btn btn-primary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-save="modal">Save</button>
-            </div>
-
-        </div>
-    </div>
-</div>-->
-
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <partial name="_UpdateImageModalPartial" />
     <script src="~/js/profile.js"></script>
 }
