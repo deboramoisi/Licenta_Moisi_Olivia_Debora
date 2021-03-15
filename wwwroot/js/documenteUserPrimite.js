@@ -15,7 +15,8 @@ function loadDataTable() {
                 "data": "documentPath",
                 "render": function (data) {
                     var filePath = "/img/documente/" + data;
-                    return `<a href="${filePath}" target="_blank"> Vizualizare document </a>`;
+                    var icon = getExtensie(data);
+                    return `<a href="${filePath}" target="_blank"><i class="${icon}"></i> Vizualizare document </a>`;
                 }
             },
             { "data": "client.denumire" },

@@ -1,9 +1,4 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
-
-// Initialize the owl carousel using JQuery
+﻿// Initialize the owl carousel using JQuery
 
 $(document).ready(function () {
 
@@ -16,3 +11,17 @@ $(document).ready(function () {
 	});
 
 });
+
+function getExtensie(data) {
+    var icon = "";
+    if (data.includes("pdf")) {
+        icon = "far fa-file-pdf";
+    } else if (data.includes("docx") || data.includes("doc")) {
+        icon = "far fa-file-word";
+    } else if (data.includes("xlsx") || data.includes("csv")) {
+        icon = "far fa-file-excel";
+    } else if (data.includes("png") || data.includes("jpg") || data.includes("jpeg") || data.includes("img")) {
+        icon = "far fa-images";
+    }
+    return icon;
+}

@@ -8,7 +8,7 @@ function loadDataTable() {
     dataTable = $('#tblData').DataTable({
         // functia ce returneaza toate elementele tabelulului
         "ajax": {
-            "url": "/Admin/Documents/GetAll",
+            "url": "/Clienti/IncarcariClient/GetAll",
         },
         "columns": [
             {
@@ -16,13 +16,9 @@ function loadDataTable() {
                 "render": function (data) {
                     var filePath = "/img/documente/" + data;
                     var icon = getExtensie(data);
-                    return `<a href="${filePath}" target="_blank">
-                               <i class="${icon}"></i>&nbsp; Vizualizare document
-                            </a>`;
+                    return `<a href="${filePath}" target="_blank"><i class="${icon}"></i> Vizualizare document </a>`;
                 }
             },
-            { "data": "client.denumire" },
-            { "data": "applicationUser.nume" },
             { "data": "tipDocument.denumire" },
             { "data": "data" },
             {
@@ -30,13 +26,7 @@ function loadDataTable() {
                 "render": function (data) {
                     return `
                         <div class="text-center">
-                            <a href="/Admin/Documents/Edit/${data}" class="btn btn-success">
-                                <i class="fa fa-pencil-square" aria-hidden="true"></i>
-                            </a> 
-                            <a href="/Admin/Documents/Details/${data}" class="btn btn-info">
-                                <i class="fa fa-info-circle" aria-hidden="true"></i>
-                            </a>
-                            <a onclick=Delete("/Admin/Documents/DeleteAPI/${data}") class="btn btn-danger">
+                            <a onclick=Delete("/Clienti/IncarcariClient/DeleteAPI/${data}") class="btn btn-danger">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                             </a>
                         </div>

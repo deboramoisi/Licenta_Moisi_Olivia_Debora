@@ -1,44 +1,65 @@
 ﻿@model Licenta.ViewModels.DocumentVM
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Transmitere document";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <br/>
-<h2>Incarcare document nou</h2>
+<h2>Transmitere document nou</h2>
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<br/>
+<div class="container">
+    
         <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="DocumentPathUrl" class="control-label"></label>
-                <input asp-for="DocumentPathUrl" class="form-control" />
-                <span asp-validation-for="DocumentPathUrl" class="text-danger"></span>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="DocumentPathUrl" class="control-label"></label>
+                </div>
+                <div class="col-6">
+                    <input asp-for="DocumentPathUrl" class="form-control" />
+                    <span asp-validation-for="DocumentPathUrl" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ClientId" class="control-label"></label>
-                <input asp-for="ClientId" class ="form-control" readonly />
+
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="ClientId" class="control-label"></label>
+                </div>
+                <div class="col-6">
+                    <input value=@ViewBag.ClientId class="form-control" readonly />
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ApplicationUserId" class="control-label"></label>
-                <input asp-for="ApplicationUserId" class="form-control" readonly />
+
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="ApplicationUserId" class="control-label"></label>
+                </div>
+                <div class="col-6">
+                    <input value=@ViewBag.UserId class="form-control" readonly />
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="TipDocumentId" class="control-label"></label>
-                <select asp-for="TipDocumentId" class ="form-control" asp-items="ViewBag.TipDocumentId"></select>
+
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="TipDocumentId" class="control-label"></label>
+                </div>
+                <div class="col-6">
+                    <select asp-for="TipDocumentId" class="form-control" asp-items="ViewBag.TipDocumentId"></select>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+            <div class="form-group row">
+                <div class="col-3 offset-3">
+                    <input type="submit" value="Transmite" class="btn btn-outline-success form-control" />
+                </div>
+                <div class="col-3">
+                    <a asp-action="Index" class="btn btn-outline-info form-control">Inapoi</a>
+                </div>
             </div>
         </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

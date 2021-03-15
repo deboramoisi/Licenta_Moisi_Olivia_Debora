@@ -20,30 +20,10 @@ namespace Licenta.Areas.Admin.Views
             _context = context;
         }
 
-        // Index, Details
-        #region
         public async Task<IActionResult> Index()
         {
             return View(await _context.TipDocument.ToListAsync());
         }
-
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tipDocument = await _context.TipDocument
-                .FirstOrDefaultAsync(m => m.TipDocumentId == id);
-            if (tipDocument == null)
-            {
-                return NotFound();
-            }
-
-            return View(tipDocument);
-        }
-        #endregion
 
         // Create si Edit
         #region

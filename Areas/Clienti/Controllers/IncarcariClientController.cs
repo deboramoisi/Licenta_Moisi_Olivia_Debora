@@ -51,7 +51,8 @@ namespace Licenta.Areas.Clienti.Controllers
                 ClientId = userClientId,
                 ApplicationUserId = user.Id
             };
-
+            ViewData["UserId"] = user.Nume;
+            ViewData["ClientId"] = _context.Client.Find(userClientId).Denumire;
             ViewData["TipDocumentId"] = new SelectList(_context.TipDocument, "TipDocumentId", "Denumire");
             return View(documentVM);
         }
@@ -79,9 +80,45 @@ namespace Licenta.Areas.Clienti.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            
+            ViewData["UserId"] = _context.ApplicationUsers.Find(document.ApplicationUserId).Nume;
+            ViewData["ClientId"] = _context.Client.Find(document.ClientId).Denumire;
             ViewData["TipDocumentId"] = new SelectList(_context.TipDocument, "TipDocumentId", "Denumire", document.TipDocumentId);
             return View(documentVM);
+        }
+        #endregion
+
+
+        // API CALLS
+        #region
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var user = _context.ApplicationUsers.FirstOrDefault(d => d.UserName == User.Identity.Name);
+            var applicationDbContext = _context.Document.Include(d => d.Client).Include(d => d.ApplicationUser).Include(d => d.TipDocument).Where(d => d.ClientId == user.ClientId && d.ApplicationUserId == user.Id);
+            return Json(new { data = await applicationDbContext.ToListAsync() });
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAPI(int id)
+        {
+            Document document = _context.Document.Find(id);
+            if (document == null)
+            {
+                return Json(new { success = false, message = "Eroare la stergerea documentului!" });
+            }
+            else
+            {
+                _context.Document.Remove(document);
+                await _context.SaveChangesAsync();
+                if (_fileManager.DeleteDocument(document.DocumentPath) == "Success")
+                {
+                    return Json(new { success = true, message = "Document sters cu succes!" });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Eroare la stergerea documentului!" });
+                }
+            }
         }
         #endregion
 
