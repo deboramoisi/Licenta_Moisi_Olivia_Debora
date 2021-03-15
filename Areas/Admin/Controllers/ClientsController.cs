@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Licenta.Data;
 using Licenta.Models;
@@ -140,14 +138,14 @@ namespace Licenta.Areas.Admin.Controllers
         // API CALLS
         #region
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var allObj = _context.Client.Include(c => c.SediuSocial).ToList();
-            return Json(new { data = allObj });
+            var allObj = _context.Client.Include(c => c.SediuSocial);
+            return Json(new { data = await allObj.ToListAsync() });
         }
 
         [HttpDelete]
-        public IActionResult DeleteAPI(int id)
+        public async Task<IActionResult> DeleteAPI(int id)
         {
             Client client = _context.Client.Find(id);
             if (client == null)
@@ -157,7 +155,7 @@ namespace Licenta.Areas.Admin.Controllers
             else
             {
                 _context.Remove(client);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return Json(new { success = true, message = "Client sters cu succes!" });
             }
         }

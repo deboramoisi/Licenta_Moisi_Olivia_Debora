@@ -1,8 +1,8 @@
 ﻿using Licenta.Data;
+using Licenta.Models;
 using Licenta.Utility;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,14 +23,14 @@ namespace Licenta.Areas.Clienti.Controllers
             return View();
         }
 
-        public IActionResult GetAllFurnizori()
+        public async Task<IActionResult> GetAllFurnizori()
         {
             if (User.Identity.IsAuthenticated)
             {
                 if (User.IsInRole(ConstantVar.Rol_Admin) || User.IsInRole(ConstantVar.Rol_Admin_Firma))
                 {
                     var user = _context.ApplicationUsers.FirstOrDefault(u => u.UserName == User.Identity.Name);
-                    var furnizori = _context.Furnizori.Where(u => u.ClientId == user.ClientId).OrderBy(u => u.denumire).ToList();
+                    var furnizori = await _context.Furnizori.Where(u => u.ClientId == user.ClientId).OrderBy(u => u.denumire).ToListAsync();
                     return Json(new { data = furnizori });
                 }
             }

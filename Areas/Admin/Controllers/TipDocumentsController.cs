@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Licenta.Data;
 using Licenta.Models;
@@ -125,15 +122,15 @@ namespace Licenta.Areas.Admin.Views
         // API CALLS: get all, delete
         #region
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var tipDocuments = _context.TipDocument.ToList();
-            return Json(new { data = tipDocuments });
+            var tipDocuments = _context.TipDocument;
+            return Json(new { data = await tipDocuments.ToListAsync() });
         }
 
         // apel api folosind metoda delete din js
         [HttpDelete]
-        public IActionResult DeleteAPI(int id)
+        public async Task<IActionResult> DeleteAPI(int id)
         {
             var tipDocument = _context.TipDocument.Find(id);
             if (tipDocument == null)
@@ -141,7 +138,7 @@ namespace Licenta.Areas.Admin.Views
                 return Json(new { success = false, message = "Eroare la stergerea tipului!" });
             }
             _context.Remove(tipDocument);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Json(new { success = true, message = "Tipul documentului a fost sters cu succes!" });
         }
         #endregion

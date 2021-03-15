@@ -14,7 +14,6 @@ using Licenta.Utility;
 using Microsoft.AspNetCore.Identity;
 using System.Xml.Linq;
 using Licenta.Areas.Admin.Models;
-using System.Xml;
 
 namespace Licenta.Areas.Admin.Views
 {
@@ -210,10 +209,14 @@ namespace Licenta.Areas.Admin.Views
         // API CALLS
         #region
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var allObj = _context.Document.Include(d => d.TipDocument).Include(d => d.Client).Include(d => d.ApplicationUser).OrderBy(u => u.Client.Denumire).ToList();
-            return Json(new { data = allObj });
+            var allObj = _context.Document
+                .Include(d => d.TipDocument)
+                .Include(d => d.Client)
+                .Include(d => d.ApplicationUser)
+                .OrderBy(u => u.Client.Denumire);
+            return Json(new { data = await allObj.ToListAsync() });
         }
 
         [HttpGet]
@@ -232,7 +235,7 @@ namespace Licenta.Areas.Admin.Views
         }
 
         [HttpDelete]
-        public IActionResult DeleteAPI(int id)
+        public async Task<IActionResult> DeleteAPI(int id)
         {
             Document document = _context.Document.Find(id);
             if (document == null)
@@ -242,7 +245,7 @@ namespace Licenta.Areas.Admin.Views
             else
             {
                 _context.Document.Remove(document);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 if (_fileManager.DeleteDocument(document.DocumentPath) == "Success")
                 {
                     return Json(new { success = true, message = "Document sters cu succes!" });

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -136,14 +135,14 @@ namespace Licenta.Areas.Admin.Controllers
         // API CALLS: Get all, Delete
         #region
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var allObj = _context.Salariat.Include(c => c.Client).ToList();
-            return Json(new { data = allObj });
+            var allObj = _context.Salariat.Include(c => c.Client);
+            return Json(new { data = await allObj.ToListAsync() });
         }
 
         [HttpDelete]
-        public IActionResult DeleteAPI(int id)
+        public async Task<IActionResult> DeleteAPI(int id)
         {
             Salariat salariat = _context.Salariat.Find(id);
             if (salariat == null)
@@ -153,7 +152,7 @@ namespace Licenta.Areas.Admin.Controllers
             else
             {
                 _context.Remove(salariat);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return Json(new { success = true, message = "Salariat sters cu succes!" });
             }
         }

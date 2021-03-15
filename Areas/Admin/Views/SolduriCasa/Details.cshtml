@@ -1,15 +1,16 @@
 ﻿@model Licenta.Models.SolduriCasa
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalii solduri";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<br />
+<h3>Detalii solduri</h3>
+<hr />
+<br />
 
 <div>
-    <h4>SolduriCasa</h4>
-    <hr />
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.sold_prec)
@@ -43,7 +44,12 @@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.data">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="form-group row">
+    <div class="col-3 offset-2">
+        <a asp-action="Edit" asp-route-id="@Model.data" class="btn btn-outline-success form-control">Update</a>
+    </div>
+    <div class="col-3">
+        <a asp-action="Index" class="form-control btn btn-outline-info">Inapoi</a>
+    </div> 
 </div>

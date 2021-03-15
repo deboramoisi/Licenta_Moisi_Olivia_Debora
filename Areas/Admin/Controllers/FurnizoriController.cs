@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -221,10 +220,10 @@ namespace Licenta.Areas.Admin.Controllers
 
         // API CALLS
         #region
-        public IActionResult GetAllFurnizori()
+        public async Task<IActionResult> GetAllFurnizori()
         {
-            var furnizori = _context.Furnizori.Include(u => u.Client).OrderBy(u => u.ClientId).ToList();
-            return Json(new { data = furnizori });
+            var furnizori = _context.Furnizori.Include(u => u.Client).OrderBy(u => u.ClientId);
+            return Json(new { data = await furnizori.ToListAsync() });
         }
 
         public async Task<IActionResult> DeleteAPI(int id)

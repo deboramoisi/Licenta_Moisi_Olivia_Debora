@@ -5,6 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@* Import solduri casa - show modal *@
+<div id="modal-solduri-import-ph"></div>
+
 <br/>
 
 <h3>Solduri casa</h3>
@@ -18,14 +21,16 @@
         </a>
     </div>
     <div class="col-sm-5 col-md-3">
-        <a class="form-control btn btn-outline-secondary">
-            <i class="fas fa-file-import"></i>&nbsp;&nbsp; Import solduri Saga
-        </a>
+        <button type="button" data-target="#add-solduri-import" data-url="@Url.Action("ImportSolduri")" data-toggle="ajax-solduri-modal" class="btn btn-outline-secondary form-control">
+            <i class="fas fa-file-import"></i>
+            &nbsp;&nbsp;Import solduri Saga
+        </button>
     </div>
     <div class="col-sm-4 col-md-2">
-        <a class="form-control btn btn-outline-danger">
-            <i class="fas fa-trash"></i>&nbsp;&nbsp; Delete solduri
-        </a>
+        <button type="button" data-target="#delete-solduri" data-url="@Url.Action("DeleteSolduri")" data-toggle="ajax-del-sold-modal" class="btn btn-outline-danger form-control">
+            <i class="fas fa-trash"></i>
+            &nbsp;&nbsp;Stergere solduri
+        </button>
     </div>
 </div>
 
@@ -58,6 +63,7 @@
     </table>
     </div>
 
-    @section Scripts {
-        <script src="~/js/import/importSolduriCasa.js"></script>
-    }
+@section Scripts {
+    <script src="~/js/import/importSolduriCasa.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+}

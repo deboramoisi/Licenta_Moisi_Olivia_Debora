@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +6,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Licenta.Data;
 using Licenta.Models;
-using Licenta.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Licenta.Utility;
 using Microsoft.AspNetCore.Identity;
@@ -126,15 +124,15 @@ namespace Licenta.Areas.Admin.Controllers
         // API CALLS
         #region
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var allObj = _context.ApplicationUsers.Include(c => c.Client).ToList();
-            return Json(new { data = allObj });
+            var allObj = _context.ApplicationUsers.Include(c => c.Client);
+            return Json(new { data = await allObj.ToListAsync() });
         }
 
         // Id-ul user-ului este de tip string!!!
         [HttpDelete]
-        public IActionResult DeleteAPI(string id)
+        public async Task<IActionResult> DeleteAPI(string id)
         {
             ApplicationUser applicationUser = _context.ApplicationUsers.Find(id);
             if (applicationUser == null)
@@ -144,7 +142,7 @@ namespace Licenta.Areas.Admin.Controllers
             else
             {
                 _context.Remove(applicationUser);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return Json(new { success = true, message = "User sters cu succes!" });
             }
         }
