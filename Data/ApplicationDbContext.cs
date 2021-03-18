@@ -17,7 +17,6 @@ namespace Licenta.Data
         }
 
         public DbSet<Client> Client { get; set; }
-        public DbSet<SediuSocial> SediuSocial { get; set; }
         public DbSet<Salariat> Salariat { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<TipDocument> TipDocument { get; set; }

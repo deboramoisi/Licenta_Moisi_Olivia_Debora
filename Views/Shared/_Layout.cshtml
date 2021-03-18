@@ -1,4 +1,9 @@
 ﻿@using Licenta.Utility
+@{ 
+    var adminFirma = User.IsInRole(ConstantVar.Rol_Admin_Firma);
+    var admin = User.IsInRole(ConstantVar.Rol_Admin);
+    var ui = User.IsInRole(ConstantVar.Rol_User_Individual);
+}
 
 
 <!DOCTYPE html>
@@ -32,7 +37,7 @@
                     <ul class="navbar-nav flex-grow-1">
 
                         @* Afisare dropdown doar pentru admin *@
-                        @if (User.IsInRole(ConstantVar.Rol_Admin))
+                        @if (admin)
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -40,7 +45,6 @@
                                 </a>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" asp-area="Admin" asp-controller="Clients" asp-action="Index">Clienti</a>
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="SediuSocials" asp-action="Index">Sedii Sociale</a>
                                     <a class="dropdown-item" asp-area="Admin" asp-controller="Furnizori" asp-action="Index">Furnizori</a>
                                     <a class="dropdown-item" asp-area="Admin" asp-controller="Salariats" asp-action="Index">Salariati</a>
                                     <a class="dropdown-item" asp-area="Admin" asp-controller="SolduriCasa" asp-action="Index">Solduri Casa</a>
@@ -71,7 +75,7 @@
                         }
 
                         @* Afisare dropdown doar pentru clienti *@
-                        @if (User.IsInRole(ConstantVar.Rol_Admin_Firma))
+                        @if (adminFirma)
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -105,6 +109,13 @@
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="Clienti" asp-controller="Home" asp-action="Chat">Chat</a>
                         </li>
+
+                        @if (admin || adminFirma)
+                        {
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                        </li>
+                        }
                     </ul>
                 </div>
             </div>

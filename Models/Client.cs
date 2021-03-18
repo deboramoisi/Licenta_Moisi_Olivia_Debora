@@ -38,10 +38,6 @@ namespace Licenta.Models
 
         public string TVA { get; set; }
 
-        // Navigation Property Sediu Social 1:1
-        [Display(Name="Sediu Social")]
-        public SediuSocial SediuSocial { get; set; }
-
 
         public ICollection<SolduriCasa> SolduriCasa { get; set; }
         public ICollection<Salariat> Salariati { get; set; }

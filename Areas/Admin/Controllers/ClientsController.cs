@@ -31,7 +31,6 @@ namespace Licenta.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             return View(await _context.Client
-                                .Include(c => c.SediuSocial)
                                 .ToListAsync());
         }
 
@@ -43,8 +42,6 @@ namespace Licenta.Areas.Admin.Controllers
             }
 
             var client = await _context.Client
-                // Includem detalii din Sediu Social
-                .Include(b => b.SediuSocial)
                 .Include(b => b.Salariati)
                 .FirstOrDefaultAsync(m => m.ClientId == id);
             if (client == null)
@@ -86,7 +83,6 @@ namespace Licenta.Areas.Admin.Controllers
             }
 
             var client = await _context.Client
-                .Include(b => b.SediuSocial)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ClientId == id);
 
@@ -99,7 +95,7 @@ namespace Licenta.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClientId,Denumire,NrRegComertului,CodCAEN,TipFirma,CapitalSocial,CasaDeMarcat,TVA")] Client client)
+        public async Task<IActionResult> Edit(int id, Client client)
         {
             if (id != client.ClientId)
             {
@@ -140,7 +136,7 @@ namespace Licenta.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var allObj = _context.Client.Include(c => c.SediuSocial);
+            var allObj = _context.Client;
             return Json(new { data = await allObj.ToListAsync() });
         }
 

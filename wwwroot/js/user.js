@@ -32,13 +32,13 @@ function loadDataTable() {
                         return `
                         <div class="text-center">
                             <a onclick=LockUnlock('${data.id}') class="btn btn-danger">
-                                <i class="fa fa-lock-open" aria-hidden="true"></i> Unlock
+                                <i class="fa fa-lock-open" aria-hidden="true"></i>
                             </a>
-                            <a href="/Admin/ApplicationUsers/Edit/${data.id}" class="btn btn-success">
-                                <i class="fa fa-edit" aria-hidden="true"></i>
+                            <a href="/Admin/ApplicationUsers/Edit/${data.id}" class="btn btn-outline-success">
+                                <i class="fas fa-user-edit"></i>
                             </a>
-                            <a onclick=Delete("/Admin/ApplicationUsers/DeleteAPI/${data.id}") class="btn btn-danger">
-                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            <a onclick=Delete("/Admin/ApplicationUsers/DeleteAPI/${data.id}") class="btn btn-outline-danger">
+                                <i class="fas fa-user-times"></i>
                             </a>
                         </div>
                         `;
@@ -48,18 +48,18 @@ function loadDataTable() {
                         return `
                         <div class="text-center">
                             <a onclick=LockUnlock('${data.id}') class="btn btn-success">
-                                <i class="fa fa-lock" aria-hidden="true"></i> Lock
+                                <i class="fas fa-user-lock"></i>
                             </a>
-                            <a href="/Admin/ApplicationUsers/Edit/${data.id}" class="btn btn-success">
-                                <i class="fa fa-edit" aria-hidden="true"></i>
+                            <a href="/Admin/ApplicationUsers/Edit/${data.id}" class="btn btn-outline-success">
+                                <i class="fas fa-user-edit"></i>
                             </a>
-                            <a onclick=Delete("/Admin/ApplicationUsers/DeleteAPI/${data.id}") class="btn btn-danger">
-                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            <a onclick=Delete("/Admin/ApplicationUsers/DeleteAPI/${data.id}") class="btn btn-outline-danger">
+                                <i class="fas fa-user-times"></i>
                             </a>
                         </div>
                         `;
                     }
-                }
+                }, width: "18%"
             }
         ]
     });
