@@ -1,0 +1,68 @@
+﻿@model Licenta.Areas.Admin.Models.ViewModels.ImportBalanteXMLVM
+
+@{
+    ViewData["Title"] = "Balanta XML";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<h2>Balanta XML</h2>
+
+<hr />
+
+<div class="container mt-5">
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="DocumentPathUrl" class="control-label"></label>
+            </div>
+            <div class="col-4">
+                <input asp-for="DocumentPathUrl" class="form-control" />
+                <span asp-validation-for="DocumentPathUrl" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="ClientId" class="control-label"></label>
+            </div>
+            <div class="col-4">
+                <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-4">
+                <label>Selectati luna</label>
+            </div>
+            <div class="col-4">
+                <select asp-for="Month" asp-items="Model.Months" class="form-control"></select>
+                <span asp-validation-for="Month"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-4">
+                <label>Selectati anul</label>
+            </div>
+            <div class="col-4">
+                <select asp-for="Year" asp-items="Model.Years" class="form-control"></select>
+                <span asp-validation-for="Year"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-2 offset-4">
+                <input type="submit" value="Transmite" class="btn btn-success form-control" />
+            </div>
+            <div class="col-2">
+                <a asp-action="Index" class="btn btn-primary form-control">Inapoi</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/js/tipDocument.js"></script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

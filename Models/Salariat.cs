@@ -48,18 +48,23 @@ namespace Licenta.Models
         public string cn { get; set; }
 
         [Display(Name = "Judet")]
+        [Required(AllowEmptyStrings = true)]
         public string judet { get; set; }
 
         [Display(Name = "Localitate")]
+        [Required(AllowEmptyStrings = true)]
         public string localitate { get; set; }
 
         [Display(Name = "Strada")]
+        [Required(AllowEmptyStrings = true)]
         public string str { get; set; }
 
         [Display(Name = "Numar")]
+        [Required(AllowEmptyStrings = true)]
         public string nr { get; set; }
 
         [Display(Name = "Cod postal"), MinLength(length: 6, ErrorMessage = "Codul postal trebuie sa aiba 6 caractere"), MaxLength(length: 6, ErrorMessage = "Codul postal nu poate avea mai mult de 6 caractere")]
+        [Required(AllowEmptyStrings = true)]
         public string cod_post { get; set; }
 
         [Display(Name = "Numar contract")]

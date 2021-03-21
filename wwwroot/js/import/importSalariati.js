@@ -2,7 +2,7 @@
 
 $(function () {
     loadDataTable();
-    deleteSalariati();
+    
     var placeholderElement = $('#modal-salariati-import-ph');
     $('button[data-toggle="ajax-salariati-modal"]').click(function (event) {
         var url = $(this).data('url');
@@ -35,29 +35,9 @@ $(function () {
             processData: false,
             data: formData,
             success: function () {
-               
+
                 placeholderElement.find('.modal').modal('hide');
-
-                toastr["success"]("Salariati importati cu succes!")
-
-                toastr.options = {
-                    "closeButton": false,
-                    "debug": false,
-                    "newestOnTop": false,
-                    "progressBar": false,
-                    "positionClass": "toast-top-right",
-                    "preventDuplicates": false,
-                    "onclick": null,
-                    "showDuration": "300",
-                    "hideDuration": "1000",
-                    "timeOut": "5000",
-                    "extendedTimeOut": "1000",
-                    "showEasing": "swing",
-                    "hideEasing": "linear",
-                    "showMethod": "fadeIn",
-                    "hideMethod": "fadeOut"
-                }
-
+                toastrAlert("success", "Salariati importati cu succes!")
                 dataTable.ajax.reload();
 
             }
@@ -65,6 +45,40 @@ $(function () {
         });
 
     })
+
+    // Delete salariati
+    var placeholderElement = $('#modal-salariati-import-ph');
+    $('button[data-toggle="ajax-del-sal-modal"]').click(function (event) {
+        var url = $(this).data('url');
+        $.get(url).done(function (data) {
+            placeholderElement.html(data);
+            // cautam elementul cu clasa modal
+            placeholderElement.find('.modal').modal('show');
+        });
+    });
+
+    placeholderElement.on('click', '[data-save="modal-del"]', function (event) {
+        event.preventDefault();
+
+        var form = $(this).parents('.modal').find('form');
+        var actionUrl = form.attr('action');
+        var data = form.serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: actionUrl,
+            data: data,
+            success: function (message) {
+                placeholderElement.find('.modal').modal('hide');
+                toastrAlert("success", "Salariati stersi cu succes!")
+                dataTable.ajax.reload();
+            }, error: function (err) {
+                toastrAlert("error", "Eroare la stergerea salariatilor!")
+            }
+        });
+
+    })
+
 });
 
 function loadDataTable() {
@@ -100,62 +114,7 @@ function loadDataTable() {
         ]
     });
 }
-
-function deleteSalariati() {
-    var placeholderElement = $('#modal-salariati-import-ph');
-    $('button[data-toggle="ajax-del-sal-modal"]').click(function (event) {
-        var url = $(this).data('url');
-        $.get(url).done(function (data) {
-            placeholderElement.html(data);
-            // cautam elementul cu clasa modal
-            placeholderElement.find('.modal').modal('show');
-        });
-    });
-
-    placeholderElement.on('click', '[data-save="modal"]', function (event) {
-        event.preventDefault();
-
-        var form = $(this).parents('.modal').find('form');
-        var actionUrl = form.attr('action');
-        var data = form.serialize();
-
-        $.ajax({
-            type: 'POST',
-            url: actionUrl,
-            data: data,
-            success: function (message) {
-                placeholderElement.find('.modal').modal('hide');
-
-                // toastr pentru succes
-                toastr["success"]("Salariati stersi cu succes!")
-
-                toastr.options = {
-                    "closeButton": false,
-                    "debug": false,
-                    "newestOnTop": false,
-                    "progressBar": false,
-                    "positionClass": "toast-top-right",
-                    "preventDuplicates": false,
-                    "onclick": null,
-                    "showDuration": "300",
-                    "hideDuration": "1000",
-                    "timeOut": "5000",
-                    "extendedTimeOut": "1000",
-                    "showEasing": "swing",
-                    "hideEasing": "linear",
-                    "showMethod": "fadeIn",
-                    "hideMethod": "fadeOut"
-                }
-
-                dataTable.ajax.reload();
-            },
-            error: function (err) {
-                alert(err.message);
-            }
-        });
-
-    })
-}
+    
 
 function Delete(url) {
     swal({

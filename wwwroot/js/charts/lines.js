@@ -1,24 +1,25 @@
-﻿//$(document).ready(function () {
+﻿$(document).ready(function () {
 
-//    $.ajax({
-//        type: "GET",
-//        url: "/Admin/Dashboard/GetProfitPierdere?id=76&an=2020",
-//        contentType: "application/json",
-//        dataType: "json",
-//        success: function (data) {
-//            console.log(data);
-//            BarForProfitPierdere(data);
-//        }
-//   });
+    $.ajax({
+        type: "GET",
+        url: "/Admin/Dashboard/GetProfitPierdere?id=76&an=2020",
+        contentType: "application/json",
+        dataType: "json",
+        success: function (data) {
+            console.log(data);
+            BarForProfitPierdere(data);
+            LineForProfitPierdere(data);
+        }
+   });
         
-//}); 
+}); 
 
 
-function BarForProfitPierdere(prPierdere) {
+function LineForProfitPierdere(prPierdere) {
 
-    var ctx = document.getElementById('myChart').getContext('2d');
+    var ctx = document.getElementById('lineChartProfit').getContext('2d');
     var myChart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['Jan', 'Febr', 'Mar', 'Apr', 'Mai', 'Iun', 'Iul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             datasets: [{

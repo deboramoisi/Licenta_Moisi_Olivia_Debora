@@ -41,7 +41,8 @@ namespace Licenta.Models
 
         public ICollection<SolduriCasa> SolduriCasa { get; set; }
         public ICollection<Salariat> Salariati { get; set; }
-    
         public ICollection<Furnizori> Furnizori { get; set; }
+        public ICollection<ProfitPierdere> ProfitPierdere { get; set; }
+
     }
 }

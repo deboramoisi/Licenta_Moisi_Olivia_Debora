@@ -13,19 +13,20 @@ using Microsoft.AspNetCore.Authorization;
 using Licenta.Utility;
 using Microsoft.AspNetCore.Identity;
 using System.Xml.Linq;
+using Licenta.Areas.Admin.Models.ViewModels;
 using Licenta.Areas.Admin.Models;
 
 namespace Licenta.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = ConstantVar.Rol_Admin)]
-    public class DocumentsController : Controller
+    public class ProfitPierdereController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IFileManager _fileManager;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public DocumentsController(ApplicationDbContext context, IFileManager fileManager, UserManager<IdentityUser> userManager)
+        public ProfitPierdereController(ApplicationDbContext context, IFileManager fileManager, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _fileManager = fileManager;
@@ -36,8 +37,17 @@ namespace Licenta.Areas.Admin.Controllers
         #region
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Document.Include(d => d.Client).Include(d => d.ApplicationUser).Include(d => d.TipDocument);
-            return View(await applicationDbContext.ToListAsync());
+            var profitPierdere = _context.ProfitPierdere.Include(d => d.Client).OrderBy(u => u.ClientId);
+                //if (pp.rulaj_c > pp.rulaj_d)
+                //{
+                //    pp.Profit_luna = pp.rulaj_c - pp.rulaj_d;
+                //} 
+                //else
+                //{
+                //    pp.Pierdere_luna = pp.rulaj_d - pp.rulaj_c;
+                //}
+                //_context.Update(pp);
+            return View(await profitPierdere.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -47,11 +57,8 @@ namespace Licenta.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var document = await _context.Document
-                .Include(d => d.Client)
-                .Include(d => d.TipDocument)
-                .Include(d => d.ApplicationUser)
-                .FirstOrDefaultAsync(m => m.DocumentId == id);
+            var document = await _context.ProfitPierdere
+                .FirstOrDefaultAsync(m => m.ProfitPierdereId == id);
             if (document == null)
             {
                 return NotFound();
@@ -61,64 +68,82 @@ namespace Licenta.Areas.Admin.Controllers
         }
         #endregion
 
-        // Incarcari utilizator, Admin or not
-        #region
-        public async Task<IActionResult> IncarcariUtilizatori()
-        {
-            var applicationDbContext = _context.Document.Include(d => d.Client).Include(d => d.ApplicationUser).Include(d => d.TipDocument);
-            return View(await applicationDbContext.ToListAsync());
-        }
-
-        private async Task<bool> AdminOrNot(string id)
-        {
-            var user = _context.ApplicationUsers.Find(id);
-            if (await _userManager.IsInRoleAsync(user, ConstantVar.Rol_Admin))
-            {
-                return false;
-            }
-            return true;
-        }
-        #endregion
-
         // Create, import new document
         #region
         [HttpGet]
         public IActionResult Create()
         {
+            var balanta = new ImportBalanteXMLVM() { };
             ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(u => u.Denumire), "ClientId", "Denumire");
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers.OrderBy(u => u.Nume), "Id", "Nume");
-            ViewData["TipDocumentId"] = new SelectList(_context.TipDocument.OrderBy(u => u.Denumire), "TipDocumentId", "Denumire");
-            return View();
+            return View(balanta);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(DocumentVM documentVM)
+        public async Task<IActionResult> Create(ImportBalanteXMLVM balanta)
         {
-            var denumireDocument = _context.TipDocument.Find(documentVM.TipDocumentId);
-
-            Console.WriteLine(documentVM.DocumentPathUrl);
+            var user = await _userManager.GetUserAsync(User);
+            var documentType = _context.TipDocument.FirstOrDefault(u => u.Denumire == "XML").TipDocumentId;
 
             Document document = new Document()
             {
-                DocumentId = documentVM.DocumentId,
-                ApplicationUserId = documentVM.ApplicationUserId,
-                ClientId = documentVM.ClientId,
-                TipDocumentId = documentVM.TipDocumentId,
-                DocumentPath = await _fileManager.SaveDocument(documentVM.DocumentPathUrl, denumireDocument.Denumire, documentVM.ClientId, documentVM.ApplicationUserId),
-                Data = documentVM.Data
+                ApplicationUserId = user.Id,
+                ClientId = balanta.ClientId,
+                TipDocumentId = documentType,
+                DocumentPath = await _fileManager.SaveDocument(balanta.DocumentPathUrl, "XML", balanta.ClientId, user.Id),
             };
 
             if (ModelState.IsValid)
             {
                 _context.Add(document);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                var fullPath = $"C:/Users/user/source/repos/Licenta/wwwroot{document.DocumentPath}";
+                XDocument doc = XDocument.Load(fullPath);
+
+                var balante = from bal in doc.Root.Elements()
+                              where bal.Element("cont").Value.ToString().Equals("121")
+                              select bal;
+
+                foreach (XElement bal in balante)
+                {
+                    ProfitPierdere profitPierdere = CreateProfitPierdere(bal, balanta);
+                    _context.Add(profitPierdere);
+                }
+     
+                _fileManager.DeleteDocumentXML(document.DocumentPath);
+                _context.Remove(document);
+                _context.SaveChanges();
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", document.ClientId);
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Nume", document.ApplicationUserId);
-            ViewData["TipDocumentId"] = new SelectList(_context.TipDocument, "TipDocumentId", "Denumire", document.TipDocumentId);
-            return View(documentVM);
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", balanta.ClientId);
+            return RedirectToAction(nameof(Index));
+        }
+
+        private static ProfitPierdere CreateProfitPierdere(XElement profitP, ImportBalanteXMLVM balanta)
+        {
+            ProfitPierdere profitPierdere = new ProfitPierdere()
+            {
+                deb_prec = float.Parse(profitP.Element("deb_prec").Value),
+                cred_prec = float.Parse(profitP.Element("cred_prec").Value),
+                rulaj_d = float.Parse(profitP.Element("rulaj_d").Value),
+                rulaj_c = float.Parse(profitP.Element("rulaj_c").Value),
+                fin_d = float.Parse(profitP.Element("fin_d").Value),
+                fin_c = float.Parse(profitP.Element("fin_c").Value),
+                ClientId = balanta.ClientId,
+                Year = balanta.Year,
+                Month = balanta.Month
+            };
+
+            if (profitPierdere.rulaj_c > profitPierdere.rulaj_d)
+            {
+               
+                profitPierdere.Profit_luna = profitPierdere.rulaj_c - profitPierdere.rulaj_d;
+            }
+            else
+            {
+                profitPierdere.Pierdere_luna = profitPierdere.rulaj_d - profitPierdere.rulaj_c;
+            }
+
+            return profitPierdere;
         }
         #endregion
 
@@ -131,26 +156,24 @@ namespace Licenta.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var document = await _context.Document.FindAsync(id);
+            var document = await _context.ProfitPierdere.FindAsync(id);
             if (document == null)
             {
                 return NotFound();
             }
 
-            var documentVM = new DocumentVM()
-            {
-                DocumentPathUrl = null,
-                DocumentId = document.DocumentId,
-                TipDocumentId = document.TipDocumentId,
-                ClientId = document.ClientId,
-                ApplicationUserId = document.ApplicationUserId,
-                Data = document.Data
-            };
+            //var documentVM = new DocumentVM()
+            //{
+            //    DocumentPathUrl = null,
+            //    DocumentId = document.DocumentId,
+            //    TipDocumentId = document.TipDocumentId,
+            //    ClientId = document.ClientId,
+            //    ApplicationUserId = document.ApplicationUserId,
+            //    Data = document.Data
+            //};
 
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", document.ClientId);
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Nume", document.ApplicationUserId);
-            ViewData["TipDocumentId"] = new SelectList(_context.TipDocument, "TipDocumentId", "Denumire", document.TipDocumentId);
-            return View(documentVM);
+            return View(document);
         }
 
         [HttpPost]
@@ -211,27 +234,13 @@ namespace Licenta.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var allObj = _context.Document
-                .Include(d => d.TipDocument)
+            var allObj = _context.ProfitPierdere
                 .Include(d => d.Client)
-                .Include(d => d.ApplicationUser)
-                .OrderBy(u => u.Client.Denumire);
-            return Json(new { data = await allObj.ToListAsync() });
-        }
+                .OrderBy(d => d.ClientId)
+                    .ThenByDescending(d => d.Year)
+                    .ThenBy(d => d.Month);
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllUser()
-        {
-            var allDocuments = _context.Document.Include(d => d.ApplicationUser).Include(d => d.TipDocument).Include(d => d.Client).OrderBy(u => u.ApplicationUser.Nume);
-            var myList = new List<Document>();
-            foreach (var doc in allDocuments)
-            {
-                if (await _userManager.IsInRoleAsync(doc.ApplicationUser, ConstantVar.Rol_Admin_Firma) || await _userManager.IsInRoleAsync(doc.ApplicationUser, ConstantVar.Rol_User_Individual))
-                {
-                    myList.Add(doc);
-                }
-            }
-            return Json(new { data = myList });
+            return Json(new { data = await allObj.ToListAsync() });
         }
 
         [HttpDelete]

@@ -1,0 +1,62 @@
+﻿@model Licenta.Models.ProfitPierdere
+
+@{
+    ViewData["Title"] = "Detalii profit-pierdere";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<h3>Detalii profit/pierdere</h3>
+<hr />
+<br />
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Client)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ClientId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.deb_prec)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.deb_prec)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.cred_prec)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.cred_prec)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.rulaj_d)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.rulaj_d)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.rulaj_c)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.rulaj_c)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.fin_d)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.fin_d)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.fin_c)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.fin_c)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ProfitPierdereId" class="btn btn-outline-success">Edit</a> |
+    <a asp-action="Index" class="btn btn-outline-secondary">Inapoi</a>
+</div>

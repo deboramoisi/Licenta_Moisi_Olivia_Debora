@@ -1,0 +1,47 @@
+﻿@model Licenta.ViewModels.DocumentVM
+
+@{
+    ViewData["Title"] = "Edit document";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<h2>Editare document transmis</h2>
+
+<hr />
+<div class="container mt-5">
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="DocumentId" />
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="DocumentPathUrl" class="control-label"></label>
+            </div>
+            <div class="col-4">
+                <input asp-for="DocumentPathUrl" class="form-control" />
+                <span asp-validation-for="DocumentPathUrl" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="ClientId" class="control-label"></label>
+            </div>
+            <div class="col-4">
+                <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="col-2 offset-4">
+                <input type="submit" value="Update" class="btn btn-success form-control" />
+            </div>
+            <div class="col-2">
+                <a asp-action="Index" class="btn btn-primary form-control">Inapoi</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

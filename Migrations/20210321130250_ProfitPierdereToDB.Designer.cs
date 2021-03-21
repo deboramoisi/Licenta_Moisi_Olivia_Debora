@@ -4,14 +4,16 @@ using Licenta.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Licenta.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210321130250_ProfitPierdereToDB")]
+    partial class ProfitPierdereToDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,32 +133,8 @@ namespace Licenta.Migrations
                     b.Property<string>("Month")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float?>("Pierdere_luna")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("Profit_luna")
-                        .HasColumnType("real");
-
                     b.Property<string>("Year")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<float?>("cred_prec")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("deb_prec")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("fin_c")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("fin_d")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("rulaj_c")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("rulaj_d")
-                        .HasColumnType("real");
 
                     b.HasKey("ProfitPierdereId");
 

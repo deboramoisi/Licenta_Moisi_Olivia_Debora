@@ -12,6 +12,8 @@ using Licenta.ViewModels;
 using Licenta.Services.FileManager;
 using System.Xml.Linq;
 using Licenta.Areas.Admin.Models.ViewModels;
+using System.IO;
+using System.Collections.Generic;
 
 namespace Licenta.Areas.Admin.Controllers
 {
@@ -209,30 +211,7 @@ namespace Licenta.Areas.Admin.Controllers
 
                     foreach (XElement salariat in salariati)
                     {
-                        Salariat salariatNou = new Salariat
-                        {
-                            Nume = salariat.Element("nume").Value.ToString(),
-                            Prenume = salariat.Element("prenume").Value.ToString(),
-                            locatie = salariat.Element("locatie").Value.ToString(),
-                            functie = salariat.Element("functie").Value.ToString(),
-                            datai = DateTime.Parse(salariat.Element("datai").Value),
-                            tip = salariat.Element("tip").Value.ToString(),
-                            ore_zi = int.Parse(salariat.Element("ore_zi").Value),
-                            grupa = salariat.Element("grupa").Value.ToString(),
-                            nr_zile_co = int.Parse(salariat.Element("nr_zile_co").Value),
-                            tip_rem = salariat.Element("tip_rem").Value.ToString(),
-                            salar_brut = int.Parse(salariat.Element("salar_brut").Value),
-                            cn = salariat.Element("cn").Value.ToString(),
-                            judet = salariat.Element("judet").Value.ToString(),
-                            localitate = salariat.Element("localitate").Value.ToString(),
-                            str = salariat.Element("str").Value.ToString(),
-                            nr = salariat.Element("nr").Value.ToString(),
-                            cod_post = salariat.Element("cod_post").Value.ToString(),
-                            nr_contr = int.Parse(salariat.Element("nr_contr").Value),
-                            d_contract = DateTime.Parse(salariat.Element("d_contract").Value),
-                            ClientId = document.ClientId
-                        };
-
+                        Salariat salariatNou = CreateSalariat(salariat, document.ClientId);
                         _context.Add(salariatNou);
                     }
                     // stergem din memorie: bd si server XML-ul
@@ -242,6 +221,44 @@ namespace Licenta.Areas.Admin.Controllers
                 }
             }
             return PartialView("_AddSalariatiImport", documentVM);
+        }
+
+        private Salariat CreateSalariat(XElement salariat, int clientId)
+        {
+            Salariat salariatNou = new Salariat
+            {
+                Nume = salariat.Element("nume").Value.ToString(),
+                Prenume = salariat.Element("prenume").Value.ToString(),
+                locatie = salariat.Element("locatie").Value.ToString(),
+                functie = salariat.Element("functie").Value.ToString(),
+                datai = DateTime.Parse(salariat.Element("datai").Value),
+                tip = salariat.Element("tip").Value.ToString(),
+                ore_zi = int.Parse(salariat.Element("ore_zi").Value),
+                grupa = salariat.Element("grupa").Value.ToString(),
+                nr_zile_co = int.Parse(salariat.Element("nr_zile_co").Value),
+                tip_rem = salariat.Element("tip_rem").Value.ToString(),
+                salar_brut = int.Parse(salariat.Element("salar_brut").Value),
+                cn = salariat.Element("cn").Value.ToString(),
+                judet = TestNullOrEmpty(salariat.Element("judet").Value.ToString()),
+                localitate = TestNullOrEmpty(salariat.Element("localitate").Value.ToString()),
+                str = TestNullOrEmpty(salariat.Element("str").Value.ToString()),
+                nr = TestNullOrEmpty(salariat.Element("nr").Value.ToString()),
+                cod_post = TestNullOrEmpty(salariat.Element("cod_post").Value.ToString()),
+                // nr_contr = String.IsNullOrEmpty(salariat.Element("nr_contr").Value.ToString()) ? 0 : int.Parse(salariat.Element("nr_contr").Value),
+                d_contract = String.IsNullOrEmpty(salariat.Element("d_contract").Value.ToString()) ? DateTime.Now : DateTime.Parse(salariat.Element("d_contract").Value),
+                ClientId = clientId
+            };
+
+            return salariatNou;
+        }
+
+        private static string TestNullOrEmpty(string s)
+        {
+            if (String.IsNullOrEmpty(s))
+            {
+                return "empty";
+            }
+            return s;
         }
 
         public IActionResult DeleteSalariati()

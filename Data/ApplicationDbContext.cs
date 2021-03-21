@@ -26,6 +26,6 @@ namespace Licenta.Data
         public DbSet<Response> Response { get; set; }
         public DbSet<Furnizori> Furnizori { get; set; }
         public DbSet<SolduriCasa> SolduriCasa { get; set; }
-
+        public DbSet<ProfitPierdere> ProfitPierdere { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace Licenta.Models
         [Display(Name = "Document")]
         public string DocumentPath { get; set; }
 
-        [Display(Name = "Client")]
+        [Display(Name = "Client"), Required]
         public int ClientId { get; set; }
         [ForeignKey("ClientId")]
         public Client Client { get; set; }

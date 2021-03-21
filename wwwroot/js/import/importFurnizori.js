@@ -35,31 +35,11 @@ $(function () {
             processData: false,
             data: formData,
             success: function (message) {
-               
-                    placeholderElement.find('.modal').modal('hide');
-
-                    toastr["success"]("Furnizori importati cu succes!")
-
-                    toastr.options = {
-                        "closeButton": false,
-                        "debug": false,
-                        "newestOnTop": false,
-                        "progressBar": false,
-                        "positionClass": "toast-top-right",
-                        "preventDuplicates": false,
-                        "onclick": null,
-                        "showDuration": "300",
-                        "hideDuration": "1000",
-                        "timeOut": "5000",
-                        "extendedTimeOut": "1000",
-                        "showEasing": "swing",
-                        "hideEasing": "linear",
-                        "showMethod": "fadeIn",
-                        "hideMethod": "fadeOut"
-                    }
-
-                dataTable.ajax.reload();
-               
+                placeholderElement.find('.modal').modal('hide')
+                toastrAlert("success", "Furnizori importati cu succes!")
+                dataTable.ajax.reload()
+            }, error: function () {
+                toastrAlert("error", "Eroare la importarea furnizorilor!")
             }
            
         });
@@ -75,7 +55,6 @@ function loadDataTable() {
         "columns": [
             { "data": "denumire" },
             { "data": "cod_fiscal" },
-            { "data": "tara" },
             { "data": "client.denumire" }, 
             {
                 "data": "furnizorID",
@@ -121,29 +100,11 @@ function deleteFurnizori() {
             url: actionUrl,
             data: data,
             success: function (message) {
-                placeholderElement.find('.modal').modal('hide');
-
-                toastr["success"]("Furnizori stersi cu succes!")
-
-                toastr.options = {
-                    "closeButton": false,
-                    "debug": false,
-                    "newestOnTop": false,
-                    "progressBar": false,
-                    "positionClass": "toast-top-right",
-                    "preventDuplicates": false,
-                    "onclick": null,
-                    "showDuration": "300",
-                    "hideDuration": "1000",
-                    "timeOut": "5000",
-                    "extendedTimeOut": "1000",
-                    "showEasing": "swing",
-                    "hideEasing": "linear",
-                    "showMethod": "fadeIn",
-                    "hideMethod": "fadeOut"
-                }
-
+                placeholderElement.find('.modal').modal('hide')
+                toastrAlert("success", "Furnizori stersi cu succes!")
                 dataTable.ajax.reload();
+            }, error: function () {
+                toastrAlert("error", "Eroare la stergerea furnizorilor!")
             }
         });
 
@@ -174,8 +135,4 @@ function Delete(url) {
             });
         }
     });
-}
-
-function ReloadPage(timeout) {
-    setTimeout(function () { window.location.reload(true); }, timeout);
 }

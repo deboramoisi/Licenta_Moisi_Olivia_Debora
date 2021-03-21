@@ -4,14 +4,16 @@ using Licenta.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Licenta.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210321120711_RemoveAttributesFromFurnizori")]
+    partial class RemoveAttributesFromFurnizori
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,56 +115,6 @@ namespace Licenta.Migrations
                     b.HasIndex("ClientId");
 
                     b.ToTable("Furnizori");
-                });
-
-            modelBuilder.Entity("Licenta.Models.ProfitPierdere", b =>
-                {
-                    b.Property<int>("ProfitPierdereId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DocumentPath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Month")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float?>("Pierdere_luna")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("Profit_luna")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Year")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float?>("cred_prec")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("deb_prec")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("fin_c")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("fin_d")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("rulaj_c")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("rulaj_d")
-                        .HasColumnType("real");
-
-                    b.HasKey("ProfitPierdereId");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("ProfitPierdere");
                 });
 
             modelBuilder.Entity("Licenta.Models.QandA.Question", b =>
@@ -636,17 +588,6 @@ namespace Licenta.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("Licenta.Models.ProfitPierdere", b =>
-                {
-                    b.HasOne("Licenta.Models.Client", "Client")
-                        .WithMany("ProfitPierdere")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-                });
-
             modelBuilder.Entity("Licenta.Models.QandA.Question", b =>
                 {
                     b.HasOne("Licenta.Models.ApplicationUser", "ApplicationUser")
@@ -760,8 +701,6 @@ namespace Licenta.Migrations
             modelBuilder.Entity("Licenta.Models.Client", b =>
                 {
                     b.Navigation("Furnizori");
-
-                    b.Navigation("ProfitPierdere");
 
                     b.Navigation("Salariati");
 

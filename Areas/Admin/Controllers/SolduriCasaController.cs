@@ -246,7 +246,7 @@ namespace Licenta.Areas.Admin.Views
             return PartialView("_AddSolduriImport", documentVM);
         }
 
-        private SolduriCasa CreateSold(XElement sold, int clientId)
+        private static SolduriCasa CreateSold(XElement sold, int clientId)
         {
             SolduriCasa soldNou = new SolduriCasa
             {

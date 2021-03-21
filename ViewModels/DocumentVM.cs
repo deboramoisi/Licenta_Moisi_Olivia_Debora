@@ -17,7 +17,7 @@ namespace Licenta.ViewModels
         [Display(Name = "Incarcati documentul dumneavoastra")]
         public IFormFile DocumentPathUrl { get; set; }
 
-        [Display(Name = "Client")]
+        [Display(Name = "Client"), Required]
         public int ClientId { get; set; }
         [ForeignKey("ClientId")]
         public Client Client { get; set; }

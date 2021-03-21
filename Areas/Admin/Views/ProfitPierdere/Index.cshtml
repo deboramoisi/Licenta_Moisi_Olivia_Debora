@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Licenta.Models.ProfitPierdere>
+
+@{
+    ViewData["Title"] = "Documente transmise";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+
+<div class="row">
+    <div class="col-6">
+        <h3>Profit/Pierdere</h3>
+    </div>
+    <div class="col-6 text-right">
+        <a asp-action="Create" class="btn btn-outline-primary">
+            <i class="fas fa-file-import"></i>&nbsp;&nbsp;
+            Transmitere balanta XML
+        </a>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12 text-right">
+        <button type="button" data-target="#delete-profitP" data-url="@Url.Action("DeleteSalariati")" data-toggle="ajax-del-profitP-modal" class="btn btn-outline-danger">
+            <i class="fa fa-trash" aria-hidden="true"></i>
+            &nbsp;&nbsp;Stergere solduri
+        </button>
+    </div>
+</div>
+
+<br />
+
+<div class="table-responsive-md p-4 rounded border">
+    <table class="table table-hover" id="tblData">
+        <thead>
+            <tr class="thead-dark">
+                <th>
+                    @Html.DisplayNameFor(model => model.Client)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.rulaj_d)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.rulaj_c)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Profit_luna)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Pierdere_luna)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Month)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Year)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+
+    </table>
+</div>
+
+@section Scripts {
+    <script src="~/js/profitPierdere.js"></script>
+}

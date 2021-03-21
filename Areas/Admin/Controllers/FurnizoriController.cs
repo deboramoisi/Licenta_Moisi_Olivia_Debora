@@ -62,7 +62,7 @@ namespace Licenta.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FurnizorID,denumire,cod_fiscal,tara,judet,adresa,ClientId")] Furnizori furnizori)
+        public async Task<IActionResult> Create([Bind("FurnizorID,denumire,cod_fiscal,ClientId")] Furnizori furnizori)
         {
             if (ModelState.IsValid)
             {
@@ -92,7 +92,7 @@ namespace Licenta.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FurnizorID,denumire,cod_fiscal,tara,judet,adresa,ClientId")] Furnizori furnizori)
+        public async Task<IActionResult> Edit(int id, [Bind("FurnizorID,denumire,cod_fiscal,ClientId")] Furnizori furnizori)
         {
             if (id != furnizori.FurnizorID)
             {
@@ -168,7 +168,6 @@ namespace Licenta.Areas.Admin.Controllers
                 if (ModelState.IsValid)
                 {
                     _context.Add(document);
-                    _context.SaveChanges();
                     
                     // procesam XML-ul
                     // adaugam furnizorii preluati din acesta clientului ales de utilizator
@@ -185,10 +184,7 @@ namespace Licenta.Areas.Admin.Controllers
                         Furnizori furnizorNou = new Furnizori
                         {
                             denumire = furnizor.Element("denumire").Value.ToString(),
-                            cod_fiscal = furnizor.Element("cod_fiscal").Value.ToString(),
-                            tara = furnizor.Element("tara").Value.ToString(),
-                            judet = furnizor.Element("judet").Value.ToString(),
-                            adresa = furnizor.Element("adresa").Value.ToString(),
+                            cod_fiscal = TestNullOrEmpty(furnizor.Element("cod_fiscal").Value.ToString()),
                             ClientId = document.ClientId
                         };
 
@@ -201,6 +197,15 @@ namespace Licenta.Areas.Admin.Controllers
                 }
             }
             return PartialView("_AddFurnizoriImport", documentVM);
+        }
+
+        private static string TestNullOrEmpty(string s)
+        {
+            if (String.IsNullOrEmpty(s))
+            {
+                return "empty";
+            }
+            return s;
         }
 
         public IActionResult DeleteFurnizori()

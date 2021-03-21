@@ -16,12 +16,7 @@ namespace Licenta.Models
         public string denumire { get; set; }
         [Required, Display(Name = "Cod fiscal")]
         public string cod_fiscal { get; set; }
-        [Display(Name = "Tara")]
-        public string tara { get; set; }
-        [Display(Name = "Judet")]
-        public string judet { get; set; }
-        [Display(Name = "Adresa")]
-        public string adresa { get; set; }
+
         public Client Client { get; set; }
         [ForeignKey("ClientId")]
         public int ClientId { get; set; }

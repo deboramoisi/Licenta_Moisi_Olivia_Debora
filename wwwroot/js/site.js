@@ -25,3 +25,52 @@ function getExtensie(data) {
     }
     return icon;
 }
+
+function toastrAlert(type, message) {
+    // toastr pentru succes
+    toastr[type](message)
+
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+}
+
+function Delete2(url) {
+    swal({
+        title: "Sunteti sigur?",
+        text: "In urma stergerii, datele nu vor putea fi recuperate!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+    }).then((sterge) => {
+        if (sterge) {
+            $.ajax({
+                type: "DELETE",
+                url: url,
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        dataTable.ajax.reload();
+                    }
+                    else {
+                        toastr.error(data.message);
+                    }
+                }
+            });
+        }
+    });
+}
