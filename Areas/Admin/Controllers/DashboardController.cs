@@ -2,8 +2,8 @@
 using Licenta.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,7 +24,17 @@ namespace Licenta.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
+            ViewData["ClientIdList"] = new SelectList(_context.Client.OrderBy(c => c.Denumire), "ClientId", "Denumire");
             return View();
+        }
+
+        // API calls - denumire client, profit pierdere pt diagrame
+        #region
+        [HttpGet]
+        public async Task<IActionResult> GetDenumireClient(string id)
+        {
+            var client = await _context.Client.FindAsync(int.Parse(id));
+            return Json(client.Denumire);
         }
 
         [HttpGet]
@@ -47,5 +57,6 @@ namespace Licenta.Areas.Admin.Controllers
 
             return Json(pp.ToArray());
         }
+        #endregion
     }
 }

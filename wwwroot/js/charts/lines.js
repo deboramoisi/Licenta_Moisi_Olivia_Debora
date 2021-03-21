@@ -1,19 +1,41 @@
-﻿$(document).ready(function () {
+﻿var selectedClient = 1;
 
+function FilterByClient(client) {
+    selectedClient = client;
     $.ajax({
         type: "GET",
-        url: "/Admin/Dashboard/GetProfitPierdere?id=76&an=2020",
+        url: "/Admin/Dashboard/GetProfitPierdere?id=" + selectedClient + "&an=2020",
         contentType: "application/json",
         dataType: "json",
         success: function (data) {
-            console.log(data);
             BarForProfitPierdere(data);
             LineForProfitPierdere(data);
+            GetDenumire();
         }
-   });
+    });
+}
+
+$(document).ready(function () {
+
+    $.ajax({
+        type: "GET",
+        url: "/Admin/Dashboard/GetProfitPierdere?id=" + selectedClient + "&an=2020",
+        contentType: "application/json",
+        dataType: "json",
+        success: function (data) {
+            BarForProfitPierdere(data);
+            LineForProfitPierdere(data);
+            GetDenumire();
+        }
+    });
         
 }); 
 
+function GetDenumire() {
+    $.get("/Admin/Dashboard/GetDenumireClient?id=" + selectedClient).done(function (data) {
+        $("[name = 'denumire']").html(data); 
+    });
+}
 
 function LineForProfitPierdere(prPierdere) {
 
