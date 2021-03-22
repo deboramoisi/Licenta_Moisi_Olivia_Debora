@@ -1,4 +1,6 @@
-﻿using Licenta.Data;
+﻿using Licenta.Areas.Admin.Models.ViewModels;
+using Licenta.Data;
+using Licenta.Services.DashboardManager;
 using Licenta.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,21 +13,24 @@ using System.Threading.Tasks;
 namespace Licenta.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = ConstantVar.Rol_Admin + "," + ConstantVar.Rol_Admin_Firma)]
+    [Authorize(Roles = ConstantVar.Rol_Admin)]
 
     public class DashboardController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IDashboardManager _dashboardManager;
 
-        public DashboardController(ApplicationDbContext context)
+        public DashboardController(ApplicationDbContext context, IDashboardManager dashboardManager)
         {
             _context = context;
+            _dashboardManager = dashboardManager;
         }
 
         public IActionResult Index()
         {
+            DashboardVM dvm = new DashboardVM() { };
             ViewData["ClientIdList"] = new SelectList(_context.Client.OrderBy(c => c.Denumire), "ClientId", "Denumire");
-            return View();
+            return View(dvm);
         }
 
         // API calls - denumire client, profit pierdere pt diagrame
@@ -33,29 +38,13 @@ namespace Licenta.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> GetDenumireClient(string id)
         {
-            var client = await _context.Client.FindAsync(int.Parse(id));
-            return Json(client.Denumire);
+            return Json(await _dashboardManager.GetDenumireClient(id));
         }
 
         [HttpGet]
         public async Task<IActionResult> GetProfitPierdere(string id, string an)
         {
-            var profitPierdere = await _context.ProfitPierdere.Where(u => u.ClientId == int.Parse(id) && u.Year == an).ToListAsync();
-            IList<float> pp = new List<float>();
-
-            foreach (var pr in profitPierdere)
-            {
-                if (pr.Profit_luna == null)
-                {
-                    pp.Add(pr.Pierdere_luna.Value);
-                } 
-                else
-                {
-                    pp.Add(pr.Profit_luna.Value);
-                }
-            }
-
-            return Json(pp.ToArray());
+            return Json(await _dashboardManager.GetProfitPierdere(id, an));
         }
         #endregion
     }

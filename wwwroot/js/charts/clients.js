@@ -1,21 +1,17 @@
-﻿var selectedClient = 1;
-var selectedYear = 2020;
+﻿var selectedYear = "2020";
 
-function FilterByClient(client, year) {
+function FilterByYear(year) {
     selectedYear = (year !== '') ? year : '2020';
-    if (client !== '') {
-        selectedClient = client;
-    }
-    console.log(selectedClient, selectedYear);
+    
+    console.log(selectedYear);
     $.ajax({
         type: "GET",
-        url: "/Admin/Dashboard/GetProfitPierdere?id=" + selectedClient + "&an=" + selectedYear,
+        url: "/Clienti/DashboardClient/GetProfitPierdere?an=" + selectedYear,
         contentType: "application/json",
         dataType: "json",
         success: function (data) {
             BarForProfitPierdere(data);
             LineForProfitPierdere(data);
-            GetDenumire();
         }
     });
 }
@@ -24,7 +20,7 @@ $(document).ready(function () {
 
     $.ajax({
         type: "GET",
-        url: "/Admin/Dashboard/GetProfitPierdere?id=" + selectedClient + "&an=2020",
+        url: "/Clienti/DashboardClient/GetProfitPierdere?an=" + selectedYear,
         contentType: "application/json",
         dataType: "json",
         success: function (data) {
@@ -37,7 +33,7 @@ $(document).ready(function () {
 }); 
 
 function GetDenumire() {
-    $.get("/Admin/Dashboard/GetDenumireClient?id=" + selectedClient).done(function (data) {
+    $.get("/Clienti/DashboardClient/GetDenumireClient").done(function (data) {
         $("[name = 'denumire']").html(data); 
     });
 }

@@ -1,20 +1,4 @@
-﻿//$(document).ready(function () {
-
-//    $.ajax({
-//        type: "GET",
-//        url: "/Admin/Dashboard/GetProfitPierdere?id=76&an=2020",
-//        contentType: "application/json",
-//        dataType: "json",
-//        success: function (data) {
-//            console.log(data);
-//            BarForProfitPierdere(data);
-//        }
-//   });
-        
-//}); 
-
-
-function BarForProfitPierdere(prPierdere) {
+﻿function BarForProfitPierdere(prPierdere) {
 
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {

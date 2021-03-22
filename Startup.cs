@@ -17,6 +17,7 @@ using Licenta.Utility;
 using Licenta.Services.FileManager;
 using Licenta.Models;
 using Licenta.Hubs;
+using Licenta.Services.DashboardManager;
 
 namespace Licenta
 {
@@ -69,8 +70,11 @@ namespace Licenta
                 options.ClientSecret = "zMxhfOPRE6-qm219iagk3wX_";
             });
 
-            // serviciu de file Manager, imagini de profil
+            // serviciu de file Manager
             services.AddTransient<IFileManager, FileManager>();
+
+            // serviciu dashboard
+            services.AddTransient<IDashboardManager, DashboardManager>();
 
         }
 

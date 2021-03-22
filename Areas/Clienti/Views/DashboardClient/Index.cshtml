@@ -1,12 +1,8 @@
-﻿@model Licenta.Areas.Admin.Models.ViewModels.DashboardVM  
+﻿@model Licenta.Areas.Clienti.Models.DashboardVM
 
 @{
     ViewData["Title"] = "Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-@section Styles {
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous" />
 }
 
 <br />
@@ -16,34 +12,30 @@
         <h3>Dashboard</h3>
     </div>
     <div class="offset-2 col-4 text-right">
-        <select onchange="FilterByClient(this.value, '2020')" id="dashboardClient" asp-for="ClientId" asp-items="ViewBag.ClientIdList"
-                class="form-control">
-            <option value="" default="" selected="" class="font-italic">--Selectati clientul--</option>
-        </select>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-6"></div>
-    <div class="offset-2 col-4 text-right">
-        <select onchange="FilterByClient('', this.value)" asp-for="AnSelectat" asp-items="@Model.Years" class="form-control">
+        <select onchange="FilterByYear(this.value)" asp-for="AnSelectat" asp-items="@Model.Years" class="form-control">
             <option value="" default="" selected="" class="font-italic">--Selectati anul--</option>
         </select>
     </div>
 </div>
 
 <h4 class="mt-5 text-center font-italic">
-    <span name="denumire"></span> - diagrama de tip bar profit/pierdere</h4>
+    <span name="denumire"></span> - diagrama de tip bar profit/pierdere
+</h4>
 <canvas id="myChart" style="height:20vh; width:50vh;"></canvas>
 <div class="m-5"></div>
 
 <h4 class="mt-5 text-center font-italic">
-    <span name="denumire"></span> - diagrama de tip linie profit/pierdere</h4>
+    <span name="denumire"></span> - diagrama de tip linie profit/pierdere
+</h4>
 <canvas id="lineChartProfit" style="width:50vh; height:20vh;"></canvas>
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous" />
+}
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js" integrity="sha512-SuxO9djzjML6b9w9/I07IWnLnQhgyYVSpHZx0JV97kGBfTIsUYlWflyuW4ypnvhBrslz1yJ3R+S14fdCWmSmSA==" crossorigin="anonymous"></script>
     <script src="~/js/charts/bars.js"></script>
-    <script src="~/js/charts/lines.js"></script>
+    <script src="~/js/charts/clients.js"></script>
 }
