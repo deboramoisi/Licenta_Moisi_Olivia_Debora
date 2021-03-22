@@ -51,3 +51,43 @@
     });
 
 }
+
+var incasari, plati;
+
+function StackedBar(data) {
+
+    incasari = data[0];
+    plati = data[1];
+
+    var ctx2 = document.getElementById('chart2');
+
+    var stackedBar = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: ['Ian', 'Feb', 'Mar', 'Apr', 'Mai', 'Iun', 'Iul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [
+                {
+                    label: 'Incasari',
+                    data: incasari,
+                    backgroundColor: '#D6E9C6',
+                },
+                {
+                    label: 'Plati',
+                    data: plati,
+                    backgroundColor: '#FAEBCC',
+                }
+                //{
+                //    label: 'Sold_zi',
+                //    data: [47.1, 87.2, 117, 75],
+                //    backgroundColor: '#EBCCD1',
+                //}
+            ]
+        },
+        options: {
+            scales: {
+                xAxes: [{ stacked: true }],
+                yAxes: [{ stacked: true }]
+            }
+        }
+    });
+}

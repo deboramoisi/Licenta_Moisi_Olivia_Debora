@@ -10,6 +10,6 @@ namespace Licenta.Services.DashboardManager
     {
         Task<string> GetDenumireClient(string id);
         Task<IList> GetProfitPierdere(string id, string an);
-
+        Task<IList<List<float>>> GetSolduriCasa(string id, string an);
     }
 }

@@ -1,4 +1,4 @@
-﻿@model Licenta.Areas.Admin.Models.ViewModels.DashboardVM  
+﻿@model Licenta.Areas.Admin.Models.ViewModels.DashboardVM
 
 @{
     ViewData["Title"] = "Dashboard";
@@ -33,13 +33,19 @@
 </div>
 
 <h4 class="mt-5 text-center font-italic">
-    <span name="denumire"></span> - diagrama de tip bar profit/pierdere</h4>
+    <span name="denumire"></span> - diagrama de tip bar profit/pierdere
+</h4>
 <canvas id="myChart" style="height:20vh; width:50vh;"></canvas>
 <div class="m-5"></div>
 
 <h4 class="mt-5 text-center font-italic">
-    <span name="denumire"></span> - diagrama de tip linie profit/pierdere</h4>
+    <span name="denumire"></span> - diagrama de tip linie profit/pierdere
+</h4>
 <canvas id="lineChartProfit" style="width:50vh; height:20vh;"></canvas>
+
+<div class="m-5"></div>
+<canvas id="chart2" style="width:50vh; height:20vh;"></canvas>
+
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>

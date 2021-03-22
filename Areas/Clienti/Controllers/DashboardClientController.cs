@@ -50,6 +50,13 @@ namespace Licenta.Areas.Clienti.Controllers
             var clientId = _context.ApplicationUsers.FirstOrDefault(u => u.UserName == User.Identity.Name).ClientId;
             return Json(await _dashboardManager.GetProfitPierdere(clientId.ToString(), an));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSolduriCasa(string an)
+        {
+            var clientId = _context.ApplicationUsers.FirstOrDefault(u => u.UserName == User.Identity.Name).ClientId;
+            return Json(await _dashboardManager.GetSolduriCasa(clientId.ToString(), an));
+        }
         #endregion
 
 

@@ -44,6 +44,35 @@ namespace Licenta.Services.DashboardManager
 
             return pp.ToArray();
         }
+
+        public async Task<IList<List<float>>> GetSolduriCasa(string id, string an)
+        {
+            var solduriCasa = await _context.SolduriCasa
+                .Where(u => u.data.Year.ToString() == an && u.ClientId.ToString() == id)
+                .OrderBy(u => u.data.Month)
+                .ToListAsync();
+
+            IList<float> incasari = new List<float>();
+            IList<float> plati = new List<float>();
+            IList<float> solduriZi = new List<float>();
+
+            foreach (var sold in solduriCasa)
+            {
+                incasari.Add(sold.incasari);
+                plati.Add(sold.plati);
+                solduriZi.Add(sold.sold_zi);
+            }
+
+            IList<List<float>> rezultat = new List<List<float>>() { 
+                incasari.ToList(),
+                plati.ToList(),
+                solduriZi.ToList()
+            };
+
+            return rezultat;
+        }
+
+
         #endregion
     }
 }

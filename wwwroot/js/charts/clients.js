@@ -1,7 +1,10 @@
 ﻿var selectedYear = "2020";
+var solduri;
 
 function FilterByYear(year) {
     selectedYear = (year !== '') ? year : '2020';
+
+    GetSolduri();
     
     console.log(selectedYear);
     $.ajax({
@@ -12,11 +15,15 @@ function FilterByYear(year) {
         success: function (data) {
             BarForProfitPierdere(data);
             LineForProfitPierdere(data);
+            StackedBar(solduri);
         }
     });
 }
 
 $(document).ready(function () {
+
+    GetSolduri();
+    GetDenumire();
 
     $.ajax({
         type: "GET",
@@ -26,7 +33,7 @@ $(document).ready(function () {
         success: function (data) {
             BarForProfitPierdere(data);
             LineForProfitPierdere(data);
-            GetDenumire();
+            StackedBar(solduri);
         }
     });
         
@@ -35,6 +42,12 @@ $(document).ready(function () {
 function GetDenumire() {
     $.get("/Clienti/DashboardClient/GetDenumireClient").done(function (data) {
         $("[name = 'denumire']").html(data); 
+    });
+}
+
+function GetSolduri() {
+    $.get("/Clienti/DashboardClient/GetSolduriCasa?an=" + selectedYear).done(function (data) {
+        solduri = data;
     });
 }
 
