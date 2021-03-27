@@ -23,9 +23,9 @@ namespace Licenta.Areas.Admin.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IFileManager _fileManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public DocumentsController(ApplicationDbContext context, IFileManager fileManager, UserManager<IdentityUser> userManager)
+        public DocumentsController(ApplicationDbContext context, IFileManager fileManager, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _fileManager = fileManager;

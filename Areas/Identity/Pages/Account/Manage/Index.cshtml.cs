@@ -17,14 +17,14 @@ namespace Licenta.Areas.Identity.Pages.Account.Manage
 {
     public partial class IndexModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ApplicationDbContext _context;
         private readonly IFileManager _fileManager;
 
         public IndexModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
             ApplicationDbContext context,
             IFileManager fileManager)
         {
@@ -74,25 +74,25 @@ namespace Licenta.Areas.Identity.Pages.Account.Manage
             public string ProfileImageUrl { get; set; }
         }
 
-        private async Task LoadAsync(IdentityUser user)
+        private async Task LoadAsync(ApplicationUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            var applicationUser = _context.ApplicationUsers.FirstOrDefault(u => u.UserName == userName);
+            // var applicationUser = _context.ApplicationUsers.FirstOrDefault(u => u.UserName == userName);
 
             Username = userName;
-            Email = applicationUser.Email;
+            Email = user.Email;
 
             Input = new InputModel
             {
                 PhoneNumber = phoneNumber,
-                ClientId = applicationUser.ClientId,
-                ClientName = (applicationUser.ClientId != 0) ? (_context.Client.Find(applicationUser.ClientId).Denumire) : "",
-                PozitieFirma = applicationUser.PozitieFirma,
-                Nume = applicationUser.Nume,
+                ClientId = (user.ClientId != null) ? user.ClientId : 0,
+                ClientName = (user.ClientId != null) ? (_context.Client.Find(user.ClientId).Denumire) : "",
+                PozitieFirma = user.PozitieFirma,
+                Nume = user.Nume,
                 Rol = _userManager.GetRolesAsync(user).Result.FirstOrDefault(),
-                Descriere = applicationUser.Descriere,
-                ProfileImageUrl = applicationUser.ProfileImageUrl
+                Descriere = (user.Descriere != null) ? user.Descriere : "",
+                ProfileImageUrl = user.ProfileImageUrl
             };
 
             profileImageUrl = $"/img/profile/{Input.ProfileImageUrl}";
@@ -119,12 +119,10 @@ namespace Licenta.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var applicationUser = _context.ApplicationUsers.FirstOrDefault(u => u.Id == user.Id);
-
             if (Input.ImageUrl != null)
             {
                 // user-ul vrea sa editeze fotografia de profil
-                applicationUser.ProfileImageUrl = await _fileManager.SaveImage(Input.ImageUrl);
+                user.ProfileImageUrl = await _fileManager.SaveImage(Input.ImageUrl);
             }
 
             if (!ModelState.IsValid)
@@ -144,21 +142,21 @@ namespace Licenta.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            if (applicationUser != null)
+            if (user != null)
             {
-                if (applicationUser.Nume != Input.Nume)
+                if (user.Nume != Input.Nume)
                 {
-                    applicationUser.Nume = Input.Nume;
+                    user.Nume = Input.Nume;
                 }
-                if (applicationUser.PozitieFirma != Input.PozitieFirma)
+                if (user.PozitieFirma != Input.PozitieFirma)
                 {
-                    applicationUser.PozitieFirma = Input.PozitieFirma;
+                    user.PozitieFirma = Input.PozitieFirma;
                 }
-                if (applicationUser.Descriere != Input.Descriere)
+                if (user.Descriere != Input.Descriere)
                 {
-                    applicationUser.Descriere = Input.Descriere;
+                    user.Descriere = Input.Descriere;
                 }
-                _context.Update(applicationUser);
+                _context.Update(user);
                 await _context.SaveChangesAsync();
             }
 

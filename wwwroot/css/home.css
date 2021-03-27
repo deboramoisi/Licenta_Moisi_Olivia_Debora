@@ -22,3 +22,10 @@
 .card-title {
     font-style: italic;
 }
+
+#contact-body {
+    background: url("../img/banner-contact.png") no-repeat;
+    width: 100%;
+    height: 100vh;
+}
+

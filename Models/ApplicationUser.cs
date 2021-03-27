@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Licenta.Models.Chat;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -30,5 +31,13 @@ namespace Licenta.Models
 
         public string Descriere { get; set; }
         public string ProfileImageUrl { get; set; }
+
+        // 1 - * ApplicationUser || Message
+        public ICollection<Message> Messages { get; set; }
+
+        public ApplicationUser()
+        {
+            Messages = new HashSet<Message>();
+        }
     }
 }

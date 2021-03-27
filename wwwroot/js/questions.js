@@ -1,6 +1,7 @@
 ﻿var questions = $('#questions_table');
 
 $(function () {
+
     var placeholderElement = $('#question-modal');
     $('button[data-toggle="ajax-question-modal"]').click(function (event) {
         var url = $(this).data('url');
@@ -26,27 +27,8 @@ $(function () {
             if (isValid) {
                 placeholderElement.find('.modal').modal('hide');
 
-                // toastr pentru succes
-                toastr["success"]("Intrebare adaugata cu succes!")
-
-                toastr.options = {
-                    "closeButton": false,
-                    "debug": false,
-                    "newestOnTop": false,
-                    "progressBar": false,
-                    "positionClass": "toast-top-right",
-                    "preventDuplicates": false,
-                    "onclick": null,
-                    "showDuration": "300",
-                    "hideDuration": "1000",
-                    "timeOut": "5000",
-                    "extendedTimeOut": "1000",
-                    "showEasing": "swing",
-                    "hideEasing": "linear",
-                    "showMethod": "fadeIn",
-                    "hideMethod": "fadeOut"
-                }
-
+                toastrAlert("success", "Intrebare adaugata cu succes");
+                
                 ReloadPage(2000);
             }
         });

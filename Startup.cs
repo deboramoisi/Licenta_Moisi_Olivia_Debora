@@ -12,12 +12,12 @@ using Licenta.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Licenta.Utility;
 using Licenta.Services.FileManager;
 using Licenta.Models;
 using Licenta.Hubs;
 using Licenta.Services.DashboardManager;
+using Licenta.Services.MailService;
 
 namespace Licenta
 {
@@ -42,9 +42,10 @@ namespace Licenta
                 // .AddAzureSignalR();
 
             // Identity user & roles: options => options.SignIn.RequireConfirmedAccount = true
-            services.AddIdentity<IdentityUser,IdentityRole>().AddDefaultTokenProviders()
+            services.AddIdentity<ApplicationUser,IdentityRole>()
+                .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddSingleton<IEmailSender, EmailSender>();
+            
             services.AddControllersWithViews().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
@@ -75,6 +76,12 @@ namespace Licenta
 
             // serviciu dashboard
             services.AddTransient<IDashboardManager, DashboardManager>();
+
+            // Mail
+            var emailConfig = Configuration.GetSection("MailSettings")
+                .Get<EmailConfiguration>();
+            services.AddSingleton(emailConfig);
+            services.AddScoped<IEmailSender, EmailSender>();
 
         }
 

@@ -120,7 +120,7 @@ namespace Licenta.Areas.Clienti.Views
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("QuestionId,Intrebare,DataAdaugare,Rezolvata,QuestionCategoryId,ApplicationUserId")] Question question)
+        public async Task<IActionResult> Create(Question question)
         {
             if (!User.IsInRole(ConstantVar.Rol_Admin))
             {

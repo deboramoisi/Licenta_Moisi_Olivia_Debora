@@ -19,6 +19,34 @@ namespace Licenta.Migrations
                 .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Licenta.Models.Chat.Message", b =>
+                {
+                    b.Property<int>("MessageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("When")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("MessageId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Messages");
+                });
+
             modelBuilder.Entity("Licenta.Models.Client", b =>
                 {
                     b.Property<int>("ClientId")
@@ -600,6 +628,15 @@ namespace Licenta.Migrations
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
+            modelBuilder.Entity("Licenta.Models.Chat.Message", b =>
+                {
+                    b.HasOne("Licenta.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Messages")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("ApplicationUser");
+                });
+
             modelBuilder.Entity("Licenta.Models.Document", b =>
                 {
                     b.HasOne("Licenta.Models.ApplicationUser", "ApplicationUser")
@@ -771,6 +808,11 @@ namespace Licenta.Migrations
             modelBuilder.Entity("Licenta.Models.QandA.Question", b =>
                 {
                     b.Navigation("Responses");
+                });
+
+            modelBuilder.Entity("Licenta.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }

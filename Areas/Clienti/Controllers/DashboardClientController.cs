@@ -1,5 +1,6 @@
 ﻿using Licenta.Areas.Clienti.Models;
 using Licenta.Data;
+using Licenta.Models;
 using Licenta.Services.DashboardManager;
 using Licenta.Utility;
 using Microsoft.AspNetCore.Authorization;
@@ -17,11 +18,11 @@ namespace Licenta.Areas.Clienti.Controllers
     public class DashboardClientController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IDashboardManager _dashboardManager;
 
         public DashboardClientController(ApplicationDbContext context,
-            UserManager<IdentityUser> userManager,
+            UserManager<ApplicationUser> userManager,
             IDashboardManager dashboardManager)
         {
             _context = context;

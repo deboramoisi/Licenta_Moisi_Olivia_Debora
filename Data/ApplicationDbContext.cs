@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Licenta.Models;
+using Licenta.Models.Chat;
 using Licenta.Models.QandA;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -27,5 +28,8 @@ namespace Licenta.Data
         public DbSet<Furnizori> Furnizori { get; set; }
         public DbSet<SolduriCasa> SolduriCasa { get; set; }
         public DbSet<ProfitPierdere> ProfitPierdere { get; set; }
+
+        public DbSet<Message> Messages { get; set; }
+
     }
 }

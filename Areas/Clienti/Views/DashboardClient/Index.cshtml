@@ -9,7 +9,7 @@
 
 <div class="row">
     <div class="col-6">
-        <h3>Dashboard</h3>
+        <h3>Dashboard <span name="denumire"></span></h3>
     </div>
     <div class="offset-2 col-4 text-right">
         <select onchange="FilterByYear(this.value)" asp-for="AnSelectat" asp-items="@Model.Years" class="form-control">
@@ -18,19 +18,20 @@
     </div>
 </div>
 
-<h4 class="mt-5 text-center font-italic">
+
+<h4 name="profitPierdere" class="mt-5 text-center font-italic">
     <span name="denumire"></span> - diagrama de tip bar profit/pierdere
 </h4>
 <canvas id="myChart" style="height:20vh; width:50vh;"></canvas>
-<div class="m-5"></div>
 
-<h4 class="mt-5 text-center font-italic">
-    <span name="denumire"></span> - diagrama de tip linie profit/pierdere
+
+<h4 name="profitPierdere" class="mt-5 text-center font-italic">
+   <span name="denumire"></span> - diagrama de tip linie profit/pierdere
 </h4>
 <canvas id="lineChartProfit" style="width:50vh; height:20vh;"></canvas>
 
-<div class="m-5"></div>
-<h4 class="mt-5 text-center font-italic">
+
+<h4 name="sold" class="mt-5 text-center font-italic">
     <span name="denumire"></span> - solduri casa stacked bar
 </h4>
 <canvas id="chart2" style="width:300px; height:100px;"></canvas>

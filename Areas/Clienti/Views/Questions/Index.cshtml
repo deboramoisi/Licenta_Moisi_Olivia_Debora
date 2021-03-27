@@ -33,7 +33,7 @@
         </a>
 
         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["QuestionSortParam"]">
+            <a class="dropdown-item" asp-controller="Questions" asp-action="Index" asp-route-sortOrder="@ViewData["QuestionSortParam"]" >
                 Intrebare &nbsp;
                 @if (ViewData["QuestionSortParam"].ToString() == "Question")
                 {
@@ -44,7 +44,7 @@
                     @: <i class="fa fa-sort-desc" aria-hidden="true"></i>
                 }
             </a>
-            <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">
+            <a class="dropdown-item" asp-controller="Questions" asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]" >
                 Data adaugarii &nbsp;
                 @if (ViewData["DateSortParam"].ToString() == "Date")
                 {
@@ -55,7 +55,7 @@
                     @: <i class="fa fa-sort-desc" aria-hidden="true"></i>
                 }
             </a>
-            <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["CategorySortParam"]">
+            <a class="dropdown-item" asp-controller="Questions" asp-action="Index" asp-route-sortOrder="@ViewData["CategorySortParam"]" >
                 Categorii &nbsp;
                 @if (ViewData["CategorySortParam"].ToString() == "Category")
                 {
@@ -84,6 +84,7 @@
     </div>
 
 </div>
+
 <div class="container mt-5" id="questions_table">
     <div class="row">
         <div class="col-8 text-left">

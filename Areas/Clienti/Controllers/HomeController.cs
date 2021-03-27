@@ -2,6 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Licenta.Models;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Licenta.Data;
+using Licenta.Models.Chat;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Licenta.Areas.Clienti.Controllers
 {
@@ -9,10 +15,16 @@ namespace Licenta.Areas.Clienti.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger,
+            UserManager<ApplicationUser> userManager,
+            ApplicationDbContext context)
         {
             _logger = logger;
+            _userManager = userManager;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -20,9 +32,36 @@ namespace Licenta.Areas.Clienti.Controllers
             return View();
         }
 
-        public IActionResult Chat()
+        public async Task<IActionResult> Create(Message message)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                message.UserName = User.Identity.Name;
+                var sender = await _userManager.GetUserAsync(User);
+                message.UserId = sender.Id;
+                // adaugam mesajul cu toate informatiile
+                await _context.AddAsync(message);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            return Error();
+        }
+
+        public async Task<IActionResult> Chat()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            var messages = await _context.Messages.OrderBy(m => m.When).ToListAsync();
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewBag.CurrentUserName = currentUser.UserName;
+                return View(messages);
+            }
+            else
+            {
+                // Pentru return spre Login
+                return LocalRedirect("/Identity/Account/Login");
+            }
+
         }
 
         public IActionResult Privacy()

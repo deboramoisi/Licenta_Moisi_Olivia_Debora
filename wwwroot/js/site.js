@@ -12,6 +12,10 @@ $(document).ready(function () {
 
 });
 
+function isEmpty(array) {
+    return (array.length === 0) ? true : false;
+}
+
 function getExtensie(data) {
     var icon = "";
     if (data.includes("pdf")) {
@@ -48,6 +52,8 @@ function toastrAlert(type, message) {
         "hideMethod": "fadeOut"
     }
 }
+
+
 
 function Delete2(url) {
     swal({

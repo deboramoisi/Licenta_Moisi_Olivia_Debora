@@ -3,41 +3,47 @@ var solduri;
 
 function FilterByYear(year) {
     selectedYear = (year !== '') ? year : '2020';
-
     GetSolduri();
-    
-    console.log(selectedYear);
-    $.ajax({
-        type: "GET",
-        url: "/Clienti/DashboardClient/GetProfitPierdere?an=" + selectedYear,
-        contentType: "application/json",
-        dataType: "json",
-        success: function (data) {
-            BarForProfitPierdere(data);
-            LineForProfitPierdere(data);
-            StackedBar(solduri);
-        }
-    });
+    GetProfitPierdereAJAX();
 }
 
 $(document).ready(function () {
 
     GetSolduri();
     GetDenumire();
+    GetProfitPierdereAJAX();
+        
+}); 
 
+function GetProfitPierdereAJAX() {
     $.ajax({
         type: "GET",
         url: "/Clienti/DashboardClient/GetProfitPierdere?an=" + selectedYear,
         contentType: "application/json",
         dataType: "json",
         success: function (data) {
-            BarForProfitPierdere(data);
-            LineForProfitPierdere(data);
-            StackedBar(solduri);
+            if (!isEmpty(data)) {
+                // daca avem date pentru perioada selectata atunci afisam vizualizarile
+                $("#myChart").css("display", "block");
+                $("#lineChartProfit").css("display", "block");
+                BarForProfitPierdere(data);
+                LineForProfitPierdere(data);
+            } else { 
+                // daca nu atunci afisam mesaj coresp + display none pentru vizualizari
+                $("[name = 'profitPierdere']").html("Nu exista date disponibile pentru aceasta perioada"); 
+                $("#myChart").css("display", "none");
+                $("#lineChartProfit").css("display", "none");
+            }
+            if (!isEmpty(solduri)) {
+                $("#chart2").css("display", "block");
+                StackedBar(solduri);
+            } else {
+                $("[name = 'sold']").html("Nu exista date disponibile pentru aceasta perioada"); 
+                $("#chart2").css("display", "none");
+            }
         }
     });
-        
-}); 
+}
 
 function GetDenumire() {
     $.get("/Clienti/DashboardClient/GetDenumireClient").done(function (data) {
@@ -47,7 +53,11 @@ function GetDenumire() {
 
 function GetSolduri() {
     $.get("/Clienti/DashboardClient/GetSolduriCasa?an=" + selectedYear).done(function (data) {
-        solduri = data;
+        if (data[0].length !== 0) {
+            solduri = data;
+        } else {
+            solduri = [[]];
+        }
     });
 }
 
