@@ -12,6 +12,32 @@ $(document).ready(function () {
 
 });
 
+// Formular Home
+$('#submitButton').click(function (event) {
+
+    var form = $('#sendFormHome');
+
+    $.ajax({
+        type: "POST",
+        url: "/Clienti/Home/SendForm",
+        data: form.serialize(),
+        success: function (data) {
+            if (data.success) {
+                toastrAlert("success", data.message)
+                $("[name = 'Mesaj']").val(null);
+                $("[name = 'Subiect']").val(null);
+                $("[name = 'Email']").val(null);
+                $("[name = 'Nume']").val(null);
+            } else {
+                toastrAlert("error", data.message)
+            }
+        }
+    });
+
+    event.preventDefault();   
+
+})
+
 function isEmpty(array) {
     return (array.length === 0) ? true : false;
 }

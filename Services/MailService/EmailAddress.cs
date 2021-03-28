@@ -14,5 +14,10 @@ namespace Licenta.Services.MailService
         {
             DisplayName = "Contsal";
         }
+
+        public static implicit operator List<object>(EmailAddress v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

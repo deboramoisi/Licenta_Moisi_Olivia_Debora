@@ -34,13 +34,6 @@ function GetProfitPierdereAJAX() {
                 $("#myChart").css("display", "none");
                 $("#lineChartProfit").css("display", "none");
             }
-            if (!isEmpty(solduri)) {
-                $("#chart2").css("display", "block");
-                StackedBar(solduri);
-            } else {
-                $("[name = 'sold']").html("Nu exista date disponibile pentru aceasta perioada"); 
-                $("#chart2").css("display", "none");
-            }
         }
     });
 }
@@ -59,6 +52,14 @@ function GetSolduri() {
             solduri = [[]];
         }
     });
+
+    if (!isEmpty(solduri)) {
+        $("#chart2").css("display", "block");
+        StackedBar(solduri);
+    } else {
+        $("[name = 'sold']").html("Nu exista date disponibile pentru aceasta perioada");
+        $("#chart2").css("display", "none");
+    }
 }
 
 function LineForProfitPierdere(prPierdere) {

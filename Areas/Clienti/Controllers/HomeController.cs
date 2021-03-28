@@ -8,6 +8,10 @@ using Licenta.Data;
 using Licenta.Models.Chat;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Licenta.Areas.Clienti.Models;
+using Licenta.Services.MailService;
+using System.Collections.Generic;
+using MimeKit;
 
 namespace Licenta.Areas.Clienti.Controllers
 {
@@ -17,14 +21,17 @@ namespace Licenta.Areas.Clienti.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
+        private readonly IEmailSender _emailSender;
 
         public HomeController(ILogger<HomeController> logger,
             UserManager<ApplicationUser> userManager,
-            ApplicationDbContext context)
+            ApplicationDbContext context,
+            IEmailSender emailSender)
         {
             _logger = logger;
             _userManager = userManager;
             _context = context;
+            _emailSender = emailSender;
         }
 
         public IActionResult Index()
@@ -32,7 +39,7 @@ namespace Licenta.Areas.Clienti.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Create(Message message)
+        public async Task<IActionResult> Create(Licenta.Models.Chat.Message message)
         {
             if (ModelState.IsValid)
             {
@@ -61,6 +68,31 @@ namespace Licenta.Areas.Clienti.Controllers
                 // Pentru return spre Login
                 return LocalRedirect("/Identity/Account/Login");
             }
+
+        }
+
+        [HttpPost]
+        public IActionResult SendForm(HomeFormVM form)
+        {
+            IEnumerable<EmailAddress> emails = new List<EmailAddress>() { 
+                new EmailAddress{ Address = "deboramoisi@yahoo.com", DisplayName = "Debi" }
+            };
+
+            if (ModelState.IsValid)
+            {
+                var message = new Licenta.Services.MailService.Message(emails, form.Subiect, form.Mesaj + " Email: " + form.Email);
+                try
+                {
+                    _emailSender.SendEmail(message);
+                    return Json(new { success = true, message = "Mail-ul dumneavoastra a fost transmis cu succes!"});
+                }
+                catch
+                {
+                    throw;
+                }
+
+            }
+            return Json(new { success = false, message = "Eroare la trimiterea mail-ului!" });
 
         }
 

@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Licenta.Areas.Clienti.Models.HomeFormVM
+
+@{
     ViewData["Title"] = "Contsal";
 }
 
@@ -73,39 +75,48 @@
             <h3 class="pt-4 pl-4 text-left text-white">Contactati-ne!</h3>
         </div>
        
-            <form>
-                <div class="form-group row">
-                    <div class="text-center text-white col-1 offset-1">
-                        <label class="col-form-label">Nume</label>
-                    </div>
-                    <div class="col-3">
-                        <input type="text" class="form-control" placeholder="Introduceti numele dumneavoastra" />
-                    </div>
-                    <div class="text-center text-white col-1">
-                        <label class="col-form-label">Email</label>
-                    </div>
-                    <div class="col-4">
-                        <input type="email" class="form-control" placeholder="Adresa email" />
-                    </div>
+        <form id="sendFormHome">
+            <div class="form-group row">
+                <div class="text-center text-white col-1 offset-1">
+                    <label asp-for="Nume" class="col-form-label"></label>
                 </div>
+                <div class="col-3">
+                    <input asp-for="Nume" class="form-control" placeholder="Introduceti numele dumneavoastra" />
+                </div>
+                <div class="text-center text-white col-1">
+                    <label asp-for="Email" class="col-form-label"></label>
+                </div>
+                <div class="col-4">
+                    <input asp-for="Email" class="form-control" placeholder="Adresa email" />
+                </div>
+            </div>
 
-                <div class="form-group row">
-                    <div class="text-center text-white col-1 offset-1">
-                        <label class="col-form-label">Mesaj</label>
-                    </div>
-                    <div class="col-8">
-                        <textarea placeholder="Completati cu mesajul dumneavoastra" rows="8" class="form-control"></textarea>
-                    </div>
+            <div class="form-group row">
+                <div class="text-center text-white col-1 offset-1">
+                    <label asp-for="Subiect" class="col-form-label"></label>
                 </div>
+                <div class="col-8">
+                    <input asp-for="Subiect" placeholder="Subiectul mesajului" class="form-control" />
+                </div>
+            </div>
 
-                <div class="form-group row">
-                    <div class="col-3 offset-7">
-                        <button type="submit" class="btn btn-secondary form-control">
-                            <i class="far fa-paper-plane"></i>&nbsp;&nbsp;Trimite
-                        </button>
-                    </div>
+            <div class="form-group row">
+                <div class="text-center text-white col-1 offset-1">
+                    <label asp-for="Mesaj" class="col-form-label"></label>
                 </div>
-            </form>
+                <div class="col-8">
+                    <textarea asp-for="Mesaj" placeholder="Completati cu mesajul dumneavoastra" rows="8" class="form-control"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-3 offset-7">
+                    <button id="submitButton" class="btn btn-secondary form-control">
+                        <i class="far fa-paper-plane"></i>&nbsp;&nbsp;Trimite
+                    </button>
+                </div>
+            </div>
+        </form>
 
     </div>
 </section>

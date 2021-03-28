@@ -46,6 +46,12 @@ namespace Licenta.Areas.Admin.Controllers
         {
             return Json(await _dashboardManager.GetProfitPierdere(id, an));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSolduriCasa(string id, string an)
+        {
+            return Json(await _dashboardManager.GetSolduriCasa(id, an));
+        }
         #endregion
     }
 }
