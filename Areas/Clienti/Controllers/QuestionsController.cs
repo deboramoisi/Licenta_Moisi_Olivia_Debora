@@ -171,7 +171,9 @@ namespace Licenta.Areas.Clienti.Views
             {
                 try
                 {
+                    question.Rezolvata = (question.Responses.Count() > 0);
                     _context.Update(question);
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -190,6 +192,18 @@ namespace Licenta.Areas.Clienti.Views
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Nume", question.ApplicationUserId);
             ViewData["QuestionCategoryId"] = new SelectList(_context.QuestionCategory, "QuestionCategoryId", "Denumire", question.QuestionCategoryId);
             return View(question);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> QuestionsByCategory(int category)
+        {
+            var questions = await _context.Question
+                .Where(u => u.QuestionCategoryId == category)
+                .Include(u => u.ApplicationUser)
+                .Include(u => u.QuestionCategory)
+                .AsNoTracking()
+                .ToListAsync();
+            return View(questions);
         }
 
         private bool QuestionExists(int id)

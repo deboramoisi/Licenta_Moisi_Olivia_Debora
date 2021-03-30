@@ -12,6 +12,9 @@
 
 <div class="row">
     <div class="col-9">
+        <form>
+            <input type="hidden" asp-for="@Model.QuestionId" />
+        </form>
         <h4>@Model.Intrebare</h4>
         <h6 class="row font-italic ml-1">
             By @Model.ApplicationUser.Nume
@@ -30,7 +33,7 @@
     @if (admin || clientCuDrepturi)
     {
         @: &nbsp;
-        <a asp-controller="Responses" asp-action="Edit" asp-route-id="@Model.QuestionId" class="text-right">
+        <a asp-controller="Questions" asp-action="Edit" asp-route-id="@Model.QuestionId" class="text-right">
             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
         </a>
     }
@@ -74,7 +77,7 @@
     @if (admin || clientCuDrepturi)
     {
     <div class="col-2 offset-2">
-        <a asp-controller="Responses" asp-action="Edit" asp-route-id="@Model.QuestionId" class="btn btn-success form-control">Editare</a>
+        <a asp-controller="Questions" asp-action="Edit" asp-route-id="@Model.QuestionId" class="btn btn-success form-control">Editare</a>
     </div>
     }
     

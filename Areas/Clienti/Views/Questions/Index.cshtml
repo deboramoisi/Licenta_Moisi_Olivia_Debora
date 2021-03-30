@@ -18,10 +18,19 @@
     </div>
     <div class="col-6 text-right">
         <button type="button" class="btn btn-outline-primary" data-toggle="ajax-question-modal" data-target="#add-question" data-url="@Url.Action("Create")">
-            <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Adauga intrebare noua
+            <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp; Adauga intrebare noua
         </button>
     </div>
 </div>
+
+<div class="row">
+    <div class="offset-6 col-6 text-right">
+        <button type="button" class="btn btn-outline-secondary" data-toggle="ajax-questionCateg-modal" data-target="#add-questionCateg">
+            <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp; Adauga categorie noua
+        </button>
+    </div>
+</div>
+
 <br />
 
 @* Dropdown sortare *@
@@ -173,5 +182,6 @@
 } 
 
 @section Scripts {
-    <script src="~/js/questions.js"></script>
+    <script src="~/js/qa/questions.js"></script>
+    <script src="~/js/qa/questionCateg.js"></script>
 } 

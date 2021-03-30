@@ -44,22 +44,31 @@ namespace Licenta.Areas.Clienti.Views
 
         // Create_Edit
         #region
+        [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                return PartialView("_AddQuestionCateg", new QuestionCategory());
+            }
+            else
+            {
+                // Pentru return spre Login
+                return LocalRedirect("/Identity/Account/Login");
+            }
+
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("QuestionCategoryId,Denumire")] QuestionCategory questionCategory)
+        public async Task<IActionResult> Create(QuestionCategory qc)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(questionCategory);
+                _context.Add(qc);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
-            return View(questionCategory);
+            return PartialView("_AddQuestionCateg", qc);
         }
 
         public async Task<IActionResult> Edit(int? id)

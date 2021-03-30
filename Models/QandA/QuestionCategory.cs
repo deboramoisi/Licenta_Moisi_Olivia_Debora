@@ -7,6 +7,7 @@ namespace Licenta.Models.QandA
     {
         [Key]
         public int QuestionCategoryId { get; set; }
+        [Required]
         public string Denumire { get; set; }
     }
 }

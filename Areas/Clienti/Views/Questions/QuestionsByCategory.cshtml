@@ -1,0 +1,16 @@
+﻿@model IEnumerable<Licenta.Models.QandA.Question>
+
+@{
+    var categorie = Model.Last().QuestionCategory.Denumire;
+    ViewData["Title"] = categorie;
+}
+
+<br />
+<h3>@categorie</h3>
+
+<br />
+
+@foreach (var item in Model)
+{
+    <p>@item.Intrebare</p>
+}

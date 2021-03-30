@@ -5,32 +5,25 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<br />
+<h2>Intrebari in functie de categorii</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Denumire)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Denumire)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.QuestionCategoryId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.QuestionCategoryId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.QuestionCategoryId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<hr />
+
+<br />
+<div class="d-flex flex-wrap justify-content-center">
+    @foreach (var item in Model)
+    {
+
+        <div class="d-flex flex-wrap">
+            <div class="card border-secondary m-3" style="max-width: 18rem;">
+                <div class="card-header">@Html.DisplayFor(modelItem => item.Denumire)</div>
+                <div class="card-body text-secondary">
+                    <p class="card-text">Descoperiti mai multe intrebari din categoria @Html.DisplayFor(modelItem => item.Denumire)</p>
+                    <p><a asp-controller="Questions" asp-action="QuestionsByCategory" asp-route-category="@item.QuestionCategoryId" class="btn btn-warning">Mai multe</a></p>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>

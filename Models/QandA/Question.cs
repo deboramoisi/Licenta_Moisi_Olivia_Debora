@@ -24,7 +24,7 @@ namespace Licenta.Models.QandA
         
         public bool Rezolvata { get; set; } = false;
         
-        [Display(Name = "Categorie")]
+        [Display(Name = "Categorie"), Required]
         public int QuestionCategoryId { get; set; }
         [ForeignKey("QuestionCategoryId")]
         public QuestionCategory QuestionCategory { get; set; }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Licenta.Data;
 using Licenta.Models.QandA;
+using Licenta.Areas.Clienti.Models;
 
 namespace Licenta.Areas.Clienti.Views
 {
@@ -65,7 +66,10 @@ namespace Licenta.Areas.Clienti.Views
                 }
             }
 
-            ViewData["QuestionId"] = new SelectList(_context.Question, "QuestionId", "Intrebare");
+            var question = _context.Question.Find(response.QuestionId);
+
+            ViewData["QuestionId"] = new SelectList(_context.Question, "QuestionId", "Intrebare", response.QuestionId);
+            ViewData["QuestionCategoryId"] = new SelectList(_context.QuestionCategory, "QuestionCategoryId", "Denumire", question.QuestionCategoryId);
             return View(response);
         }
 
@@ -91,24 +95,48 @@ namespace Licenta.Areas.Clienti.Views
 
         public async Task<IActionResult> Edit(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
             }
 
             var response = await _context.Response.FindAsync(id);
+            var question = await _context.Question.FindAsync(response.QuestionId);
+            //var questionCateg = _context.QuestionCategory.Where(u => u.QuestionCategoryId == question.QuestionCategoryId);
+
             if (response == null)
             {
                 return NotFound();
             }
+
+            var qaVM = new QaVM() { 
+                QuestionId = response.QuestionId,
+                Raspuns = response.Raspuns,
+                DataAdaugare = response.DataAdaugare,
+                ResponseId = response.ResponseId,
+                QuestionCategoryId = question.QuestionId
+            };
+
             ViewData["QuestionId"] = new SelectList(_context.Question, "QuestionId", "Intrebare", response.QuestionId);
-            return View(response);
+            ViewData["QuestionCategoryId"] = new SelectList(_context.QuestionCategory, "QuestionCategoryId", "Denumire", question.QuestionCategoryId);
+            return View(qaVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ResponseId,Raspuns,DataAdaugare,QuestionId")] Response response)
+        public async Task<IActionResult> Edit(int id, QaVM qaVM)
         {
+            var response = new Response
+            {
+                ResponseId = qaVM.ResponseId,
+                DataAdaugare = qaVM.DataAdaugare,
+                QuestionId = qaVM.QuestionId,
+                Raspuns = qaVM.Raspuns
+            };
+
+            var question = await _context.Question.FindAsync(response.QuestionId);
+
             if (id != response.ResponseId)
             {
                 return NotFound();
@@ -119,6 +147,11 @@ namespace Licenta.Areas.Clienti.Views
                 try
                 {
                     _context.Update(response);
+                    if (question.QuestionCategoryId != qaVM.QuestionCategoryId)
+                    {
+                        question.QuestionCategoryId = qaVM.QuestionCategoryId;
+                        _context.Update(question);
+                    }
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -135,7 +168,8 @@ namespace Licenta.Areas.Clienti.Views
                 return RedirectToAction(nameof(Index));
             }
             ViewData["QuestionId"] = new SelectList(_context.Question, "QuestionId", "Intrebare", response.QuestionId);
-            return View(response);
+            ViewData["QuestionCategoryId"] = new SelectList(_context.QuestionCategory, "QuestionCategoryId", "Denumire", qaVM.QuestionCategoryId);
+            return View(qaVM);
         }
         #endregion
 

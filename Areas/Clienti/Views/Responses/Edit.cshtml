@@ -1,42 +1,71 @@
-﻿@model Licenta.Models.QandA.Response
+﻿@model Licenta.Areas.Clienti.Models.QaVM
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editare raspuns";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
-
-<h4>Response</h4>
+<br />
+<h2>Editare raspuns</h2>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ResponseId" />
-            <div class="form-group">
-                <label asp-for="Raspuns" class="control-label"></label>
-                <input asp-for="Raspuns" class="form-control" />
-                <span asp-validation-for="Raspuns" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DataAdaugare" class="control-label"></label>
-                <input asp-for="DataAdaugare" class="form-control" />
-                <span asp-validation-for="DataAdaugare" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+
+<div class="container">
+    
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="ResponseId" />
+
+        <div class="form-group row">
+            <div class="col-3">
                 <label asp-for="QuestionId" class="control-label"></label>
+            </div>
+            <div class="col-6">
                 <select asp-for="QuestionId" class="form-control" asp-items="ViewBag.QuestionId"></select>
                 <span asp-validation-for="QuestionId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Raspuns" class="control-label"></label>
             </div>
-        </form>
-    </div>
+            <div class="col-6">
+                <textarea asp-for="Raspuns" class="form-control" rows="10"></textarea>
+                <span asp-validation-for="Raspuns" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="QuestionCategoryId" class="control-label"></label>
+            </div>
+            <div class="col-6">
+                <select asp-for="QuestionCategoryId" class="form-control" asp-items="ViewBag.QuestionCategoryId"></select>
+                <span asp-validation-for="QuestionCategoryId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="DataAdaugare" class="control-label"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="DataAdaugare" class="form-control" />
+                <span asp-validation-for="DataAdaugare" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3 offset-3">
+                <input type="submit" value="Actualizeaza" class="btn btn-outline-success form-control" />
+            </div>
+            <div class="col-3">
+                <a asp-controller="Questions" asp-action="Index" class="btn btn-outline-secondary form-control">Inapoi</a>
+            </div>
+        </div>
+
+    </form>
+    
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 

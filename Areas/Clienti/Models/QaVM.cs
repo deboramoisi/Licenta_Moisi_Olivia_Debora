@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Licenta.Models.QandA;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Licenta.Models.QandA
+namespace Licenta.Areas.Clienti.Models
 {
-    public class Response
+    public class QaVM
     {
         [Key]
         public int ResponseId { get; set; }
-        
+
         [Required, MinLength(length: 10, ErrorMessage = "Raspunsul acordat trebuie sa aiba minim 10 caractere!")]
         public string Raspuns { get; set; }
 
@@ -23,5 +21,10 @@ namespace Licenta.Models.QandA
         public int QuestionId { get; set; }
         [ForeignKey("QuestionId")]
         public Question Question { get; set; }
+
+        [Display(Name = "Categorie"), Required]
+        public int QuestionCategoryId { get; set; }
+        [ForeignKey("QuestionCategoryId")]
+        public QuestionCategory QuestionCategory { get; set; }
     }
 }

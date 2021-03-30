@@ -1,0 +1,38 @@
+﻿@model Licenta.Models.QandA.QuestionCategory
+@using Licenta.Utility 
+
+<div class="modal fade" id="add-questionCateg" tabindex="-1" role="dialog" aria-labelledby="addQuestionCategLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addQuestionCategLabel">Adauga categorie</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-controller="QuestionCategories" asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <!-- Verificam daca modelul e valid, transmitem pentru notificare si inchidere modal -->
+                    <input type="hidden" name="IsValid" value="@ViewData.ModelState.IsValid.ToString()" />
+
+                    <div class="form-group row">
+                        <div class="col-3">
+                            <label asp-for="Denumire" class="control-label"></label>
+                        </div>
+                        <div class="col-6">
+                            <textarea asp-for="Denumire" class="form-control"></textarea>
+                            <span asp-validation-for="Denumire" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-save="modal-qc">Adauga</button>
+            </div>
+        </div>
+    </div>
+</div>
