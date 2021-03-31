@@ -48,10 +48,10 @@ namespace Licenta.Areas.Clienti.Controllers
 
             DocumentVM documentVM = new DocumentVM()
             {
-                ClientId = userClientId,
+                ClientId = user.ClientId.Value,
                 ApplicationUserId = user.Id
             };
-            ViewData["UserId"] = user.Nume;
+            ViewData["UserId"] = user.UserName;
             ViewData["ClientId"] = _context.Client.Find(userClientId).Denumire;
             ViewData["TipDocumentId"] = new SelectList(_context.TipDocument, "TipDocumentId", "Denumire");
             return View(documentVM);
@@ -62,17 +62,19 @@ namespace Licenta.Areas.Clienti.Controllers
         public async Task<IActionResult> Create(DocumentVM documentVM)
         {
             var denumireDocument = _context.TipDocument.Find(documentVM.TipDocumentId);
+            var user = _context.ApplicationUsers.FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             Console.WriteLine(documentVM.DocumentPathUrl);
 
             Document document = new Document()
             {
+                DocumentId = documentVM.DocumentId,
+                ApplicationUserId = user.Id,
+                Data = DateTime.Now,
+                ClientId = user.ClientId.Value,
                 TipDocumentId = documentVM.TipDocumentId,
-                DocumentPath = await _fileManager.SaveDocument(documentVM.DocumentPathUrl, denumireDocument.Denumire, documentVM.ClientId, documentVM.ApplicationUserId)
+                DocumentPath = await _fileManager.SaveDocument(documentVM.DocumentPathUrl, denumireDocument.Denumire, user.ClientId.Value, user.Id)
             };
-
-            document.ApplicationUserId = documentVM.ApplicationUserId;
-            document.ClientId = documentVM.ClientId;
 
             if (ModelState.IsValid)
             {
@@ -80,7 +82,7 @@ namespace Licenta.Areas.Clienti.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = _context.ApplicationUsers.Find(document.ApplicationUserId).Nume;
+            ViewData["UserId"] = user.Nume;
             ViewData["ClientId"] = _context.Client.Find(document.ClientId).Denumire;
             ViewData["TipDocumentId"] = new SelectList(_context.TipDocument, "TipDocumentId", "Denumire", document.TipDocumentId);
             return View(documentVM);

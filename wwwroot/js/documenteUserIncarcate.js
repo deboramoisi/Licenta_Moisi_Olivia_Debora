@@ -37,29 +37,3 @@ function loadDataTable() {
         ]
     });
 }
-
-function Delete(url) {
-    swal({
-        title: "Sunteti sigur?",
-        text: "In urma stergerii, datele nu vor putea fi recuperate!",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true
-    }).then((sterge) => {
-        if (sterge) {
-            $.ajax({
-                type: "DELETE",
-                url: url,
-                success: function (data) {
-                    if (data.success) {
-                        toastr.success(data.message);
-                        dataTable.ajax.reload();
-                    }
-                    else {
-                        toastr.error(data.message);
-                    }
-                }
-            });
-        }
-    });
-}

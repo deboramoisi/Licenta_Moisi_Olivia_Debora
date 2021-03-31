@@ -12,8 +12,6 @@ using Licenta.ViewModels;
 using Licenta.Services.FileManager;
 using System.Xml.Linq;
 using Licenta.Areas.Admin.Models.ViewModels;
-using System.IO;
-using System.Collections.Generic;
 
 namespace Licenta.Areas.Admin.Controllers
 {

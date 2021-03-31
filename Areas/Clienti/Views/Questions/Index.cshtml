@@ -163,8 +163,12 @@
                         {
                             <i class="fa fa-check" aria-hidden="true"></i>
                         }
-                        <a asp-controller="Questions" asp-action="Index" asp-route-filterBy="@item.Denumire">@item.Denumire</a>
+                        <a asp-controller="Questions" asp-action="Index" asp-route-filterBy="@item.Denumire"> @item.Denumire </a>
                     </div>
+
+                    <a onclick="Delete('/Clienti/QuestionCategories/DeleteAPI/@item.QuestionCategoryId')" class="text-danger text-right">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </a>
                 }
                 @if (ViewData["filterBy"].ToString() == "All")
                 {

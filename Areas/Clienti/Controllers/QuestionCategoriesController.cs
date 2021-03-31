@@ -121,31 +121,20 @@ namespace Licenta.Areas.Clienti.Views
 
         // Delete
         #region
-        public async Task<IActionResult> Delete(int? id)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAPI(int id)
         {
-            if (id == null)
+            QuestionCategory qc = await _context.QuestionCategory.FindAsync(id);
+            if (qc == null)
             {
-                return NotFound();
+                return Json(new { success = false, message = "Categoria nu a fost gasita!" });
             }
-
-            var questionCategory = await _context.QuestionCategory
-                .FirstOrDefaultAsync(m => m.QuestionCategoryId == id);
-            if (questionCategory == null)
+            else
             {
-                return NotFound();
+                _context.Remove(qc);
+                await _context.SaveChangesAsync();
+                return Json(new { success = true, message = "Categorie stearsa cu succes!" });
             }
-
-            return View(questionCategory);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var questionCategory = await _context.QuestionCategory.FindAsync(id);
-            _context.QuestionCategory.Remove(questionCategory);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         private bool QuestionCategoryExists(int id)
