@@ -2,6 +2,7 @@
 
 $(document).ready(function () {
     loadDataTable();
+    deleteSolduriBalanta();
 });
 
 function loadDataTable() {
@@ -11,7 +12,7 @@ function loadDataTable() {
             "url": "/Admin/ProfitPierdere/GetAll",
         },
         "columns": [
-            { "data": "clientId" },
+            { "data": "client.denumire" },
             { "data": "rulaj_d" },
             { "data": "rulaj_c" },
             { "data": "profit_luna" },
@@ -39,4 +40,39 @@ function loadDataTable() {
             }
         ]
     });
+}
+
+function deleteSolduriBalanta() {
+    var placeholderElement = $('#modal-solduri-delete-ph');
+    $('button[data-toggle="ajax-del-profitP-modal"]').click(function (event) {
+        var url = $(this).data('url');
+        alert("hei");
+        $.get(url).done(function (data) {
+            placeholderElement.html(data);
+            placeholderElement.find('.modal').modal('show');
+        });
+    });
+
+    placeholderElement.on('click', '[data-save="modal"]', function (event) {
+        event.preventDefault();
+
+        var form = $(this).parents('.modal').find('form');
+        var actionUrl = form.attr('action');
+        var data = form.serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: actionUrl,
+            data: data,
+            success: function (message) {
+                placeholderElement.find('.modal').modal('hide');
+                toastrAlert("success", "Solduri balanta sterse cu succes!")
+                dataTable.ajax.reload();
+            }, error: function (err) {
+                console.log(err);
+                toastrAlert("error", "Eroare la stergerea soldurilor de profit si pierdere!")
+            }
+        });
+
+    })
 }

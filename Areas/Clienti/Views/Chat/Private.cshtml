@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Licenta.Models.Chat.Chat>
+@using System.Security.Claims;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Chat";
+    var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/chat.css" />
+}
+
+<div class="chat-body">
+    @foreach (var chat in Model)
+    {
+    <div class="form-group row">
+        <a class="btn btn-outline-secondary p-3 m-3 col-3 form-control text-center"
+           asp-controller="Chat" asp-action="Chat" asp-route-id="@chat.ChatId">
+            @chat.Users.FirstOrDefault(x => x.ApplicationUserId != userId).ApplicationUser.Nume
+        </a>
+    </div>
+    }
+</div>
+
+

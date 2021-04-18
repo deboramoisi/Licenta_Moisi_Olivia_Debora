@@ -13,7 +13,7 @@ $(document).ready(function () {
 });
 
 // Formular Home
-$('#submitButton').click(function (event) {
+$('#submitMailButton').click(function (event) {
 
     var form = $('#sendFormHome');
 

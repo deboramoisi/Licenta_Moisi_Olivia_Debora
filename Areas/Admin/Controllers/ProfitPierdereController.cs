@@ -134,14 +134,16 @@ namespace Licenta.Areas.Admin.Controllers
                 Month = balanta.Month
             };
 
+            // daca veniturile sunt mai mari atunci avem profit
             if (profitPierdere.rulaj_c > profitPierdere.rulaj_d)
             {
                
                 profitPierdere.Profit_luna = profitPierdere.rulaj_c - profitPierdere.rulaj_d;
             }
+            // altfel avem pierdere
             else
             {
-                profitPierdere.Pierdere_luna = profitPierdere.rulaj_d - profitPierdere.rulaj_c;
+                profitPierdere.Pierdere_luna = profitPierdere.rulaj_c - profitPierdere.rulaj_d;
             }
 
             return profitPierdere;
@@ -162,16 +164,6 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
-            //var documentVM = new DocumentVM()
-            //{
-            //    DocumentPathUrl = null,
-            //    DocumentId = document.DocumentId,
-            //    TipDocumentId = document.TipDocumentId,
-            //    ClientId = document.ClientId,
-            //    ApplicationUserId = document.ApplicationUserId,
-            //    Data = document.Data
-            //};
 
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", document.ClientId);
             return View(document);
@@ -265,6 +257,30 @@ namespace Licenta.Areas.Admin.Controllers
                 }
             }
         }
+
+        // Delete solduri profit/pierdere
+        #region
+        [HttpGet]
+        public IActionResult DeleteSolduriBalanta()
+        {
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(u => u.Denumire), "ClientId", "Denumire");
+            return PartialView("_DeleteSolduriBalanta");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteSolduriBalanta(DeleteSolduriBalantaVM soldVM)
+        {
+            var year = soldVM.DataEnd.Year;
+            var month = soldVM.DataStart.Month;
+
+            _context.ProfitPierdere.RemoveRange(_context.ProfitPierdere.Where(
+                                        x => x.ClientId == soldVM.ClientId 
+                                        && (int.Parse(x.Year) >= soldVM.DataStart.Year && int.Parse(x.Year) <= soldVM.DataEnd.Year)
+                                        && (int.Parse(x.Month) >= soldVM.DataStart.Month && int.Parse(x.Month) <= soldVM.DataEnd.Month)));
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+        #endregion
         #endregion
     }
 }

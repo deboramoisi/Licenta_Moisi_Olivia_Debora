@@ -32,10 +32,12 @@ namespace Licenta.Services.DashboardManager
 
             foreach (var pr in profitPierdere)
             {
+                // daca avem pierdere adaugam pierderea
                 if (pr.Profit_luna == null)
                 {
                     pp.Add(pr.Pierdere_luna.Value);
                 }
+                // adaugam profitul
                 else
                 {
                     pp.Add(pr.Profit_luna.Value);

@@ -1,0 +1,56 @@
+﻿@model Licenta.Areas.Admin.Models.ViewModels.DeleteSolduriBalantaVM
+
+<div class="modal fade" id="delete-profitP" tabindex="-1" role="dialog" aria-labelledby="delSolduriBalantaLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="delSolduriBalantaLabel">Stergere solduri profit-pierdere/perioada</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form asp-contrller="ProfitPierdere" asp-action="DeleteSolduriBalanta" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" name="IsValid" value="@ViewData.ModelState.IsValid.ToString()" />
+
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label asp-for="ClientId" class="control-label"></label>
+                        </div>
+                        <div class="col-5">
+                            <select asp-for="ClientId" id="clientId" class="form-control" asp-items="ViewBag.ClientId"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label asp-for="DataStart" class="control-label"></label>
+                        </div>
+                        <div class="col-5">
+                            <input asp-for="DataStart" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label asp-for="DataEnd" class="control-label"></label>
+                        </div>
+                        <div class="col-5">
+                            <input asp-for="DataEnd" class="form-control" />
+                        </div>
+                    </div>
+                </form>
+        </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-save="modal">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+

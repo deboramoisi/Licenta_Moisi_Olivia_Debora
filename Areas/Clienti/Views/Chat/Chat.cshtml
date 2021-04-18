@@ -1,0 +1,68 @@
+﻿@model Licenta.Areas.Clienti.Models.ChatVM
+@using System.Security.Claims;
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Chat";
+    var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/chat.css" />
+}
+
+<div class="wrapper row">
+    <div class="side-menu col-3">
+        <h3 class="p-2 mt-4 mb-3">Utilizatori</h3>
+        @foreach (var chat in Model.AllChats)
+        {
+            <div class="user-chat">
+                <a asp-controller="Chat" asp-action="Chat" asp-route-id="@chat.ChatId">
+                    @chat.Users.FirstOrDefault(x => x.ApplicationUserId != userId).ApplicationUser.Nume
+                    <i class="fas fa-angle-double-right col-1"></i>
+                </a>
+            </div>
+        }
+    </div>
+
+    <div id="chatBody" class="col-9">
+        <div class="chat-body">
+            <div>
+                <h3 class="p-2 mt-4 mb-3">
+                    <i class="far fa-user"></i> &nbsp;&nbsp;
+                    @Model.Chat.Users.Where(x => x.ApplicationUserId != User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault().ApplicationUser.UserName.Split("@")[0]
+                </h3>
+            </div>
+
+            @foreach (var message in Model.Chat.Mesaje)
+            {
+                <div class="message">
+                    <header>@message.Nume.Split("@")[0]: &nbsp;</header>
+                    <p>@message.Text</p>
+                    <footer>@message.Data</footer>
+                </div>
+            }
+
+        </div>
+
+        <form asp-controller="Chat" asp-action="CreateMessage" onsubmit="sendMessage()" class="chat-input">
+            <input type="hidden" value="@Model.Chat.ChatId" name="roomId" />
+            <input type="hidden" value="@Model.Chat.Nume" name="roomName" />
+            <div class="form-group row m-2">
+                <input type="text" name="message" id="message-input" class="col-7 form-control"  />
+                <button type="submit" class="col-3 form-control">Send</button>
+            </div>
+            
+        </form>
+    </div>
+    
+</div>
+
+@section Scripts {
+    <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
+    <script type="text/javascript">
+        var roomId = "@Model.Chat.ChatId";
+    </script>
+    <script src="~/js/chat/myChat.js"></script>
+} 

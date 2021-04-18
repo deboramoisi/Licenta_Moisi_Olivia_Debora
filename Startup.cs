@@ -18,6 +18,7 @@ using Licenta.Models;
 using Licenta.Hubs;
 using Licenta.Services.DashboardManager;
 using Licenta.Services.MailService;
+using Licenta.Services.ChatManager;
 
 namespace Licenta
 {
@@ -83,6 +84,8 @@ namespace Licenta
             services.AddSingleton(emailConfig);
             services.AddScoped<IEmailSender, EmailSender>();
 
+            services.AddTransient<IChatManager, ChatManager>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -115,7 +118,8 @@ namespace Licenta
                 endpoints.MapRazorPages();
                 
                 // pentru chat
-                endpoints.MapHub<ChatHub>("/chathub");
+                // endpoints.MapHub<ChatHub>("/chathub");
+                endpoints.MapHub<ChatHub>("/chatHub");
             });
         }
     }

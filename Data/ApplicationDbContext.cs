@@ -29,7 +29,20 @@ namespace Licenta.Data
         public DbSet<SolduriCasa> SolduriCasa { get; set; }
         public DbSet<ProfitPierdere> ProfitPierdere { get; set; }
 
+        public DbSet<Chat> Chats { get; set; }
+        public DbSet<ChatUser> ChatUsers { get; set; }
+        public DbSet<Mesaj> Mesaje { get; set; }
+
         public DbSet<Message> Messages { get; set; }
+
+        // Composite Key pentru ChatUsers
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<ChatUser>()
+                .HasKey(x => new { x.ChatId, x.ApplicationUserId });
+        }
 
     }
 }
