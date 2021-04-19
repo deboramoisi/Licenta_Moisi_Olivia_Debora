@@ -1,0 +1,41 @@
+﻿@model Licenta.Models.Plati.TipPlata
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<h2>Adauga tip plata</h2>
+
+<hr />
+
+<div class="container mt-5">
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Denumire" class="control-label"></label>
+            </div>
+            <div class="col-4">
+                <input asp-for="Denumire" class="form-control" />
+                <span asp-validation-for="Denumire"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-2 offset-4">
+                <input type="submit" value="Salveaza" class="btn btn-success form-control" />
+            </div>
+            <div class="col-2">
+                <a asp-action="Index" class="btn btn-primary form-control">Inapoi</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @*<script src="~/js/tipDocument.js"></script>*@
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

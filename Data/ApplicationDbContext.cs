@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Licenta.Models;
+﻿using Licenta.Models;
 using Licenta.Models.Chat;
+using Licenta.Models.Plati;
 using Licenta.Models.QandA;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +32,10 @@ namespace Licenta.Data
         public DbSet<Mesaj> Mesaje { get; set; }
 
         public DbSet<Message> Messages { get; set; }
+
+        public DbSet<TipPlata> TipPlati { get; set; }
+        public DbSet<Plata> Plati { get; set; }
+
 
         // Composite Key pentru ChatUsers
         protected override void OnModelCreating(ModelBuilder builder)
