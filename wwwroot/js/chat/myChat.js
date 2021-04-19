@@ -81,3 +81,15 @@ var sendMessage = function () {
 }
 
 
+// Schimbare sageti de expansiune
+var utilizatoriArea = $("#utilizatoriArea");
+
+utilizatoriArea.on("click", function () {
+    var ariaExpanded = utilizatoriArea.prop("ariaExpanded");
+
+    if (ariaExpanded === "true") {
+        utilizatoriArea.html("Utilizatori &nbsp; <i class='fas fa-angle-double-down'></i>");
+    } else {
+        utilizatoriArea.html("Utilizatori &nbsp; <i class='fas fa-angle-double-up'></i>");
+    }
+});

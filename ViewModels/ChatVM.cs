@@ -1,11 +1,7 @@
-﻿using Licenta.Models;
-using Licenta.Models.Chat;
-using System;
+﻿using Licenta.Models.Chat;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Licenta.Areas.Clienti.Models
+namespace Licenta.ViewModels
 {
     public class ChatVM
     {

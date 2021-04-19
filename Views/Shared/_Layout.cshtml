@@ -49,8 +49,6 @@
                                     <a class="dropdown-item" asp-area="Admin" asp-controller="Salariats" asp-action="Index">Salariati</a>
                                     <a class="dropdown-item" asp-area="Admin" asp-controller="SolduriCasa" asp-action="Index">Solduri Casa</a>
                                     <a class="dropdown-item" asp-area="Admin" asp-controller="ProfitPierdere" asp-action="Index">Profit si pierdere</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Link</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
@@ -61,8 +59,6 @@
                                     <a class="dropdown-item" asp-area="Admin" asp-controller="TipDocuments" asp-action="Index">Tip Documente</a>
                                     <a class="dropdown-item" asp-area="Admin" asp-controller="Documents" asp-action="Index">Transmitere Documente</a>
                                     <a class="dropdown-item" asp-area="Admin" asp-controller="Documents" asp-action="IncarcariUtilizatori">Documente Primite</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Link</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
@@ -75,6 +71,10 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="Admin" asp-controller="Chat" asp-action="Chat" asp-route-id="11">Chat Admin</a>
                             </li>
                         }
 
@@ -100,24 +100,24 @@
                                     <a class="dropdown-item" asp-area="Clienti" asp-controller="Salariati" asp-action="Index">Salariati</a>
                                 </div>
                             </li>
-                            
+
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="Clienti" asp-controller="DashboardClient" asp-action="Index">Dashboard</a>
                             </li>
                         }
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                                Q&A
-                            </a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-area="Clienti" asp-controller="Questions" asp-action="Index">Intrebari</a>
-                                <a class="dropdown-item" asp-area="Clienti" asp-controller="QuestionCategories" asp-action="Index">Categorii</a>
-                            </div>
-                        </li>
+
+
+                        @if (User.Identity.IsAuthenticated && !admin)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="Clienti" asp-controller="Chat" asp-action="Chat">Chat</a>
+                            </li>
+                        }
 
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Chat" asp-action="Private">Chat</a>
+                            <a class="nav-link text-white" asp-area="Clienti" asp-controller="Questions" asp-action="Index">Q&A</a>
                         </li>
+
                     </ul>
                 </div>
             </div>

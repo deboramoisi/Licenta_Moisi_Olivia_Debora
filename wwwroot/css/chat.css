@@ -8,13 +8,31 @@
         color: aqua;
     }
 
-.message {
+.side-menu {
     display: flex;
-    flex-direction: row;
-    margin-top: 0.2rem;
+    flex-direction: column;
+    background-color: grey;
+    width: 20vw;
+    height: 100vh;
+    border-radius: 7px 0px 0px 7px;
 }
 
-    /* flexbox trick */
+.chat-body {
+    width: 80vw;
+}
+
+.message {
+    background-color: lightgray;
+    border-radius: 3px 4px;
+    margin: 7px;
+    padding: 5px;
+    word-wrap: break-word;
+    word-break: break-word;
+    max-width: 40vw;
+    min-width: 20vw;
+    display: flex;
+}
+
     .message:first-child {
         margin-top: auto;
     }
@@ -39,45 +57,45 @@
         text-align: center;
     }
 
-.side-menu {
-    display: flex;
-    flex-direction: column;
-    background-color: grey;
-    width: 20vw;
-    height: 100vh;
-    border-radius: 7px 7px;
-}
-
-.chat-body {
-    width: 80vw;
-}
-
-.message {
-    background-color: lightgray;
-    border-radius: 3px 4px;
-    margin: 7px;
-    padding: 5px;
-    word-wrap: break-word;
-    word-break: break-word;
-    max-width: 40vw;
-    min-width: 20vw;
-}
-
 #chatBody {
     background: url("/img/chat-bg.png");
     background-repeat: repeat;
+    border-radius: 0px 7px 7px 0px;
+    box-shadow: -10px 0 8px -6px rgb(127, 187, 224);
+}
+
+.chat-body-user {
+    width: 100vw;
+    height: 100vh;
+    background: url("/img/chat-bg.png");
+    background-repeat: repeat;
+    border-radius: 7px 7px;
+}
+
+.chat-input-user {
+    margin-left: 50px;
 }
 
 .user-chat {
     height: 50px;
     padding-left: 10px;
 }
-    
-.user-chat:first-child {
-    margin-top: 100px;
+
+#utilizatoriArea {
+    font-size: 24px;
+    padding: 8px;
+    margin: 24px 0px 16px;
 }
 
 #messageInput {
     margin: 7px;
     padding: 5px;
+}
+
+.user-sender {
+
+}
+
+.user-receiver {
+
 }

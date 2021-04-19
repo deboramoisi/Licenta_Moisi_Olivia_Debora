@@ -1,10 +1,11 @@
-﻿using Licenta.Areas.Clienti.Models;
-using Licenta.Data;
+﻿using Licenta.Data;
 using Licenta.Hubs;
 using Licenta.Models;
 using Licenta.Models.Chat;
 using Licenta.Services.ChatManager;
+using Licenta.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -67,70 +68,6 @@ namespace Licenta.Areas.Clienti.Controllers
             return NotFound();
         }
 
-        [HttpGet("[action]")]
-        public IActionResult Find()
-        {
-            IList<ApplicationUser> users = _chatManager.Find(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            return View(users);
-        }
-
-        [HttpGet("[action]")]
-        public IActionResult Private()
-        {
-            IList<Chat> chats = _chatManager.Private(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            return View(chats);
-        }
-
-        [HttpPost("[action]/{userId}")]
-        public async Task<IActionResult> CreatePrivateRoom(string userId)
-        {
-            int chatId = await _chatManager.CreatePrivateRoom(userId, User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            if (chatId != 0)
-            {
-                return RedirectToAction("Chat", new { id = chatId });
-            }
-            else
-            {
-                return NotFound();
-            }
-            
-        }
-
-        [HttpPost("[action]/{name}")]
-        public async Task<IActionResult> CreateRoom(string name)
-        {
-
-            if (await _chatManager.CreateRoom(name, User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return RedirectToAction("Index");
-            }
-            return NotFound();
-        }
-
-        [HttpGet("[action]")]
-        public IActionResult CreateRoomModal()
-        {
-            return PartialView("_AddChatRoom", new Chat());
-        }
-
-        [HttpPost("[action]")]
-        public async Task<IActionResult> CreateRoomModal(Chat chat)
-        {
-            chat.Tip = TipChat.Grup;
-
-            chat.Users.Add(new ChatUser
-            {
-                // find user
-                ApplicationUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
-                Role = UserChatRole.Admin
-            });
-
-            _context.Chats.Add(chat);
-            await _context.SaveChangesAsync();
-
-            return PartialView("_AddChatRoom", chat);
-        }
-
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> JoinRoom(int id)
         {
@@ -152,29 +89,32 @@ namespace Licenta.Areas.Clienti.Controllers
             return NotFound();
         }
 
-        [HttpGet("[action]/{id}")]
-        public IActionResult Chat(int id)
+        [HttpGet("[action]")]
+        public IActionResult Chat()
         {
+            var user = _context.ApplicationUsers
+                .Include(x => x.Chats)
+                    .ThenInclude(x => x.Chat)
+                .FirstOrDefault(x => x.UserName == User.Identity.Name);
+
+            int chatId = 0;
+
+            if (_context.ChatUsers.FirstOrDefault(x => x.ApplicationUserId == user.Id) == null)
+            {
+                var admin = _context.ApplicationUsers.FirstOrDefault(x => x.UserName.Contains("dana_moisi")).Id;
+                chatId = _chatManager.CreatePrivateRoom(user.Id, admin).Result;
+            } else
+            {
+                chatId = _context.ChatUsers.FirstOrDefault(x => x.ApplicationUserId == user.Id).ChatId;
+            }
+
             var chat = _context.Chats
                 .Include(x => x.Mesaje)
                 .Include(x => x.Users)
                     .ThenInclude(x => x.ApplicationUser)
-                .FirstOrDefault(x => x.ChatId == id);
+                .FirstOrDefault(x => x.ChatId == chatId);
 
-            var allChats = _context.Chats
-                .Include(x => x.Users)
-                    .ThenInclude(x => x.ApplicationUser)
-                .Where(x => x.Users
-                        .Any(y => y.ApplicationUserId == User.FindFirst(ClaimTypes.NameIdentifier).Value))
-                .ToList();
-
-            var chatVM = new ChatVM
-            {
-                Chat = chat,
-                AllChats = allChats
-            };
-
-            return View(chatVM);
+            return View(chat);
         }
 
         [HttpGet("[action]")]

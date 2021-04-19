@@ -1,4 +1,4 @@
-﻿@model Licenta.Areas.Clienti.Models.ChatVM
+﻿@model Licenta.Models.Chat.Chat
 @using System.Security.Claims;
 
 
@@ -13,29 +13,14 @@
 }
 
 <div class="wrapper row">
-    <div class="side-menu col-3">
-        <h3 class="p-2 mt-4 mb-3">Utilizatori</h3>
-        @foreach (var chat in Model.AllChats)
-        {
-            <div class="user-chat">
-                <a asp-controller="Chat" asp-action="Chat" asp-route-id="@chat.ChatId">
-                    @chat.Users.FirstOrDefault(x => x.ApplicationUserId != userId).ApplicationUser.Nume
-                    <i class="fas fa-angle-double-right col-1"></i>
-                </a>
-            </div>
-        }
-    </div>
-
-    <div id="chatBody" class="col-9">
-        <div class="chat-body">
-            <div>
+    <div class="chat-body-user">
+            <div class="chat-input-user">
                 <h3 class="p-2 mt-4 mb-3">
                     <i class="far fa-user"></i> &nbsp;&nbsp;
-                    @Model.Chat.Users.Where(x => x.ApplicationUserId != User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault().ApplicationUser.UserName.Split("@")[0]
+                    @Model.Users.Where(x => x.ApplicationUserId != User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault().ApplicationUser.UserName.Split("@")[0]
                 </h3>
-            </div>
 
-            @foreach (var message in Model.Chat.Mesaje)
+            @foreach (var message in Model.Mesaje)
             {
                 <div class="message">
                     <header>@message.Nume.Split("@")[0]: &nbsp;</header>
@@ -44,25 +29,24 @@
                 </div>
             }
 
-        </div>
+            <form asp-controller="Chat" asp-action="CreateMessage" onsubmit="sendMessage()" class="chat-input">
+                <input type="hidden" value="@Model.ChatId" name="roomId" />
+                <input type="hidden" value="@Model.Nume" name="roomName" />
+                <div class="form-group row m-2">
+                    <input type="text" name="message" id="message-input" class="col-10 form-control" />
+                    <button type="submit" class="col-1 form-control p-2 ml-2 btn btn-secondary"><i class="far fa-paper-plane"></i></button>
+                </div>
 
-        <form asp-controller="Chat" asp-action="CreateMessage" onsubmit="sendMessage()" class="chat-input">
-            <input type="hidden" value="@Model.Chat.ChatId" name="roomId" />
-            <input type="hidden" value="@Model.Chat.Nume" name="roomName" />
-            <div class="form-group row m-2">
-                <input type="text" name="message" id="message-input" class="col-7 form-control"  />
-                <button type="submit" class="col-3 form-control">Send</button>
-            </div>
-            
-        </form>
+            </form>
+        </div>
     </div>
-    
+
 </div>
 
 @section Scripts {
     <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
     <script type="text/javascript">
-        var roomId = "@Model.Chat.ChatId";
+        var roomId = "@Model.ChatId";
     </script>
     <script src="~/js/chat/myChat.js"></script>
 } 

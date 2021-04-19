@@ -25,7 +25,6 @@ namespace Licenta.Models
         // Clienti care doresc doar consultatii
         public int? ClientId { get; set; }
 
-        // Navigation Property
         [ForeignKey("ClientId")]
         public Client Client { get; set; }
 
