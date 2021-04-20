@@ -1,0 +1,39 @@
+﻿@model Licenta.Models.Plati.TipPlata
+
+<div class="modal fade" id="edit-tipPlata" tabindex="-1" role="dialog" aria-labelledby="editTipPlataLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="editTipPlataLabel">Actualizare tip plata</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="formTipEdit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" name="id" value="@Model.TipPlataId" />
+                    <input type="hidden" asp-for="TipPlataId" />
+
+                    <div class="form-group row">
+                        <div class="col-4">
+                            <label asp-for="Denumire" class="control-label"></label>
+                        </div>
+                        <div class="col-4">
+                            <input asp-for="Denumire" class="form-control" />
+                            <span asp-validation-for="Denumire" class="text-danger"></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-save="modal-tp-edit">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

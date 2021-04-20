@@ -1,33 +1,22 @@
 ﻿@model IEnumerable<Licenta.Models.Plati.Plata>
 
-@{
-    ViewData["Title"] = "Index";
+@{ 
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Plati";
 }
 
 <br />
 
-<div class="row">
-    <div class="col-6">
-        <h2>Plati</h2>
-    </div>
-    <div class="col-6 text-right">
-        <a asp-controller="Plata" asp-action="Create" class="btn btn-outline-secondary">
-            <i class="fa fa-plus" aria-hidden="true"></i>
-            &nbsp;&nbsp;Adaugare plata noua
-        </a>
-    </div>
+<div class="text-center">
+    <h3>Plati</h3>
 </div>
-
 <hr />
 <br />
+
 <div class="table-responsive-md p-4 border rounded">
     <table class="table table-hover" id="tblData" style="width:100%">
-        <thead>
-            <tr class="thead-dark">
-                <th>
-                    @Html.DisplayNameFor(model => model.Client.Denumire)
-                </th>
+        <thead class="thead-dark">
+            <tr>
                 <th>
                     @Html.DisplayNameFor(model => model.TipPlata.Denumire)
                 </th>
@@ -40,12 +29,11 @@
                 <th>
                     @Html.DisplayNameFor(model => model.DataScadenta)
                 </th>
-                <th></th>
             </tr>
         </thead>
     </table>
 </div>
 
 @section Scripts {
-    <script src="~/js/plati/plati.js"></script>
+    <script src="~/js/plati/platiUser.js"></script>
 }

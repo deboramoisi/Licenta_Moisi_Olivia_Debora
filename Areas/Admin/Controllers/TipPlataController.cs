@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,12 +22,15 @@ namespace Licenta.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TipPlati.ToListAsync());
+            return View(await _context.TipPlati
+                .OrderBy(x => x.Denumire)
+                .ToListAsync());
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            return PartialView("_AddTipPlata", new TipPlata { });
         }
 
         [HttpPost]
@@ -41,9 +43,10 @@ namespace Licenta.Areas.Admin.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(tipPlata);
+            return PartialView("_AddTipPlata", tipPlata);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -56,7 +59,7 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            return View(tipPlata);
+            return PartialView("_EditTipPlata", tipPlata);
         }
 
         [HttpPost]
@@ -88,7 +91,7 @@ namespace Licenta.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(tipPlata);
+            return PartialView("_EditTipPlata", tipPlata);
         }
 
         private bool TipPlataExists(int id)

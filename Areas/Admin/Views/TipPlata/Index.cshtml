@@ -1,36 +1,42 @@
 ﻿@model IEnumerable<Licenta.Models.Plati.TipPlata>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Tip plati";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<br />
+<div id="tipPlata-modal"></div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Denumire)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Denumire)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TipPlataId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TipPlataId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TipPlataId">Delete</a>
-            </td>
-        </tr>
+<div class="row">
+    <div class="col-6">
+        <h2>Tip plati</h2>
+    </div>
+    <div class="col-6 text-right">
+        <button type="button" data-target="#add-tipPlata" data-toggle="ajax-tipPlata-modal" class="btn btn-outline-secondary">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            &nbsp;&nbsp;Adaugare tip plata nou
+        </button>
+    </div>
+</div>
+
+
+<br />
+<div class="table-responsive-md p-4 border rounded">
+    <table class="table table-hover" id="tblData" style="width:100%">
+        <thead>
+            <tr class="thead-dark">
+                <th>
+                    @Html.DisplayNameFor(model => model.Denumire)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="~/js/plati/tipPlata.js"></script>
+    <partial name="_ValidationScriptsPartial" />
 }
-    </tbody>
-</table>
+

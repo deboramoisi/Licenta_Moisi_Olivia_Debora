@@ -115,6 +115,8 @@ namespace Licenta.Areas.Admin.Controllers
             var plati = _context.Plati;
             return Json(new { data = await plati
                 .Include(x => x.TipPlata)
+                .Include(x => x.Client)
+                .OrderBy(x => x.Client.Denumire)
                 .AsNoTracking()
                 .ToListAsync() });
         }
