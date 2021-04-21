@@ -94,7 +94,7 @@ namespace Licenta.Areas.Admin.Controllers
                     applicationUser.Nume = user.Nume;
                     applicationUser.PhoneNumber = user.PhoneNumber;
 
-                    _context.Update(applicationUser);
+                    _context.ApplicationUsers.Update(applicationUser);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -141,7 +141,7 @@ namespace Licenta.Areas.Admin.Controllers
             }
             else
             {
-                _context.Remove(applicationUser);
+                _context.ApplicationUsers.Remove(applicationUser);
                 await _context.SaveChangesAsync();
                 return Json(new { success = true, message = "User sters cu succes!" });
             }

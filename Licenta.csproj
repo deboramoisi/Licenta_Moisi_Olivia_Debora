@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\Migrations\20201229175233_FurnizorAndClientFurnizorToAppDbContext.cs" />
-    <Compile Remove="Data\Migrations\20201229175233_FurnizorAndClientFurnizorToAppDbContext.Designer.cs" />
-    <Compile Remove="Data\Migrations\20210201143709_FKSediuSocialInClientTable.cs" />
-    <Compile Remove="Data\Migrations\20210201143709_FKSediuSocialInClientTable.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Grpc.Core" Version="2.36.0" />
     <PackageReference Include="jQuery.UI.Combined" Version="1.12.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.3" />
@@ -35,9 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Areas\Clienti\Data\" />
-    <Folder Include="Data\Migrations\" />
     <Folder Include="wwwroot\img\documente\" />
     <Folder Include="wwwroot\xml\" />
   </ItemGroup>

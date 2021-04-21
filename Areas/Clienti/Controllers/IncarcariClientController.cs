@@ -78,7 +78,7 @@ namespace Licenta.Areas.Clienti.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Add(document);
+                _context.Document.Add(document);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

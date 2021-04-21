@@ -1,5 +1,6 @@
 ﻿using Licenta.Models;
 using Licenta.Models.Chat;
+using Licenta.Models.Notificari;
 using Licenta.Models.Plati;
 using Licenta.Models.QandA;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -36,6 +37,9 @@ namespace Licenta.Data
         public DbSet<TipPlata> TipPlati { get; set; }
         public DbSet<Plata> Plati { get; set; }
 
+        public DbSet<NotificareUser> NotificareUsers { get; set; }
+        public DbSet<Notificare> Notificari { get; set; }
+
 
         // Composite Key pentru ChatUsers
         protected override void OnModelCreating(ModelBuilder builder)
@@ -44,6 +48,9 @@ namespace Licenta.Data
 
             builder.Entity<ChatUser>()
                 .HasKey(x => new { x.ChatId, x.ApplicationUserId });
+
+            builder.Entity<NotificareUser>()
+                   .HasKey(k => new { k.NotificareId, k.ApplicationUserId });
         }
 
     }

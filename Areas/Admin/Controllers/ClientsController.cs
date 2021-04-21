@@ -67,7 +67,7 @@ namespace Licenta.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Add(client);
+                _context.Client.Add(client);
                 _context.SaveChanges();
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -106,7 +106,7 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(client);
+                    _context.Client.Update(client);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -150,7 +150,7 @@ namespace Licenta.Areas.Admin.Controllers
             }
             else
             {
-                _context.Remove(client);
+                _context.Client.Remove(client);
                 await _context.SaveChangesAsync();
                 return Json(new { success = true, message = "Client sters cu succes!" });
             }
@@ -190,7 +190,7 @@ namespace Licenta.Areas.Admin.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    _context.Add(document);
+                    _context.Document.Add(document);
                     _context.SaveChanges();
 
                     // procesam XML-ul
@@ -212,11 +212,11 @@ namespace Licenta.Areas.Admin.Controllers
                            NrRegComertului = client.Element("reg_com").Value.ToString()
                         };
 
-                        _context.Add(clientNou);
+                        _context.Client.Add(clientNou);
                     }
                     // stergem din memorie: bd si server XML-ul
                     _fileManager.DeleteDocumentXML(document.DocumentPath);
-                    _context.Remove(document);
+                    _context.Document.Remove(document);
                     _context.SaveChanges();
                 }
             }

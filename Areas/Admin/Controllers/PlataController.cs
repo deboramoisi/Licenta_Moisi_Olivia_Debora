@@ -42,7 +42,7 @@ namespace Licenta.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(plata);
+                _context.Plati.Add(plata);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -81,7 +81,7 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(plata);
+                    _context.Plati.Update(plata);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -129,7 +129,7 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 return Json(new { success = false, message = "Eroare la stergerea platii!" });
             }
-            _context.Remove(plata);
+            _context.Plati.Remove(plata);
             await _context.SaveChangesAsync();
             return Json(new { success = true, message = "Plata a fost stearsa cu succes!" });
         }

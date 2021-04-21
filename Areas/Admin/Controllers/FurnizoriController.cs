@@ -66,7 +66,7 @@ namespace Licenta.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(furnizori);
+                _context.Furnizori.Add(furnizori);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -103,7 +103,7 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(furnizori);
+                    _context.Furnizori.Update(furnizori);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -167,7 +167,7 @@ namespace Licenta.Areas.Admin.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    _context.Add(document);
+                    _context.Document.Add(document);
                     
                     // procesam XML-ul
                     // adaugam furnizorii preluati din acesta clientului ales de utilizator
@@ -188,11 +188,11 @@ namespace Licenta.Areas.Admin.Controllers
                             ClientId = document.ClientId
                         };
 
-                        _context.Add(furnizorNou);
+                        _context.Furnizori.Add(furnizorNou);
                     }
                     // stergem din memorie: bd si server XML-ul
                     _fileManager.DeleteDocumentXML(document.DocumentPath);
-                    _context.Remove(document);
+                    _context.Document.Remove(document);
                     _context.SaveChanges();
                 }
             }
@@ -240,7 +240,7 @@ namespace Licenta.Areas.Admin.Controllers
             } 
             else
             {
-                _context.Remove(furnizori);
+                _context.Furnizori.Remove(furnizori);
                 await _context.SaveChangesAsync();
                 return Json(new { success = true, message = "Furnizor sters cu succes!" });
             }

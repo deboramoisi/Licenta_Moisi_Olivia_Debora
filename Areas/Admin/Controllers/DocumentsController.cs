@@ -12,8 +12,6 @@ using Licenta.Services.FileManager;
 using Microsoft.AspNetCore.Authorization;
 using Licenta.Utility;
 using Microsoft.AspNetCore.Identity;
-using System.Xml.Linq;
-using Licenta.Areas.Admin.Models;
 
 namespace Licenta.Areas.Admin.Controllers
 {
@@ -111,7 +109,7 @@ namespace Licenta.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Add(document);
+                _context.Document.Add(document);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -178,7 +176,7 @@ namespace Licenta.Areas.Admin.Controllers
                     document.ClientId = documentVM.ClientId;
                     document.TipDocumentId = documentVM.TipDocumentId;
                     document.Data = documentVM.Data;
-                    _context.Update(document);
+                    _context.Document.Update(document);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

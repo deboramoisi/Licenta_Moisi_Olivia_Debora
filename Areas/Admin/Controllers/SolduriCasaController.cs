@@ -71,7 +71,7 @@ namespace Licenta.Areas.Admin.Views
         {
             if (ModelState.IsValid)
             {
-                _context.Add(solduriCasa);
+                _context.SolduriCasa.Add(solduriCasa);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -108,7 +108,7 @@ namespace Licenta.Areas.Admin.Views
             {
                 try
                 {
-                    _context.Update(solduriCasa);
+                    _context.SolduriCasa.Update(solduriCasa);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -199,7 +199,7 @@ namespace Licenta.Areas.Admin.Views
 
                 if (ModelState.IsValid)
                 {
-                    _context.Add(document);
+                    _context.Document.Add(document);
 
                     // procesam XML-ul
                     // adaugam salariatii preluati din acesta clientului ales de utilizator
@@ -234,12 +234,12 @@ namespace Licenta.Areas.Admin.Views
                     // adaugam cate un sold pentru fiecare luna
                     foreach (SolduriCasa sold in solduriCasa)
                     {
-                        _context.Add(sold);
+                        _context.SolduriCasa.Add(sold);
                     }
                     
                     // stergem din memorie: bd si server XML-ul
                     _fileManager.DeleteDocumentXML(document.DocumentPath);
-                    _context.Remove(document);
+                    _context.Document.Remove(document);
                     _context.SaveChanges();
                 }
             }

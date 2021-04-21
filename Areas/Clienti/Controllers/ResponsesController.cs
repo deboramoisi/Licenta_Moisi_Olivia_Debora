@@ -7,9 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using Licenta.Data;
 using Licenta.Models.QandA;
 using Licenta.Areas.Clienti.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Licenta.Areas.Clienti.Views
 {
+    [Authorize]
     [Area("Clienti")]
     public class ResponsesController : Controller
     {

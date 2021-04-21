@@ -65,7 +65,7 @@ namespace Licenta.Areas.Clienti.Views
         {
             if (ModelState.IsValid)
             {
-                _context.Add(qc);
+                _context.QuestionCategory.Add(qc);
                 await _context.SaveChangesAsync();
             }
             return PartialView("_AddQuestionCateg", qc);
@@ -99,7 +99,7 @@ namespace Licenta.Areas.Clienti.Views
             {
                 try
                 {
-                    _context.Update(questionCategory);
+                    _context.QuestionCategory.Update(questionCategory);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -131,7 +131,7 @@ namespace Licenta.Areas.Clienti.Views
             }
             else
             {
-                _context.Remove(qc);
+                _context.QuestionCategory.Remove(qc);
                 await _context.SaveChangesAsync();
                 return Json(new { success = true, message = "Categorie stearsa cu succes!" });
             }

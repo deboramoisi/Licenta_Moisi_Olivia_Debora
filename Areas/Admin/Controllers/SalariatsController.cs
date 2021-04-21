@@ -69,7 +69,7 @@ namespace Licenta.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(salariat);
+                _context.Salariat.Add(salariat);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -106,7 +106,7 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(salariat);
+                    _context.Salariat.Update(salariat);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -151,7 +151,7 @@ namespace Licenta.Areas.Admin.Controllers
             }
             else
             {
-                _context.Remove(salariat);
+                _context.Salariat.Remove(salariat);
                 await _context.SaveChangesAsync();
                 return Json(new { success = true, message = "Salariat sters cu succes!" });
             }
@@ -196,7 +196,7 @@ namespace Licenta.Areas.Admin.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    _context.Add(document);
+                    _context.Document.Add(document);
 
                     // procesam XML-ul
                     // adaugam salariatii preluati din acesta clientului ales de utilizator
@@ -210,11 +210,11 @@ namespace Licenta.Areas.Admin.Controllers
                     foreach (XElement salariat in salariati)
                     {
                         Salariat salariatNou = CreateSalariat(salariat, document.ClientId);
-                        _context.Add(salariatNou);
+                        _context.Salariat.Add(salariatNou);
                     }
                     // stergem din memorie: bd si server XML-ul
                     _fileManager.DeleteDocumentXML(document.DocumentPath);
-                    _context.Remove(document);
+                    _context.Document.Remove(document);
                     _context.SaveChanges();
                 }
             }

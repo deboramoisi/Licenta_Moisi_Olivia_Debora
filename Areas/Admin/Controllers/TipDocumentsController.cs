@@ -39,7 +39,7 @@ namespace Licenta.Areas.Admin.Views
             
             if (ModelState.IsValid)
             {
-                _context.Add(tipDocument);
+                _context.TipDocument.Add(tipDocument);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -74,7 +74,7 @@ namespace Licenta.Areas.Admin.Views
             {
                 try
                 {
-                    _context.Update(tipDocument);
+                    _context.TipDocument.Update(tipDocument);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -117,7 +117,7 @@ namespace Licenta.Areas.Admin.Views
             {
                 return Json(new { success = false, message = "Eroare la stergerea tipului!" });
             }
-            _context.Remove(tipDocument);
+            _context.TipDocument.Remove(tipDocument);
             await _context.SaveChangesAsync();
             return Json(new { success = true, message = "Tipul documentului a fost sters cu succes!" });
         }

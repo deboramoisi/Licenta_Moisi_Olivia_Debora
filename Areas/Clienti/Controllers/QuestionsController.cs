@@ -130,7 +130,7 @@ namespace Licenta.Areas.Clienti.Views
 
             if (ModelState.IsValid)
             {
-                _context.Add(question);
+                _context.Question.Add(question);
                 await _context.SaveChangesAsync();
             }
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Nume", question.ApplicationUserId);
@@ -172,7 +172,7 @@ namespace Licenta.Areas.Clienti.Views
                 try
                 {
                     question.Rezolvata = (question.Responses.Count() > 0);
-                    _context.Update(question);
+                    _context.Question.Update(question);
 
                     await _context.SaveChangesAsync();
                 }
@@ -224,7 +224,7 @@ namespace Licenta.Areas.Clienti.Views
             }
             else
             {
-                _context.Remove(question);
+                _context.Question.Remove(question);
                 await _context.SaveChangesAsync();
                 return Json(new { success = true, message = "Intrebare stearsa cu succes!" });
             }

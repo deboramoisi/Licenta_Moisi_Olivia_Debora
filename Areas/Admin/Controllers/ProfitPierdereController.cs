@@ -96,7 +96,7 @@ namespace Licenta.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Add(document);
+                _context.Document.Add(document);
 
                 var fullPath = $"C:/Users/user/source/repos/Licenta/wwwroot{document.DocumentPath}";
                 XDocument doc = XDocument.Load(fullPath);
@@ -112,7 +112,7 @@ namespace Licenta.Areas.Admin.Controllers
                 }
      
                 _fileManager.DeleteDocumentXML(document.DocumentPath);
-                _context.Remove(document);
+                _context.Document.Remove(document);
                 _context.SaveChanges();
             }
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", balanta.ClientId);
@@ -194,7 +194,7 @@ namespace Licenta.Areas.Admin.Controllers
                     document.ClientId = documentVM.ClientId;
                     document.TipDocumentId = documentVM.TipDocumentId;
                     document.Data = documentVM.Data;
-                    _context.Update(document);
+                    _context.Document.Update(document);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

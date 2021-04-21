@@ -39,7 +39,7 @@ namespace Licenta.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tipPlata);
+                _context.TipPlati.Add(tipPlata);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -75,7 +75,7 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(tipPlata);
+                    _context.TipPlati.Update(tipPlata);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -116,7 +116,7 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 return Json(new { success = false, message = "Eroare la stergerea tipului!" });
             }
-            _context.Remove(tipPlata);
+            _context.TipPlati.Remove(tipPlata);
             await _context.SaveChangesAsync();
             return Json(new { success = true, message = "Tipul platii a fost sters cu succes!" });
         }
