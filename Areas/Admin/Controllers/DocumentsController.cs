@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +11,8 @@ using Licenta.Services.FileManager;
 using Microsoft.AspNetCore.Authorization;
 using Licenta.Utility;
 using Microsoft.AspNetCore.Identity;
+using Licenta.Models.Notificari;
+using Licenta.Services.NotificationManager;
 
 namespace Licenta.Areas.Admin.Controllers
 {
@@ -22,12 +23,17 @@ namespace Licenta.Areas.Admin.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IFileManager _fileManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly INotificationManager _notificationManager;
 
-        public DocumentsController(ApplicationDbContext context, IFileManager fileManager, UserManager<ApplicationUser> userManager)
+        public DocumentsController(ApplicationDbContext context,
+            IFileManager fileManager,
+            UserManager<ApplicationUser> userManager,
+            INotificationManager notificationManager)
         {
             _context = context;
             _fileManager = fileManager;
             _userManager = userManager;
+            _notificationManager = notificationManager;
         }
 
         // Index, Details
@@ -95,8 +101,6 @@ namespace Licenta.Areas.Admin.Controllers
         {
             var denumireDocument = _context.TipDocument.Find(documentVM.TipDocumentId);
 
-            Console.WriteLine(documentVM.DocumentPathUrl);
-
             Document document = new Document()
             {
                 DocumentId = documentVM.DocumentId,
@@ -111,6 +115,16 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 _context.Document.Add(document);
                 await _context.SaveChangesAsync();
+                // aici notificam user-ul ca a primit un document
+
+                var notificare = new Notificare()
+                {
+                    Text = $"Documentul {document.TipDocument.Denumire} a fost adaugat pentru data {document.Data}"
+                };
+
+                // notificare
+                await _notificationManager.CreateAsync(notificare, document.ClientId);
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", document.ClientId);

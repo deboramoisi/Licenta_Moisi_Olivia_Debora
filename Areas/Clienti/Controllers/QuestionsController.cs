@@ -171,7 +171,7 @@ namespace Licenta.Areas.Clienti.Views
             {
                 try
                 {
-                    question.Rezolvata = (question.Responses.Count() > 0);
+                    question.Rezolvata = (question.Responses.Any());
                     _context.Question.Update(question);
 
                     await _context.SaveChangesAsync();

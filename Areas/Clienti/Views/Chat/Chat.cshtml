@@ -14,7 +14,8 @@
 
 <div class="wrapper row">
     <div class="chat-body-user">
-            <div class="chat-input-user">
+        <div class="chat-input-user">
+            <div class="chat-body">
                 <h3 class="p-2 mt-4 mb-3">
                     <i class="far fa-user"></i> &nbsp;&nbsp;
                     @Model.Users.Where(x => x.ApplicationUserId != User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault().ApplicationUser.UserName.Split("@")[0]
@@ -28,6 +29,7 @@
                     <footer>@message.Data</footer>
                 </div>
             }
+            </div>
 
             <form asp-controller="Chat" asp-action="CreateMessage" onsubmit="sendMessage()" class="chat-input">
                 <input type="hidden" value="@Model.ChatId" name="roomId" />
@@ -40,7 +42,6 @@
             </form>
         </div>
     </div>
-
 </div>
 
 @section Scripts {

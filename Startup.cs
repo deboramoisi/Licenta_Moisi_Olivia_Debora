@@ -1,24 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Licenta.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Licenta.Utility;
 using Licenta.Services.FileManager;
 using Licenta.Models;
 using Licenta.Hubs;
 using Licenta.Services.DashboardManager;
 using Licenta.Services.MailService;
 using Licenta.Services.ChatManager;
+using Licenta.Services.NotificationManager;
 
 namespace Licenta
 {
@@ -86,6 +80,8 @@ namespace Licenta
 
             services.AddTransient<IChatManager, ChatManager>();
 
+            services.AddTransient<INotificationManager, NotificationManager>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -120,6 +116,7 @@ namespace Licenta
                 // pentru chat
                 // endpoints.MapHub<ChatHub>("/chathub");
                 endpoints.MapHub<ChatHub>("/chatHub");
+                endpoints.MapHub<NotificationHub>("/signalR");
             });
         }
     }

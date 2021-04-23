@@ -22,8 +22,8 @@ namespace Licenta.Areas.Clienti.Controllers
 
     public class ChatController : Controller
     {
-        private IChatManager _chatManager;
-        private IHubContext<ChatHub> _chat;
+        private readonly IChatManager _chatManager;
+        private readonly IHubContext<ChatHub> _chat;
         private readonly ApplicationDbContext _context;
 
         public ChatController(
@@ -73,7 +73,7 @@ namespace Licenta.Areas.Clienti.Controllers
         {
             if (await _chatManager.JoinRoom(id, User.FindFirst(ClaimTypes.NameIdentifier).Value))
             {
-                return RedirectToAction("Chat", new { id = id });
+                return RedirectToAction("Chat", new { id });
             }
             return NotFound();
         }

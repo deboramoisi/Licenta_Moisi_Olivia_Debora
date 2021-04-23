@@ -1,5 +1,26 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
+﻿#notification {
+    top: 6px;
+    position: relative;
+    background-color: white;
+    color: royalblue;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.notification-text {
+    font-weight: bold;
+}
+
+#notification-content {
+    display: none;
+}
+
+.popover {
+    cursor: pointer;
+}
 
 a.navbar-brand {
   white-space: normal;

@@ -8,8 +8,92 @@ $(document).ready(function () {
 		loop: true,
 		dots: true,
 		items: 1
-	});
+    });
 
+    notificationPopover();
+    getNotification();
+
+    let connection = new signalR.HubConnectionBuilder()
+        .withUrl("/signalR")
+        .build();
+
+    connection.on("displayNotification", () => {
+        getNotification();
+    })
+
+    connection.start();
+
+});
+
+function getNotification() {
+    // get notifications from database for logged user
+    var notificationsList = "<ul class='list-group'>";
+    $.ajax({
+        url: "/Clienti/Notificare/GetNotification",
+        method: "GET",
+        success: function (result) {
+            $("#notification").html(result.count);
+            var notifications = result.notificareUser;
+            notifications.forEach(element => {
+                notificationsList = notificationsList + "<li class='list-group-item list-group-item-dark notification-text' id='" + element.notificare.notificareId + "'>" + element.notificare.text + "</li>";
+            });
+            notificationsList = notificationsList + "</ul>";
+            $("#notification-content").html(notificationsList);
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+
+}
+
+function notificationPopover() {
+    // afisare popover notificari
+    $("[data-toggle='popover']").popover({
+        placement: "bottom",
+        content: function () {
+            return $("#notification-content").html();
+        },
+        html: true
+    });
+
+    $('body').append("<div id='notification-content'></div>")
+}
+
+function readNotification(id, target) {
+
+    $.ajax({
+        url: "/Clienti/Notificare/ReadNotification",
+        method: "GET",
+        data: { notificareId: id },
+        success: function () {
+            getNotification();  
+            $(target).fadeOut('slow');
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+
+}
+
+function clickLiNotificationElement() {
+    // trebuie folosit acest tipar pentru ca id-ul notificarii este generat la runtime
+
+    $("ul").on('click', 'li.notification-text', function (e) {
+        var target = e.target;
+        var id = target.id;
+        console.log(target);
+
+        readNotification(id, target);
+    })
+}
+
+$(window).on("load", function () {
+
+    console.log('loaded');
+    
+    clickLiNotificationElement();
 });
 
 // Formular Home
@@ -130,3 +214,5 @@ function Delete2(url) {
         }
     });
 }
+
+
