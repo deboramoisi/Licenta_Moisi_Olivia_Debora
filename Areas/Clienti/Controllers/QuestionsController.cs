@@ -132,6 +132,8 @@ namespace Licenta.Areas.Clienti.Views
             {
                 _context.Question.Add(question);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Intrebare adaugata cu succes!";
+                TempData["Success"] = "true";
             }
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Nume", question.ApplicationUserId);
             ViewData["QuestionCategoryId"] = new SelectList(_context.QuestionCategory, "QuestionCategoryId", "Denumire", question.QuestionCategoryId);
@@ -160,7 +162,7 @@ namespace Licenta.Areas.Clienti.Views
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("QuestionId,Intrebare,DataAdaugare,Rezolvata,QuestionCategoryId,ApplicationUserId")] Question question)
+        public async Task<IActionResult> Edit(int id, Question question)
         {
             if (id != question.QuestionId)
             {
@@ -171,7 +173,7 @@ namespace Licenta.Areas.Clienti.Views
             {
                 try
                 {
-                    question.Rezolvata = (question.Responses.Any());
+                    question.Rezolvata = question.Responses != null;
                     _context.Question.Update(question);
 
                     await _context.SaveChangesAsync();
@@ -187,6 +189,8 @@ namespace Licenta.Areas.Clienti.Views
                         throw;
                     }
                 }
+                TempData["Message"] = "Intrebare actualizata cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Nume", question.ApplicationUserId);

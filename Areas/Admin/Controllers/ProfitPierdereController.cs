@@ -110,12 +110,14 @@ namespace Licenta.Areas.Admin.Controllers
                     ProfitPierdere profitPierdere = CreateProfitPierdere(bal, balanta);
                     _context.Add(profitPierdere);
                 }
-     
+
                 _fileManager.DeleteDocumentXML(document.DocumentPath);
                 _context.Document.Remove(document);
                 _context.SaveChanges();
             }
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", balanta.ClientId);
+            TempData["Message"] = "Solduri profit-pierdere importate cu succes!";
+            TempData["Success"] = "true";
             return RedirectToAction(nameof(Index));
         }
 
@@ -208,6 +210,8 @@ namespace Licenta.Areas.Admin.Controllers
                         throw;
                     }
                 }
+                TempData["Message"] = "Solduri profit-pierdere actualizate cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", document.ClientId);

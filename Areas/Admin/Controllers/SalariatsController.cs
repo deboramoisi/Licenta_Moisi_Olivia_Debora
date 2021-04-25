@@ -71,6 +71,8 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 _context.Salariat.Add(salariat);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Salariat creat cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire");
@@ -120,6 +122,8 @@ namespace Licenta.Areas.Admin.Controllers
                         throw;
                     }
                 }
+                TempData["Message"] = "Salariat actualizat cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", salariat.ClientId);

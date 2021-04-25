@@ -73,6 +73,8 @@ namespace Licenta.Areas.Admin.Views
             {
                 _context.SolduriCasa.Add(solduriCasa);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Solduri casa adaugate cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", solduriCasa.ClientId);
@@ -122,6 +124,8 @@ namespace Licenta.Areas.Admin.Views
                         throw;
                     }
                 }
+                TempData["Message"] = "Solduri casa actualizate cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", solduriCasa.ClientId);

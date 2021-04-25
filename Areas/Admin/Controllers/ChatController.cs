@@ -1,18 +1,17 @@
 ﻿using Licenta.Data;
-using Licenta.Hubs;
 using Licenta.Models;
 using Licenta.Models.Chat;
 using Licenta.Services.ChatManager;
 using Licenta.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Licenta.Utility;
+using Microsoft.AspNetCore.Identity;
 
 namespace Licenta.Areas.Admin.Controllers
 {
@@ -23,18 +22,17 @@ namespace Licenta.Areas.Admin.Controllers
     public class ChatController : Controller
     {
         private IChatManager _chatManager;
-        private IHubContext<ChatHub> _chat;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
 
         public ChatController(
             IChatManager chatManager,
-            IHubContext<ChatHub> chat,
-            ApplicationDbContext context
-            )
+            ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager)
         {
             _chatManager = chatManager;
-            _chat = chat;
             _context = context;
+            _userManager = userManager;
         }
 
         [HttpPost("[action]/{connectionId}/{roomId}")]
@@ -56,14 +54,18 @@ namespace Licenta.Areas.Admin.Controllers
         [HttpGet("[action]")]
         public IActionResult Private()
         {
-            IList<Chat> chats = _chatManager.Private(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            ApplicationUser user = _userManager.GetUserAsync(User).Result;
+
+            IList<Chat> chats = _chatManager.Private(user.Id);
             return View(chats);
         }
 
         [HttpPost("[action]/{userId}")]
         public async Task<IActionResult> CreatePrivateRoom(string userId)
         {
-            int chatId = await _chatManager.CreatePrivateRoom(userId, User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            ApplicationUser user = _userManager.GetUserAsync(User).Result;
+
+            int chatId = await _chatManager.CreatePrivateRoom(userId, user.Id);
             if (chatId != 0)
             {
                 return RedirectToAction("Chat", new { id = chatId });
@@ -78,8 +80,9 @@ namespace Licenta.Areas.Admin.Controllers
         [HttpPost("[action]/{name}")]
         public async Task<IActionResult> CreateRoom(string name)
         {
+            ApplicationUser user = _userManager.GetUserAsync(User).Result;
 
-            if (await _chatManager.CreateRoom(name, User.FindFirst(ClaimTypes.NameIdentifier).Value))
+            if (await _chatManager.CreateRoom(name, user.Id))
             {
                 return RedirectToAction("Index");
             }
@@ -100,7 +103,7 @@ namespace Licenta.Areas.Admin.Controllers
             chat.Users.Add(new ChatUser
             {
                 // find user
-                ApplicationUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
+                ApplicationUserId = _userManager.GetUserAsync(User).Result.Id,
                 Role = UserChatRole.Admin
             });
 
@@ -113,7 +116,9 @@ namespace Licenta.Areas.Admin.Controllers
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> JoinRoom(int id)
         {
-            if (await _chatManager.JoinRoom(id, User.FindFirst(ClaimTypes.NameIdentifier).Value))
+            ApplicationUser user = _userManager.GetUserAsync(User).Result;
+
+            if (await _chatManager.JoinRoom(id, user.Id))
             {
                 return RedirectToAction("Chat", new { id = id });
             }
@@ -123,7 +128,8 @@ namespace Licenta.Areas.Admin.Controllers
         [HttpPost("[action]/{chatId}/{message}")]
         public async Task<IActionResult> CreateMessage(int chatId, string message)
         {
-            int mesajId = await _chatManager.CreateMessage(chatId, message, User.Identity.Name);
+            ApplicationUser user = _userManager.GetUserAsync(User).Result;
+            int mesajId = await _chatManager.CreateMessage(chatId, message, user.UserName);
             if (mesajId != 0)
             {
                 return RedirectToAction("Chat", new { id = chatId });
@@ -134,6 +140,8 @@ namespace Licenta.Areas.Admin.Controllers
         [HttpGet("[action]/{id}")]
         public IActionResult Chat(int id)
         {
+            ApplicationUser user = _userManager.GetUserAsync(User).Result;
+
             var chat = _context.Chats
                 .Include(x => x.Mesaje)
                 .Include(x => x.Users)
@@ -144,7 +152,7 @@ namespace Licenta.Areas.Admin.Controllers
                 .Include(x => x.Users)
                     .ThenInclude(x => x.ApplicationUser)
                 .Where(x => x.Users
-                        .Any(y => y.ApplicationUserId == User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                        .Any(y => y.ApplicationUserId == user.Id))
                 .ToList();
 
             var chatVM = new ChatVM
@@ -159,10 +167,11 @@ namespace Licenta.Areas.Admin.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> Index()
         {
+            ApplicationUser user = _userManager.GetUserAsync(User).Result;
             var chats = await _context.Chats
                     .Include(x => x.Users)
                         .ThenInclude(x => x.ApplicationUser)
-                    .Where(x => !x.Users.Any(y => y.ApplicationUserId == User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                    .Where(x => !x.Users.Any(y => y.ApplicationUserId == user.Id))
                     .ToListAsync();
 
             return View(chats);

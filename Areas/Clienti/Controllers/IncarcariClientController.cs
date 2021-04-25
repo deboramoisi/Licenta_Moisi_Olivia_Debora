@@ -80,6 +80,8 @@ namespace Licenta.Areas.Clienti.Controllers
             {
                 _context.Document.Add(document);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Document transmis cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["UserId"] = user.Nume;

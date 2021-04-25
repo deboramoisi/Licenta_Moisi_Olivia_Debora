@@ -1,6 +1,4 @@
-﻿// Initialize the owl carousel using JQuery
-
-$(document).ready(function () {
+﻿$(document).ready(function () {
 
 	// banner owl carousel
 	$("#banner-area .owl-carousel").owlCarousel({
@@ -24,6 +22,20 @@ $(document).ready(function () {
     connection.start();
 
 });
+
+$(document).on("click", "li.notification-text", function (e) {
+    // this is for dynamically generated elements, they have to be bound to some existing ones to add events on them
+    var target = e.target;
+    var id = target.id;
+    console.log(target);
+
+    readNotification(id, target);
+});
+
+$(document).on("mouseover", "#notification-message", function (e) {
+    var target = e.target;
+    $(target).fadeOut('slow');
+})
 
 function getNotification() {
     // get notifications from database for logged user
@@ -67,7 +79,8 @@ function readNotification(id, target) {
         method: "GET",
         data: { notificareId: id },
         success: function () {
-            getNotification();  
+            getNotification();
+            console.log("NOTIFICATION SEEN");
             $(target).fadeOut('slow');
         },
         error: function (error) {
@@ -76,25 +89,6 @@ function readNotification(id, target) {
     });
 
 }
-
-function clickLiNotificationElement() {
-    // trebuie folosit acest tipar pentru ca id-ul notificarii este generat la runtime
-
-    $("ul").on('click', 'li.notification-text', function (e) {
-        var target = e.target;
-        var id = target.id;
-        console.log(target);
-
-        readNotification(id, target);
-    })
-}
-
-$(window).on("load", function () {
-
-    console.log('loaded');
-    
-    clickLiNotificationElement();
-});
 
 // Formular Home
 $('#submitMailButton').click(function (event) {

@@ -119,12 +119,14 @@ namespace Licenta.Areas.Admin.Controllers
 
                 var notificare = new Notificare()
                 {
-                    Text = $"Documentul {document.TipDocument.Denumire} a fost adaugat pentru data {document.Data}"
+                    Text = $"{document.ApplicationUser.Nume} a adaugat {document.TipDocument.Denumire} - data {document.Data}"
                 };
 
                 // notificare
                 await _notificationManager.CreateAsync(notificare, document.ClientId);
 
+                TempData["Message"] = "Document adaugat cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", document.ClientId);
@@ -204,6 +206,8 @@ namespace Licenta.Areas.Admin.Controllers
                         throw;
                     }
                 }
+                TempData["Message"] = "Document actualizat cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", document.ClientId);

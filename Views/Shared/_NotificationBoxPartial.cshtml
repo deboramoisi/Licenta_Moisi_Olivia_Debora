@@ -1,0 +1,10 @@
+﻿@{
+    var message = TempData["Message"];
+    var success = "";
+    if (TempData["Success"] != null)
+    {
+        success = (TempData["Success"].ToString() == "true") ? "success-notification" : "error-notification";
+    }
+}
+
+<div class="@success notification-box" id="notification-message">  @message  </div>

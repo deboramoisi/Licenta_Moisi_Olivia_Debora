@@ -68,6 +68,8 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 _context.Furnizori.Add(furnizori);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Furnizor adaugat cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "CodCAEN", furnizori.ClientId);
@@ -117,6 +119,8 @@ namespace Licenta.Areas.Admin.Controllers
                         throw;
                     }
                 }
+                TempData["Message"] = "Furnizor actualizat cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "CodCAEN", furnizori.ClientId);

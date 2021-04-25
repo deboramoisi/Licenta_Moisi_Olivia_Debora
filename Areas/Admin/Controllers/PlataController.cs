@@ -44,6 +44,8 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 _context.Plati.Add(plata);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Plata adaugata cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", plata.ClientId);
@@ -95,6 +97,8 @@ namespace Licenta.Areas.Admin.Controllers
                         throw;
                     }
                 }
+                TempData["Message"] = "Plata actualizata cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", plata.ClientId);

@@ -67,6 +67,8 @@ namespace Licenta.Areas.Clienti.Views
             {
                 _context.QuestionCategory.Add(qc);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Tip intrebare adaugat cu succes!";
+                TempData["Success"] = "true";
             }
             return PartialView("_AddQuestionCateg", qc);
         }
@@ -113,6 +115,8 @@ namespace Licenta.Areas.Clienti.Views
                         throw;
                     }
                 }
+                TempData["Message"] = "Tip intrebare actualizat cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             return View(questionCategory);

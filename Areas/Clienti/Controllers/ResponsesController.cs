@@ -77,7 +77,7 @@ namespace Licenta.Areas.Clienti.Views
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ResponseId,Raspuns,DataAdaugare,QuestionId")] Response response)
+        public async Task<IActionResult> Create(Response response)
         {
             var question = _context.Question.Find(response.QuestionId);
 
@@ -89,6 +89,8 @@ namespace Licenta.Areas.Clienti.Views
                 _context.Update(question);
 
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Raspuns adaugat cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["QuestionId"] = new SelectList(_context.Question, "QuestionId", "Intrebare", response.QuestionId);
@@ -167,6 +169,8 @@ namespace Licenta.Areas.Clienti.Views
                         throw;
                     }
                 }
+                TempData["Message"] = "Raspuns actualizat cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["QuestionId"] = new SelectList(_context.Question, "QuestionId", "Intrebare", response.QuestionId);

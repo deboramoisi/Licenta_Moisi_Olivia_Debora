@@ -2,13 +2,16 @@
 using Licenta.Hubs;
 using Licenta.Models;
 using Licenta.Models.Chat;
+using Licenta.Models.Notificari;
 using Licenta.Services.ChatManager;
+using Licenta.Services.NotificationManager;
 using Licenta.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -25,16 +28,21 @@ namespace Licenta.Areas.Clienti.Controllers
         private readonly IChatManager _chatManager;
         private readonly IHubContext<ChatHub> _chat;
         private readonly ApplicationDbContext _context;
+        private readonly INotificationManager _notificationManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public ChatController(
             IChatManager chatManager,
             IHubContext<ChatHub> chat,
-            ApplicationDbContext context
-            )
+            ApplicationDbContext context,
+            INotificationManager notificationManager,
+            UserManager<ApplicationUser> userManager)
         {
             _chatManager = chatManager;
             _chat = chat;
             _context = context;
+            _notificationManager = notificationManager;
+            _userManager = userManager;
         }
 
         [HttpPost("[action]/{connectionId}/{roomId}")]
@@ -61,8 +69,21 @@ namespace Licenta.Areas.Clienti.Controllers
             int roomId,
             string message)
         {
+            ApplicationUser user = _userManager.GetUserAsync(User).Result;
+            ApplicationUser admin = _context.ApplicationUsers.Where(x => x.Email.Contains("dana_moisi")).FirstOrDefault();
 
-            if (await _chatManager.SendMessage(roomId, message, User.Identity.Name)) {
+            if (await _chatManager.SendMessage(roomId, message, user.UserName)) {
+                Notificare notificare = new Notificare() { };
+                if (user.Email.Contains("dana_moisi"))
+                {
+                    notificare.Text = $"{admin.Nume} v-a trimis un mesaj - ${DateTime.Now}";
+                    await _notificationManager.CreateChatNotificationAsync(notificare, user.Id);
+                } 
+                else
+                {
+                    notificare.Text = $"{user.Nume} v-a trimis un mesaj - ${DateTime.Now}";
+                    await _notificationManager.CreateChatNotificationAsync(notificare, admin.Id);
+                }
                 return Ok();
             }
             return NotFound();

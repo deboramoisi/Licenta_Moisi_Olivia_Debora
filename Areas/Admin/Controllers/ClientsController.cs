@@ -70,6 +70,8 @@ namespace Licenta.Areas.Admin.Controllers
                 _context.Client.Add(client);
                 _context.SaveChanges();
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Client adaugat cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             return View(client);
@@ -108,6 +110,8 @@ namespace Licenta.Areas.Admin.Controllers
                 {
                     _context.Client.Update(client);
                     await _context.SaveChangesAsync();
+                    TempData["Message"] = "Informatii client actualizate cu succes!";
+                    TempData["Success"] = "true";
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
@@ -221,6 +225,8 @@ namespace Licenta.Areas.Admin.Controllers
                 }
             }
 
+            TempData["Message"] = "Clienti importati cu succes!";
+            TempData["Success"] = "true";
             return PartialView("_AddClientiImport");
         }
         #endregion

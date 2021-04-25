@@ -34,13 +34,15 @@ namespace Licenta.Areas.Admin.Views
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TipDocumentId,Denumire")] TipDocument tipDocument)
+        public async Task<IActionResult> Create(TipDocument tipDocument)
         {
             
             if (ModelState.IsValid)
             {
                 _context.TipDocument.Add(tipDocument);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Tip document adaugat cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             return View(tipDocument);
@@ -63,7 +65,7 @@ namespace Licenta.Areas.Admin.Views
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TipDocumentId,Denumire")] TipDocument tipDocument)
+        public async Task<IActionResult> Edit(int id, TipDocument tipDocument)
         {
             if (id != tipDocument.TipDocumentId)
             {
@@ -88,6 +90,8 @@ namespace Licenta.Areas.Admin.Views
                         throw;
                     }
                 }
+                TempData["Message"] = "Tip document actualizat cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             return View(tipDocument);

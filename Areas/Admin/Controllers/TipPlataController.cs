@@ -41,6 +41,8 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 _context.TipPlati.Add(tipPlata);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Tip plata adaugat cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             return PartialView("_AddTipPlata", tipPlata);
@@ -89,6 +91,8 @@ namespace Licenta.Areas.Admin.Controllers
                         throw;
                     }
                 }
+                TempData["Message"] = "Tip plata actualizat cu succes!";
+                TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
             return PartialView("_EditTipPlata", tipPlata);
