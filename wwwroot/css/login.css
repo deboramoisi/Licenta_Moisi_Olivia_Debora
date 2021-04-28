@@ -1,0 +1,74 @@
+﻿.background-smoke {
+    z-index: 900;
+    background-image: url('https://i.pinimg.com/564x/4c/de/92/4cde92a40606391b424b8f1b7853ccd8.jpg');
+    width: 98.9vw;
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar {
+    margin: 0rem !important;
+    justify-content: center;
+}
+
+#login-section {
+    height: 85vh;
+    min-width: 50vw;
+    border-radius: 0px 7px 7px 0px;
+    background-color: #ffffef;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 50vw;
+    z-index: 950;
+}
+
+#login-form {
+    height: 85vh;
+    min-width: 50vw;
+    border-radius: 0px 7px 7px 0px;
+    background-color: #ffffef;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    max-width: 50vw;
+    z-index: 950;
+}
+
+#external-login {
+    margin-top: 70px;
+    display: flex;
+    justify-content: center;
+}
+
+#picture-section {
+    height: 85vh;
+    min-width: 30vw;
+    max-width: 30vw;
+    border-radius: 7px 0px 0px 7px;
+    z-index: 950;
+}
+
+    #picture-section img {
+        height: 85vh;
+        min-width: 30vw;
+        max-width: 30vw;
+        border-radius: 7px 0px 0px 7px;
+        z-index: 950;
+    }
+
+    #login-btn {
+        color: white;
+        background-color: black;
+    }
+
+        #login-btn:hover {
+            color: black;
+            background-color: mintcream;
+        }
+
+        .footer {
+            padding-left: 185px;
+        }

@@ -30,13 +30,6 @@
        <a asp-controller="Responses" asp-action="Create" asp-route-id="@Model.QuestionId" class="btn btn-outline-primary"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Adauga raspuns nou!</a>
         
     }
-    @if (admin || clientCuDrepturi)
-    {
-        @: &nbsp;
-        <a asp-controller="Questions" asp-action="Edit" asp-route-id="@Model.QuestionId" class="text-right">
-            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-        </a>
-    }
     </div>
 
 
@@ -61,7 +54,10 @@
                 @Html.DisplayNameFor(model => response.Raspuns)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => response.Raspuns)
+                @Html.DisplayFor(model => response.Raspuns) &nbsp;
+                <a asp-controller="Responses" asp-action="Edit" asp-route-id="@response.ResponseId" title="Editare raspuns" class="text-right">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;Edit
+                </a>
             </dd>
         }
         <dt class="col-sm-2">

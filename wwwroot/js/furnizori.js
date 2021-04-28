@@ -8,12 +8,11 @@ function loadDataTable() {
     dataTable = $('#tblData').DataTable({
         // folosim ajax pt incarcarea datelor
         "ajax": {
-            "url": "/Clienti/Furnizori/GetAllFurnizori"
+            "url": "/Clienti/Informatii/GetFurnizori"
         },
         "columns": [
             { "data": "denumire" },
             { "data": "cod_fiscal" },
-            { "data": "tara" },
             {
                 "data": "furnizorID",
                 // functie cu id-ul furnizorului pt returnare buton edit, details, delete

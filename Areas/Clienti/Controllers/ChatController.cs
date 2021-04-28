@@ -69,22 +69,34 @@ namespace Licenta.Areas.Clienti.Controllers
             int roomId,
             string message)
         {
+            var chatUsers = await _context.ChatUsers
+                .Include(x=>x.ApplicationUser)
+                .Where(x => x.ChatId == roomId)
+                .AsNoTracking()
+                .ToListAsync();
+
             ApplicationUser user = _userManager.GetUserAsync(User).Result;
             ApplicationUser admin = _context.ApplicationUsers.Where(x => x.Email.Contains("dana_moisi")).FirstOrDefault();
 
+            string sender = "";
+            string receiver = "";
+
+            if (user.Email.Contains("dana_moisi"))
+            {
+                sender = admin.Nume;
+                receiver = chatUsers.Where(x => !x.ApplicationUserId.Equals(admin.Id)).First().ApplicationUserId;
+            } else
+            {
+                sender = user.Nume;
+                receiver = admin.Id;
+            }
+
             if (await _chatManager.SendMessage(roomId, message, user.UserName)) {
                 Notificare notificare = new Notificare() { };
-                if (user.Email.Contains("dana_moisi"))
-                {
-                    notificare.Text = $"{admin.Nume} v-a trimis un mesaj - ${DateTime.Now}";
-                    await _notificationManager.CreateChatNotificationAsync(notificare, user.Id);
-                } 
-                else
-                {
-                    notificare.Text = $"{user.Nume} v-a trimis un mesaj - ${DateTime.Now}";
-                    await _notificationManager.CreateChatNotificationAsync(notificare, admin.Id);
-                }
+                notificare.Text = $"{sender} v-a trimis un mesaj - ${DateTime.Now}";
+                await _notificationManager.CreateChatNotificationAsync(notificare, receiver);
                 return Ok();
+
             }
             return NotFound();
         }

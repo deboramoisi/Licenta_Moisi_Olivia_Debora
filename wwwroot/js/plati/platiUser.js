@@ -7,7 +7,7 @@ $(document).ready(function () {
 function loadDataTable() {
     dataTable = $('#tblData').DataTable({
         "ajax": {
-            "url": "/Clienti/Plata/GetAll",
+            "url": "/Clienti/Informatii/GetPlati",
         },
         "columns": [
             { "data": "tipPlata.denumire" },

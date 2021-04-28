@@ -4,17 +4,30 @@
     ViewData["Title"] = "Contsal";
 }
 
-<section class="m-0">
+@section Styles {
+    <link rel="stylesheet" href="~/css/home.css" />
+}
+
+<style>
+    .container {
+        width: 100%;
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+</style>
+
+<section class="home">
     <section id="banner-area">
 
         <div class="owl-carousel owl-theme">
 
             <div class="item">
-                <img src="~/img/Accounting-Banner1.png" alt="Accounting Banner">
+                <img src="~/img/business-offices.jpg" alt="Accounting Banner">
             </div>
 
             <div class="item">
-                <img src="~/img/accounting2.jpg" alt="Accounting picture 2">
+                <img src="~/img/business-home.jpg" alt="Accounting picture 2">
             </div>
 
         </div>
@@ -23,10 +36,8 @@
 
     <div style="margin-top: 40px"></div>
 
-    <section id="services">
-        <div>
-            <h1 class="text-center">Servicii</h1>
-        </div>
+    <section id="services-title">
+        <h1 class="text-center">Servicii</h1>
     </section>
 
     <!-- Intro -->
@@ -120,7 +131,3 @@
 
     </div>
 </section>
-
-@section Styles {
-    <link href="~/css/home.css" rel="stylesheet" type="text/css" />
-}
