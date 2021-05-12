@@ -13,6 +13,8 @@ using Licenta.Services.DashboardManager;
 using Licenta.Services.MailService;
 using Licenta.Services.ChatManager;
 using Licenta.Services.NotificationManager;
+using Stripe;
+using Licenta.Utility;
 
 namespace Licenta
 {
@@ -82,11 +84,14 @@ namespace Licenta
 
             services.AddTransient<INotificationManager, NotificationManager>();
 
+            services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["SecretKey"];
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

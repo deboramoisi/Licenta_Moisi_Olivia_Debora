@@ -13,21 +13,34 @@
 <div id="question-modal"></div>
 
 <div class="row">
-    <div class="col-6">
-        <h2>Q&A</h2>
+    <div id="qa-picture" class="col-sm-4">
+        <h2 id="qa-text">Q&A</h2>
     </div>
-    <div class="col-6 text-right">
-        <button type="button" class="btn btn-outline-primary" data-toggle="ajax-question-modal" data-target="#add-question" data-url="@Url.Action("Create")">
-            <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp; Adauga intrebare noua
-        </button>
-    </div>
-</div>
 
-<div class="row">
-    <div class="offset-6 col-6 text-right">
-        <button type="button" class="btn btn-outline-secondary" data-toggle="ajax-questionCateg-modal" data-target="#add-questionCateg">
-            <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp; Adauga categorie noua
-        </button>
+    <div class="qa-tools col-sm-7">
+        <div class="row mb-2 text-right">
+            <button type="button" class="btn btn-outline-primary col-sm-4 p-2 offset-sm-9 text-center mb-2" data-toggle="ajax-question-modal" data-target="#add-question" data-url="@Url.Action("Create")">
+                <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp; Adauga intrebare
+            </button>
+        </div>
+        
+        <div class="row">
+            <button type="button" class="btn btn-outline-secondary col-sm-4 offset-sm-9 text-center mb-2" data-toggle="ajax-questionCateg-modal" data-target="#add-questionCateg">
+                <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp; Adauga categorie
+            </button>
+        </div>
+        
+        <form asp-action="Index" method="get" class="col-sm-4 offset-sm-9 p-2 text-center">
+             <div class="form-actions no-color row">
+             Cauta intrebare: &nbsp;
+             <input type="text" name="searchQuestion" value="@ViewData["CurrentSearch"]" />
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Inapoi</a>
+             </div>
+        </form>
+
     </div>
 </div>
 
@@ -76,20 +89,6 @@
                 }
             </a>
         </div>
-    </div>
-
-    @* Search *@
-    <div class="col-6 text-right">
-        <form asp-action="Index" method="get">
-            <div class="form-actions no-color">
-                Cauta intrebare: &nbsp;
-                <input type="text" name="searchQuestion" value="@ViewData["CurrentSearch"]" />
-                <button type="submit" class="btn btn-outline-primary">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                </button>
-                <a asp-action="Index" class="btn btn-outline-secondary">Inapoi</a>
-            </div>
-        </form>
     </div>
 
 </div>

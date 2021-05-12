@@ -70,11 +70,4 @@ function onSubmit() {
         }
     });
 
-    //$.post(actionUrl, sendData).done(function () {
-    //    toastr.success("Tip document adaugat cu succes!");
-    //    this.onCloseModal();
-    //}).fail(function () {
-    //    toastr.error("Eroare la adaugarea documentului.");
-    //})
-    //});
 }

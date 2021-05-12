@@ -10,3 +10,21 @@
     .question-card:hover, .categories:hover {
         transform: scale(1.01);
     }
+
+#qa-picture {
+    background-image: url("https://i.pinimg.com/564x/76/6a/63/766a63ea1dc6199e140c4465b05b7aeb.jpg");
+    min-height: 30vh;
+    max-height: 35vh;
+    border-radius: 100px 0px 0px 0px;
+    z-index: 200;
+}
+
+    #qa-text {
+        z-index: 300;
+        padding-left: 65px;
+        padding-top: 3px;
+    }
+
+    .qa-tools {
+         
+    }

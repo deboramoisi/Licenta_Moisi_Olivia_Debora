@@ -26,5 +26,9 @@ namespace Licenta.Models.Plati
         public int TipPlataId { get; set; }
         [ForeignKey("TipPlataId")]
         public TipPlata TipPlata { get; set; }
+
+
+        public bool Achitata { get; set; } = false;
+        public bool SuccesPlata { get; set; } = false;
     }
 }

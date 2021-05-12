@@ -1,6 +1,9 @@
 ﻿@model IEnumerable<Licenta.Models.Plati.Plata>
+@using Microsoft.Extensions.Options
+@inject IOptions<Licenta.Utility.StripeSettings> Stripe
 
-@{ 
+
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Plati";
 }
@@ -29,6 +32,7 @@
                 <th>
                     @Html.DisplayNameFor(model => model.DataScadenta)
                 </th>
+                <th></th>
             </tr>
         </thead>
     </table>
@@ -36,4 +40,7 @@
 
 @section Scripts {
     <script src="~/js/plati/platiUser.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="~/js/plati/plataStripe.js"></script>
 }
