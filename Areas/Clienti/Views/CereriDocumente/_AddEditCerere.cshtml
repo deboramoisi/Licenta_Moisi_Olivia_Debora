@@ -1,0 +1,67 @@
+﻿@model Licenta.Models.CereriDocumente.CerereDocument
+@using Licenta.Utility
+
+@{ 
+    var admin = User.IsInRole(ConstantVar.Rol_Admin);
+    var adminFirma = User.IsInRole(ConstantVar.Rol_Admin_Firma);
+}
+
+<div class="modal fade" role="dialog" id="cerereDocument" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="CereriDocumente" asp-action="Create">
+                <div class="modal-header">
+                    @if (admin)
+                    {
+                        <h4 class="modal-title">Cerere Document</h4>
+                    }
+                    else
+                    {
+                        <h4 class="modal-title">Adauga/Editeaza Cerere Document</h4>
+                    }
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" asp-for="ApplicationUserId" />
+                    <input type="hidden" asp-for="CerereDocumentId" />
+                    <div class="form-group row">
+                        <label class="col-3">Client</label>
+                        <input asp-for="DenumireClient" class="col-8 form-control" readonly />
+                    </div>
+                    @if (admin)
+                    {
+                        <div class="form-group row">
+                            <label class="col-3">Tip Cerere</label>
+                            <select asp-for="TipCerereId" asp-items="ViewBag.TipCereri" class="col-8 form-control" disabled></select>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-3">Salariat</label>
+                            <select asp-for="SalariatId" asp-items="ViewBag.Salariati" class="col-8 form-control" disabled></select>
+                        </div>
+                    }
+                    else {
+                        <div class="form-group row">
+                            <label class="col-3">Tip Cerere</label>
+                            <select asp-for="TipCerereId" asp-items="ViewBag.TipCereri" class="col-8 form-control"></select>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-3">Salariat</label>
+                            <select asp-for="SalariatId" asp-items="ViewBag.Salariati" class="col-8 form-control"></select>
+                        </div>
+                    }
+                    <div class="form-group row">
+                        <label class="col-3">Deadline</label>
+                        <input asp-for="DataStart" class="col-8 form-control" readonly />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="onCloseModal()">Close</button>
+                    @if (admin)
+                    {
+                        <button type="button" class="btn btn-danger" onclick="onDeleteCerere()">Sterge</button>
+                    }
+                    <button type="button" class="btn btn-success" onclick="onSubmitCerere()">Salveaza</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

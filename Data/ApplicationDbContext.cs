@@ -1,4 +1,5 @@
 ﻿using Licenta.Models;
+using Licenta.Models.CereriDocumente;
 using Licenta.Models.Chat;
 using Licenta.Models.Notificari;
 using Licenta.Models.Plati;
@@ -40,6 +41,8 @@ namespace Licenta.Data
         public DbSet<NotificareUser> NotificareUsers { get; set; }
         public DbSet<Notificare> Notificari { get; set; }
 
+        public DbSet<TipCerere> TipCereri { get; set; }
+        public DbSet<CerereDocument> CereriDocumente { get; set; }
 
         // Composite Key pentru ChatUsers
         protected override void OnModelCreating(ModelBuilder builder)

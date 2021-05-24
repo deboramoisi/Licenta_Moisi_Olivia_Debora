@@ -9,6 +9,7 @@ namespace Licenta.Services.NotificationManager
     public interface INotificationManager
     {
         Task CreateAsync(Notificare notificare, int clientId);
+        Task CreateAsyncNotificationForAdmin(Notificare notificare, string adminId);
         Task CreateChatNotificationAsync(Notificare notificare, string userId);
         Task<List<NotificareUser>> GetNotificareUsers(string userId);
         void NotificationSeen(int id, string userId);

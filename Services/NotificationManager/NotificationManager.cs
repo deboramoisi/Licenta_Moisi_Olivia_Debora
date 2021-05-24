@@ -46,6 +46,22 @@ namespace Licenta.Services.NotificationManager
             await _hubContext.Clients.All.SendAsync("displayNotification", "");
         }
 
+        public async Task CreateAsyncNotificationForAdmin(Notificare notificare, string adminId)
+        {
+            _context.Notificari.Add(notificare);
+            _context.SaveChanges();
+
+            var notificareUser = new NotificareUser() { };
+            notificareUser.ApplicationUserId = adminId;
+            notificareUser.NotificareId = notificare.NotificareId;
+
+            _context.NotificareUsers.Add(notificareUser);
+            _context.SaveChanges();
+
+            // execute client side method from site.js
+            await _hubContext.Clients.All.SendAsync("displayNotification", "");
+        }
+
         public async Task CreateChatNotificationAsync(Notificare notificare, string userId)
         {
             _context.Notificari.Add(notificare);

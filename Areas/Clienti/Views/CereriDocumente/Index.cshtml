@@ -1,0 +1,24 @@
+﻿@model Licenta.Models.CereriDocumente.CerereDocument
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Cereri Documente";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/lib/fullcalendar/main.min.css" />
+}
+
+@*<div class="form-group">
+    <select asp-for="SalariatId" asp-items="ViewBag.Salariati" class="form-control"></select>
+</div>*@
+
+<div id="calendar" class="mt-3" style="max-height:85vh;">
+
+</div>
+
+<partial name="_AddEditCerere" />
+
+@section Scripts {
+    <script src="~/js/cereriDocumente/cerereDocumente.js"></script>
+}
