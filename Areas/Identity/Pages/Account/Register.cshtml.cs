@@ -8,6 +8,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Licenta.Data;
 using Licenta.Models;
+using Licenta.Services.MailService;
 using Licenta.Utility;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -27,7 +28,7 @@ namespace Licenta.Areas.Identity.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
-        // private readonly IEmailSender _emailSender;
+        private readonly Licenta.Services.MailService.IEmailSender _emailSender;
         // Role Manager
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _context;
@@ -36,14 +37,14 @@ namespace Licenta.Areas.Identity.Pages.Account
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            // IEmailSender emailSender,
+            Licenta.Services.MailService.IEmailSender emailSender,
             RoleManager<IdentityRole> roleManager,
             ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
-            // _emailSender = emailSender;
+            _emailSender = emailSender;
             _roleManager = roleManager;
             _context = context;
         }
@@ -121,7 +122,6 @@ namespace Licenta.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                // var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 var user = new ApplicationUser
                 {
                     UserName = Input.Email,
@@ -165,16 +165,24 @@ namespace Licenta.Areas.Identity.Pages.Account
                         await _userManager.AddToRoleAsync(user, user.Rol);
                     }
 
-                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    //var callbackUrl = Url.Page(
-                    //    "/Account/ConfirmEmail",
-                    //    pageHandler: null,
-                    //    values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
-                    //    protocol: Request.Scheme);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    var callbackUrl = Url.Page(
+                        "/Account/ConfirmEmail",
+                        pageHandler: null,
+                        values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
+                        protocol: Request.Scheme);
 
-                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                    //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    IEnumerable<EmailAddress> emailAddresses = new List<EmailAddress>() {
+                        new EmailAddress() {
+                            Address = user.Email
+                        }
+                    };
+
+                    var message = new Message(emailAddresses, "Confirmare Cont Contsal",
+                        $"Va rugam sa va confirmati adresa de mail aferent contului prin <strong><a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>click pe link-ul acesta</a></strong>." +
+                        $"Veti fi redirectionat inspre aplicatia noastra Contsal. Va multumim! <br/> <i>Echipa Contsal</i>");
+                    _emailSender.SendEmail(message);
 
                     // sign in user after registration
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)

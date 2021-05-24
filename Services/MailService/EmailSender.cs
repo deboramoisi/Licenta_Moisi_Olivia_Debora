@@ -25,7 +25,7 @@ namespace Licenta.Services.MailService
             emailMessage.From.Add(new MailboxAddress("Contsal", _emailConfig.From));
             emailMessage.To.AddRange(message.To);
             emailMessage.Subject = message.Subject;
-            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Text)
+            emailMessage.Body = new TextPart("html")
             {
                 Text = message.Content
             };

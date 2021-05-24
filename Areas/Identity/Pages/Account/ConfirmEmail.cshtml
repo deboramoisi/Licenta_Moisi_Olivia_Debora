@@ -1,7 +1,15 @@
 ﻿@page
 @model ConfirmEmailModel
 @{
-    ViewData["Title"] = "Confirm email";
+    ViewData["Title"] = "Email Confirmat";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="jumbotron text-center">
+    <h1 class="display-4 text-center">Email-ul dumneavoastra a fost confirmat cu succes!</h1>
+    <p class="lead">Va multumim pentru ca ne-ati ales si ne-ati acordat incredere in ceea ce priveste compania/finantele dumneavoastra.</p>
+    <hr class="my-4">
+    <p>Speram ca in continuare sa avem o experienta cat mai buna si placuta!</p>
+    <p class="lead">
+        <a class="btn btn-secondary btn-lg"  role="button" asp-controller="Home" asp-action="Index">About Us</a>
+    </p>
+</div>
