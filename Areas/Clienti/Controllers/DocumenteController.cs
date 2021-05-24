@@ -94,6 +94,40 @@ namespace Licenta.Areas.Clienti.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Vizualizare(int? idCategorie = 1)
+        {
+            var user = _userManager.GetUserAsync(User).Result;
+            var documente = await _context.Document.Where(x => x.ApplicationUserId == user.Id && x.TipDocumentId == idCategorie)
+                .Include(x => x.TipDocument)
+                .OrderBy(x => x.TipDocument.Denumire)
+                .AsNoTracking()
+                .ToListAsync();
+
+            ViewData["TipDocumente"] = new SelectList(_context.TipDocument.ToList(), "TipDocumentId", "Denumire");
+
+            return View(documente);
+        } 
+
+        [HttpGet]
+        public async Task<IActionResult> FilterByCategorie(int? id)
+        {
+            var user = _userManager.GetUserAsync(User).Result;
+            var documente = await _context.Document.Where(x => x.ClientId == user.ClientId && x.TipDocumentId == id)
+                .Include(x => x.TipDocument)
+                .AsNoTracking()
+                .OrderByDescending(x => x.Data)
+                .ToListAsync();
+
+            if (documente != null)
+            {
+                return Json(new { documente = documente });
+            } else
+            {
+                return Json(new { documente = "" });
+            }
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Balanta()
         {
             var documents = new List<Document>();
