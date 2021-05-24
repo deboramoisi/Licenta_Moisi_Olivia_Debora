@@ -4,12 +4,17 @@
 @{ 
     var admin = User.IsInRole(ConstantVar.Rol_Admin);
     var adminFirma = User.IsInRole(ConstantVar.Rol_Admin_Firma);
+    var isAdmin = 0;
+    if (admin)
+    {
+        isAdmin = 1;
+    }
 }
-
+  
 <div class="modal fade" role="dialog" id="cerereDocument" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form asp-controller="CereriDocumente" asp-action="Create">
+            <form asp-controller="CereriDocumente" asp-action="Create" enctype="multipart/form-data">
                 <div class="modal-header">
                     @if (admin)
                     {
@@ -23,6 +28,7 @@
                 <div class="modal-body">
                     <input type="hidden" asp-for="ApplicationUserId" />
                     <input type="hidden" asp-for="CerereDocumentId" />
+                    <input id="adminInput" type="hidden" value="@isAdmin" />
                     <div class="form-group row">
                         <label class="col-3">Client</label>
                         <input asp-for="DenumireClient" class="col-8 form-control" readonly />
@@ -39,14 +45,14 @@
                         </div>
                     }
                     else {
-                        <div class="form-group row">
-                            <label class="col-3">Tip Cerere</label>
-                            <select asp-for="TipCerereId" asp-items="ViewBag.TipCereri" class="col-8 form-control"></select>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-3">Salariat</label>
-                            <select asp-for="SalariatId" asp-items="ViewBag.Salariati" class="col-8 form-control"></select>
-                        </div>
+                    <div class="form-group row">
+                        <label class="col-3">Tip Cerere</label>
+                        <select asp-for="TipCerereId" asp-items="ViewBag.TipCereri" class="col-8 form-control"></select>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-3">Salariat</label>
+                        <select asp-for="SalariatId" asp-items="ViewBag.Salariati" class="col-8 form-control"></select>
+                    </div>
                     }
                     <div class="form-group row">
                         <label class="col-3">Deadline</label>
@@ -57,6 +63,7 @@
                     <button type="button" class="btn btn-secondary" onclick="onCloseModal()">Close</button>
                     @if (admin)
                     {
+                        <span id="incarcaDoc"></span>
                         <button type="button" class="btn btn-danger" onclick="onDeleteCerere()">Sterge</button>
                     }
                     <button type="button" class="btn btn-success" onclick="onSubmitCerere()">Salveaza</button>

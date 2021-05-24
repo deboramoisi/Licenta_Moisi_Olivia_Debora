@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script>
+		function solicitare() {
+			cerere = new XMLHttpRequest();
+			cerere.onreadystatechange = procesareRaspuns
+			cerere.open("GET", "datejson.php")
+			cerere.send(null)
+		}
+
+		function procesareRaspuns() {
+			if (cerere.readyState == 4)
+				if (cerere.status == 200) {
+					raspuns = JSON.parse(cerere.responseText)
+					produs = raspuns.Comanda.Produse[0].Denumire
+					// in loc de linia de deasupra, puteti extrage date JSON si cu sintaxa veritcala:
+					// produs = raspuns["Comanda"]["Produse"][0]["Denumire"]
+					tinta = document.getElementById("tinta")
+					tinta.innerHTML += produs
+				}
+		}
+	</script>
+	<title></title>
+</head>
+<body>
+	<input type="button" onclick="solicitare()" value="Declanseaza cerere" />
+	<div id="tinta"></div>
+</body>
+</html>

@@ -178,7 +178,7 @@ namespace Licenta.Services.FileManager
                 await document.CopyToAsync(fileStream);
             }
             // returnam numele documentului pentru a fi salvata in baza de date (fara calea absoluta - pentru securitate)
-            fileName = $"/xml/{Denumire}_{ClientId}_{UserId}_{DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss")}{extension}";
+            // fileName = $"{Denumire}_{ClientId}_{UserId}_{DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss")}{extension}";
             return fileName;
         }
         #endregion

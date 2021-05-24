@@ -1,8 +1,10 @@
 ﻿@model Licenta.Models.CereriDocumente.CerereDocument
+@using Licenta.Utility
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Cereri Documente";
+    var admin = User.IsInRole(ConstantVar.Rol_Admin);
 }
 
 @section Styles {

@@ -71,7 +71,11 @@ function onShowModal(cerereDetails, inEditingMode) {
         $('[name = "DataStart"]').val(cerereDetails.dataStart);
         $('[name = "DenumireClient"]').val(cerereDetails.denumireClient);
 
-
+        var isAdmin = $("#adminInput").val();
+        if (isAdmin) {
+            $("#incarcaDoc").html(`<a class="btn btn-primary" href="/Admin/Documents/Create/${cerereDetails.cerereDocumentId}">Incarca document</a>`);
+        }
+        console.log($("#adminInput").val());
 
     } else {
         $('[name = "DataStart"]').val(cerereDetails.startStr);
@@ -81,8 +85,6 @@ function onShowModal(cerereDetails, inEditingMode) {
 }
 
 function onCloseModal() {
-    $("form")[0].reset();
-    $('[name = "CerereDocumentId"]').val(0);
     $("#cerereDocument").modal("hide");
 }
 

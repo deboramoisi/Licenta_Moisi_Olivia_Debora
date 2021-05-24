@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,5 +30,9 @@ namespace Licenta.Models.CereriDocumente
 
         public bool Resolved { get; set; } = false;
         public string AdeverintaPath { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Incarcati documentul dumneavoastra")]
+        public IFormFile DocumentPathUrl { get; set; }
     }
 }
