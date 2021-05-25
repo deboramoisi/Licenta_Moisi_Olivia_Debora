@@ -6,6 +6,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Chat";
     var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+    var userName = User.Identity.Name;
+    var senderMessage = "message user-sender";
+    var receiverMessage = "message user-receiver";
+    var messageClass = "";
 }
 
 @section Styles {
@@ -47,7 +51,15 @@
 
             @foreach (var message in Model.Chat.Mesaje)
             {
-                <div class="message">
+                if (message.Nume == userName)
+                {
+                    messageClass = senderMessage;
+                }
+                else
+                {
+                    messageClass = receiverMessage;
+                }
+                <div class="@messageClass">
                     <header>@message.Nume.Split("@")[0]: &nbsp;</header>
                     <p>@message.Text</p>
                     <footer>@message.Data</footer>
@@ -60,19 +72,20 @@
             <input type="hidden" value="@Model.Chat.ChatId" name="roomId" />
             <input type="hidden" value="@Model.Chat.Nume" name="roomName" />
             <div class="form-group row m-2">
-                <input type="text" name="message" id="message-input" class="col-10 form-control"  />
+                <input type="text" name="message" id="message-input" class="col-10 form-control" />
                 <button type="submit" class="col-1 form-control p-2 ml-2 btn btn-secondary"><i class="far fa-paper-plane"></i></button>
             </div>
-            
+
         </form>
     </div>
-    
+
 </div>
 
 @section Scripts {
     <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
     <script type="text/javascript">
         var roomId = "@Model.Chat.ChatId";
+        var loggedUser = "@User.Identity.Name";
     </script>
     <script src="~/js/chat/myChat.js"></script>
 } 

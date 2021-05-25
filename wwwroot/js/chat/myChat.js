@@ -10,7 +10,13 @@ var _connectionId = '';
 
 connection.on("ReceiveMessage", function (data) {
     var message = document.createElement("div")
-    message.classList.add("message")
+    message.classList.add("message");
+
+    if (data.nume === loggedUser) {
+        message.classList.add("user-sender");
+    } else {
+        message.classList.add("user-receiver");
+    }
 
     var header = document.createElement("header")
     header.appendChild(document.createTextNode(data.nume))

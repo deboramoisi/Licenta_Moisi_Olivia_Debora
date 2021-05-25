@@ -20,11 +20,11 @@
 .chat-body {
     width: 80vw;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .message {
-    background-color: lightgray;
-    border-radius: 3px 4px;
     margin: 7px;
     padding: 5px;
     word-wrap: break-word;
@@ -95,9 +95,15 @@
 }
 
 .user-sender {
-
+    background-color: black;
+    color: white;
+    border-radius: 8px 8px 0px 8px;
+    justify-content: flex-end;
 }
 
 .user-receiver {
-
+    background-color: white;
+    color: black;
+    border-radius: 8px 8px 8px 0px;
+    justify-content: flex-start;
 }

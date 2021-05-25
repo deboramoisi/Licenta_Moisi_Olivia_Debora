@@ -6,6 +6,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Chat";
     var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+    var userName = User.Identity.Name;
+    var senderMessage = "message user-sender";
+    var receiverMessage = "message user-receiver";
+    var messageClass = "";
 }
 
 @section Styles {
@@ -23,7 +27,14 @@
 
             @foreach (var message in Model.Mesaje)
             {
-                <div class="message">
+                if (message.Nume == userName)
+                {
+                    messageClass = senderMessage;
+                } else
+                {
+                    messageClass = receiverMessage;
+                }
+                <div class="@messageClass">
                     <header>@message.Nume.Split("@")[0]: &nbsp;</header>
                     <p>@message.Text</p>
                     <footer>@message.Data</footer>
@@ -48,6 +59,7 @@
     <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
     <script type="text/javascript">
         var roomId = "@Model.ChatId";
+        var loggedUser = "@User.Identity.Name";
     </script>
     <script src="~/js/chat/myChat.js"></script>
 } 
