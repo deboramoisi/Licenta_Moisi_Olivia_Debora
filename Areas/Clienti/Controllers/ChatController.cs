@@ -77,23 +77,26 @@ namespace Licenta.Areas.Clienti.Controllers
 
             string sender = "";
             string receiver = "";
+            string redirectToPage = "";
 
             if (user.Email.Contains("dana_moisi"))
             {
                 sender = admin.Nume;
                 receiver = chatUsers.Where(x => !x.ApplicationUserId.Equals(admin.Id)).First().ApplicationUserId;
+                redirectToPage = $"/Chat/Chat";
             } else
             {
                 sender = user.Nume;
                 receiver = admin.Id;
+                redirectToPage = $"/Chat/Chat/{roomId}";
             }
 
             if (await _chatManager.SendMessage(roomId, message, user.UserName)) {
                 Notificare notificare = new Notificare() { };
                 notificare.Text = $"{sender} v-a trimis un mesaj - ${DateTime.Now}";
+                notificare.RedirectToPage = redirectToPage;
                 await _notificationManager.CreateChatNotificationAsync(notificare, receiver);
                 return Ok();
-
             }
             return NotFound();
         }

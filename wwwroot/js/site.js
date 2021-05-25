@@ -80,8 +80,15 @@ function readNotification(id, target) {
         data: { notificareId: id },
         success: function () {
             getNotification();
-            console.log("NOTIFICATION SEEN");
             $(target).fadeOut('slow');
+            $.ajax({
+                url: "/Clienti/Notificare/GetRedirectToPage/" + id,
+                method: "GET",
+                success: function (data) {
+                    console.log(data.redirectToPage);
+                    window.location.href = data.redirectToPage;
+                }
+            });
         },
         error: function (error) {
             console.log(error);

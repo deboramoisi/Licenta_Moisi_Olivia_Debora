@@ -71,6 +71,8 @@ namespace Licenta.Areas.Clienti.Controllers
             {
                 data.DenumireCerere = _context.TipCereri.Find(data.TipCerereId).Denumire;
                 var salariat = _context.Salariat.FirstOrDefault(x => x.SalariatId == data.SalariatId);
+                string redirectToPage = "/Clienti/CereriDocumente/Index";
+
                 if (data.CerereDocumentId != 0)
                 {
                     // edit
@@ -80,7 +82,7 @@ namespace Licenta.Areas.Clienti.Controllers
                     Notificare notificare = new Notificare();
                     notificare.Text = user.Nume + " a editat cererea de " + data.DenumireCerere + " pentru firma " + data.DenumireClient + ", salariatul "
                                         + salariat.NumePrenume + " deadline la " + data.DataStart;
-                    
+                    notificare.RedirectToPage = redirectToPage;
                     await _notificationManager.CreateAsyncNotificationForAdmin(notificare, admin.Id);
 
                     return Json(new { success = true, message = "Cerere editata cu succes!" });
@@ -93,8 +95,9 @@ namespace Licenta.Areas.Clienti.Controllers
                     Notificare notificare = new Notificare();
                     notificare.Text = user.Nume + " a depus o cerere de " + data.DenumireCerere + " pentru firma " + data.DenumireClient + ", salariatul "
                                         + salariat.NumePrenume + " deadline la " + data.DataStart;
+                    notificare.RedirectToPage = redirectToPage;
                     await _notificationManager.CreateAsyncNotificationForAdmin(notificare, admin.Id);
-
+                    
                     return Json(new { success = true, message = "Cerere adaugata cu succes!" });
                 }
             }

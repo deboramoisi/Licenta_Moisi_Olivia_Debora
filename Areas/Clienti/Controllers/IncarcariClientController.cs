@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Licenta.Models.Notificari;
+using Licenta.Services.NotificationManager;
 
 namespace Licenta.Areas.Clienti.Controllers
 {
@@ -19,11 +21,15 @@ namespace Licenta.Areas.Clienti.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IFileManager _fileManager;
+        private readonly INotificationManager _notificationManager;
 
-        public IncarcariClientController(ApplicationDbContext context, IFileManager fileManager)
+        public IncarcariClientController(ApplicationDbContext context, 
+            IFileManager fileManager,
+            INotificationManager notificationManager)
         {
             _context = context;
             _fileManager = fileManager;
+            _notificationManager = notificationManager;
         }
 
         public async Task<IActionResult> Index()
@@ -82,6 +88,14 @@ namespace Licenta.Areas.Clienti.Controllers
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Document transmis cu succes!";
                 TempData["Success"] = "true";
+
+                var admin = _context.ApplicationUsers.FirstOrDefault(x => x.Email.Contains("dana_moisi")).Id;
+
+                Notificare notificare = new Notificare();
+                string redirectToPage = "https://localhost:5001/img/documente/" + document.DocumentPath;
+                notificare.Text = $"{User.Identity.Name} a incarcat {denumireDocument.Denumire} pentru {document.Data} in {DateTime.Now}";
+                notificare.RedirectToPage = redirectToPage;
+                await _notificationManager.CreateAsyncNotificationForAdmin(notificare, admin);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["UserId"] = user.Nume;

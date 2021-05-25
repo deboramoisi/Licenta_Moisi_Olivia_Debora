@@ -12,9 +12,9 @@
     }
 
 #qa-picture {
-    background-image: url("https://i.pinimg.com/564x/76/6a/63/766a63ea1dc6199e140c4465b05b7aeb.jpg");
-    min-height: 30vh;
-    max-height: 35vh;
+    background-image: url("/img/undraw_questions.png");
+    min-height: 32vh;
+    max-height: 36vh;
     border-radius: 100px 0px 0px 0px;
     z-index: 200;
 }
@@ -26,5 +26,27 @@
     }
 
     .qa-tools {
-         
+     /*   display: flex;
+        flex-direction: column;*/
+    }
+
+#searchQuestion {
+    width: 30vw;
+
+}
+
+#searchLabel {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: darkblue;
+}
+
+#searchButtons {
+    margin-top: 5px;
+    display: flex;
+}
+
+    #searchButtons > * {
+        justify-content: flex-end;
     }

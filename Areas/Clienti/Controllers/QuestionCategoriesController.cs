@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Licenta.Data;
 using Licenta.Models.QandA;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Licenta.Areas.Clienti.Views
 {
     [Area("Clienti")]
+    [Authorize]
     public class QuestionCategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -47,16 +49,7 @@ namespace Licenta.Areas.Clienti.Views
         [HttpGet]
         public IActionResult Create()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                return PartialView("_AddQuestionCateg", new QuestionCategory());
-            }
-            else
-            {
-                // Pentru return spre Login
-                return LocalRedirect("/Identity/Account/Login");
-            }
-
+            return PartialView("_AddQuestionCateg", new QuestionCategory());
         }
 
         [HttpPost]
@@ -117,7 +110,7 @@ namespace Licenta.Areas.Clienti.Views
                 }
                 TempData["Message"] = "Tip intrebare actualizat cu succes!";
                 TempData["Success"] = "true";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Questions");
             }
             return View(questionCategory);
         }

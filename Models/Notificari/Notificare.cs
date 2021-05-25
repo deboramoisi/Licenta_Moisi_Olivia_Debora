@@ -9,6 +9,7 @@ namespace Licenta.Models.Notificari
         public int NotificareId { get; set; }
         [Required]
         public string Text { get; set; }
+        public string RedirectToPage { get; set; }
         public List<NotificareUser> NotificareUsers { get; set; }
     }
 }

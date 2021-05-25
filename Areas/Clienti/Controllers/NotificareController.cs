@@ -1,12 +1,8 @@
 ﻿using Licenta.Models;
-using Licenta.Models.Notificari;
 using Licenta.Services.NotificationManager;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Licenta.Areas.Clienti.Controllers
@@ -39,6 +35,13 @@ namespace Licenta.Areas.Clienti.Controllers
             var userId = _userManager.GetUserId(User);
             _notificationManager.NotificationSeen(notificareId, userId);
             return Ok();
+        }
+
+        [HttpGet]
+        public IActionResult GetRedirectToPage(int id)
+        {
+            var redirectToPage = _notificationManager.GetRedirectToPageForNotification(id);
+            return Json(new { redirectToPage });
         }
     }
 }

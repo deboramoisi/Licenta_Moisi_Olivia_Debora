@@ -9,36 +9,38 @@
 
 <br />
 
+<a href="/Clienti/Documente/Vizualizare">documente</a>
+
 <!-- Modal Placeholder -->
 <div id="question-modal"></div>
 
 <div class="row">
-    <div id="qa-picture" class="col-sm-4">
+    <div id="qa-picture" class="col-sm-5">
         <h2 id="qa-text">Q&A</h2>
     </div>
 
-    <div class="qa-tools col-sm-7">
-        <div class="row mb-2 text-right">
-            <button type="button" class="btn btn-outline-primary col-sm-4 p-2 offset-sm-9 text-center mb-2" data-toggle="ajax-question-modal" data-target="#add-question" data-url="@Url.Action("Create")">
-                <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp; Adauga intrebare
-            </button>
-        </div>
-        
-        <div class="row">
-            <button type="button" class="btn btn-outline-secondary col-sm-4 offset-sm-9 text-center mb-2" data-toggle="ajax-questionCateg-modal" data-target="#add-questionCateg">
+    <div class="qa-tools col-sm-6">
+        <div class="add-buttons">
+            <button type="button" class="btn btn-outline-secondary col-sm-4 offset-sm-9 p-2 text-center" data-toggle="ajax-questionCateg-modal" data-target="#add-questionCateg">
                 <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp; Adauga categorie
             </button>
         </div>
-        
-        <form asp-action="Index" method="get" class="col-sm-4 offset-sm-9 p-2 text-center">
-             <div class="form-actions no-color row">
-             Cauta intrebare: &nbsp;
-             <input type="text" name="searchQuestion" value="@ViewData["CurrentSearch"]" />
-                <button type="submit" class="btn btn-outline-primary">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                </button>
-                <a asp-action="Index" class="btn btn-outline-secondary">Inapoi</a>
-             </div>
+
+        <button type="button" class="btn btn-outline-primary col-sm-4 offset-sm-9 p-2 mt-2 text-center" data-toggle="ajax-question-modal" data-target="#add-question" data-url="@Url.Action("Create")">
+            <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp; Adauga intrebare
+        </button>
+
+        <form asp-action="Index" method="get" class="col-sm-8 offset-sm-5 p-2 text-center">
+            <div class="form-actions no-color row">
+                <span id="searchLabel">Cautati intrebare: </span>
+                <input type="text" name="searchQuestion" id="searchQuestion" value="@ViewData["CurrentSearch"]" />
+                <div id="searchButtons">
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary ml-2">Inapoi</a>
+                </div>
+            </div>
         </form>
 
     </div>
@@ -50,7 +52,7 @@
 
 <div class="row">
     <div class="dropdown show col-6">
-        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="btn btn-secondary dropdown-toggle ml-3" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-sort" aria-hidden="true"></i>&nbsp; Sort by
         </a>
 
@@ -167,9 +169,13 @@
                         <a asp-controller="Questions" asp-action="Index" asp-route-filterBy="@item.Denumire"> @item.Denumire </a>
                     </div>
 
+                    @if (admin)
+                    {
+
                     <a onclick="Delete('/Clienti/QuestionCategories/DeleteAPI/@item.QuestionCategoryId')" class="text-danger text-right">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </a>
+                    }
                 }
                 @if (ViewData["filterBy"].ToString() == "All")
                 {

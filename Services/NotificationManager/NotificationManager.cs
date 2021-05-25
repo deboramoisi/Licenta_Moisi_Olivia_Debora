@@ -96,5 +96,11 @@ namespace Licenta.Services.NotificationManager
             _context.NotificareUsers.Remove(notificareUser);
             _context.SaveChanges();
         }
+
+        public string GetRedirectToPageForNotification(int id)
+        {
+            var notificare = _context.Notificari.FirstOrDefault(x => x.NotificareId == id);
+            return notificare.RedirectToPage;
+        }
     }
 }

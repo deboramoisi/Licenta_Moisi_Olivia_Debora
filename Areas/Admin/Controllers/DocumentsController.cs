@@ -90,7 +90,13 @@ namespace Licenta.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create(int? id)
         {
-            if (id != 0)
+            if (id == 0 || id == null)
+            {
+                ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(u => u.Denumire), "ClientId", "Denumire");
+                ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers.OrderBy(u => u.Nume), "Id", "Nume");
+                ViewData["TipDocumentId"] = new SelectList(_context.TipDocument.OrderBy(u => u.Denumire), "TipDocumentId", "Denumire");
+            }
+            else
             {
                 // completam campurile pe care le stim pentru ca am fost redirectati dinspre "Incarca document" - modul cerere documente
                 var cerereDocument = _context.CereriDocumente.FirstOrDefault(x => x.CerereDocumentId == id);
@@ -100,12 +106,6 @@ namespace Licenta.Areas.Admin.Controllers
                 ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(u => u.Denumire), "ClientId", "Denumire", client);
                 ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers.OrderBy(u => u.Nume), "Id", "Nume", admin);
                 ViewData["TipDocumentId"] = new SelectList(_context.TipDocument.OrderBy(u => u.Denumire), "TipDocumentId", "Denumire", tipDocument);
-            }
-            else
-            {
-                ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(u => u.Denumire), "ClientId", "Denumire");
-                ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers.OrderBy(u => u.Nume), "Id", "Nume");
-                ViewData["TipDocumentId"] = new SelectList(_context.TipDocument.OrderBy(u => u.Denumire), "TipDocumentId", "Denumire");
             }
             return View();
         }
@@ -131,28 +131,30 @@ namespace Licenta.Areas.Admin.Controllers
                 _context.Document.Add(document);
                 await _context.SaveChangesAsync();
                 // aici notificam user-ul ca a primit un document
-                var notificare = new Notificare();
-
-                if (id != 0)
+                Notificare notificare = new Notificare();
+                string redirectToPage = "https://localhost:5001/img/documente/" + document.DocumentPath;
+                
+                if (id == 0 || id == null)
                 {
-                    // atunci am fost redirectati dinspre "Incarca document" - modul cereri documente
+                    notificare.Text = $"{denumireDocument.Denumire} pentru {document.Data} a fost incarcate pe data de {DateTime.Now}";
+                    notificare.RedirectToPage = redirectToPage;
+                    await _notificationManager.CreateAsync(notificare, document.ClientId);
+                }
+                else
+                {
+                    // atunci am fost redirectati dinspre "Incarca document" - modul cereri documente, incarcare cerere
                     var cerereDocument = _context.CereriDocumente.FindAsync(id).Result;
-                    var salariat = _context.Salariat.FirstOrDefault(x => x.SalariatId == cerereDocument.SalariatId);
+                    Salariat salariat = _context.Salariat.FirstOrDefault(x => x.SalariatId == cerereDocument.SalariatId);
                     notificare.Text = "Cererea pentru " + cerereDocument.DenumireCerere + " pentru firma " + cerereDocument.DenumireClient + ", salariatul "
                                         + salariat.NumePrenume + " deadline la " + cerereDocument.DataStart + " a fost incarcata " + DateTime.Now;
+                    notificare.RedirectToPage = redirectToPage;
                     await _notificationManager.CreateAsync(notificare, _context.Client.FirstOrDefault(x => x.Denumire == cerereDocument.DenumireClient).ClientId);
-                    
+
                     cerereDocument.Resolved = true;
                     cerereDocument.AdeverintaPath = document.DocumentPath;
                     _context.CereriDocumente.Update(cerereDocument);
                     await _context.SaveChangesAsync();
-                }
-                else
-                {
-                    notificare.Text = $"{document.ApplicationUser.Nume} a adaugat {document.TipDocument.Denumire} - data {document.Data}";
-                    // notificare
-                    await _notificationManager.CreateAsync(notificare, document.ClientId);
-                }
+                } 
                 TempData["Message"] = "Document adaugat cu succes!";
                 TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));

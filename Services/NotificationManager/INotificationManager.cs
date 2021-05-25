@@ -13,5 +13,6 @@ namespace Licenta.Services.NotificationManager
         Task CreateChatNotificationAsync(Notificare notificare, string userId);
         Task<List<NotificareUser>> GetNotificareUsers(string userId);
         void NotificationSeen(int id, string userId);
+        string GetRedirectToPageForNotification(int id);
     }
 }

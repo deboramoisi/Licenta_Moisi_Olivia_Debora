@@ -91,7 +91,7 @@ namespace Licenta.Areas.Clienti.Views
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Raspuns adaugat cu succes!";
                 TempData["Success"] = "true";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Questions");
             }
             ViewData["QuestionId"] = new SelectList(_context.Question, "QuestionId", "Intrebare", response.QuestionId);
             return View(response);
@@ -171,7 +171,7 @@ namespace Licenta.Areas.Clienti.Views
                 }
                 TempData["Message"] = "Raspuns actualizat cu succes!";
                 TempData["Success"] = "true";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Questions");
             }
             ViewData["QuestionId"] = new SelectList(_context.Question, "QuestionId", "Intrebare", response.QuestionId);
             ViewData["QuestionCategoryId"] = new SelectList(_context.QuestionCategory, "QuestionCategoryId", "Denumire", qaVM.QuestionCategoryId);
