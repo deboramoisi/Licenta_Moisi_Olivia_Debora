@@ -26,7 +26,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="MySql.Data" Version="8.0.23" />
     <PackageReference Include="NETCore.MailKit" Version="2.0.3" />
-    <PackageReference Include="Stripe.net" Version="39.48.0" />
+    <PackageReference Include="Stripe.net" Version="39.50.0" />
   </ItemGroup>
 
   <ItemGroup>

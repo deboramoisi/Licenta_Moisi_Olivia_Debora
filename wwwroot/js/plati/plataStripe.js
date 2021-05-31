@@ -3,15 +3,13 @@ var stripe = Stripe("pk_test_51IqCcAH8Hw1wc8VbCb4JHYUGubqI7GN4T5aqHzVavBo8mQoSQa
 
 // butonul este generat dinamic, motiv pentru care se foloseste aceasta abordare pt evenimentul click
 $(document).on('click', "#checkout-button", function () {
-    fetch("/Clienti/Informatii/Charge", {
+    fetch("/Clienti/Informatii/Charge/" + plataId, {
         method: "POST",
     })
         .then(function (response) {
-            alert("Response", response);
             return response.json();
         })
         .then(function (session) {
-            alert("Session", session);
             // se redirectioneaza inspre checkout-ul oferit de stripe
             return stripe.redirectToCheckout({ sessionId: session.id });
         })

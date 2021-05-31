@@ -1,0 +1,11 @@
+﻿@model Licenta.Models.Plati.Plata
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Confirmare plata";
+}
+
+Plata serviciilor in suma de @Model.Suma pentru data de @Model.Data, client @Model.Client.Denumire a fost acceptata!
+<br/> @DateTime.Now;
+
+

@@ -1,4 +1,5 @@
 ﻿using Licenta.Data;
+using Licenta.Models.Plati;
 using Licenta.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -92,7 +93,7 @@ namespace Licenta.Areas.Clienti.Controllers
 
         [Route("/order/success")]
         [HttpGet]
-        public ActionResult OrderSuccess([FromQuery] string session_id)
+        public async Task<ActionResult> OrderSuccess([FromQuery] string session_id, [FromQuery] int plata_id)
         {
             var sessionService = new SessionService();
             Session session = sessionService.Get(session_id);
@@ -100,15 +101,23 @@ namespace Licenta.Areas.Clienti.Controllers
             var customerService = new CustomerService();
             Customer customer = customerService.Get(session.CustomerId);
 
-            return Content($"<html><body><h1>Multumim pentru plata realizata, {customer.Name}!</h1></body></html>");
+            Plata plata = await _context.Plati
+                .Include(x => x.Client)
+                .FirstOrDefaultAsync(x => x.PlataId == plata_id);
+
+            plata.Achitata = true;
+            _context.Plati.Update(plata);
+            await _context.SaveChangesAsync();
+
+            // send mail with invoice
+
+
+            return View(plata);
         }
 
         [HttpPost]
-        public IActionResult Charge(string stripeEmail, string stripeToken)
+        public IActionResult Charge(int id)
         {
-            var clienti = new CustomerService();
-            var plati = new ChargeService();
-
             var domain = "http://localhost:5001/Clienti/Informatii";
             var options = new SessionCreateOptions
             {
@@ -116,7 +125,7 @@ namespace Licenta.Areas.Clienti.Controllers
                 {
                   "card",
                 },
-                LineItems = new List<SessionLineItemOptions>
+                    LineItems = new List<SessionLineItemOptions>
                 {
                   new SessionLineItemOptions
                   {
@@ -126,21 +135,23 @@ namespace Licenta.Areas.Clienti.Controllers
                       Currency = "ron",
                       ProductData = new SessionLineItemPriceDataProductDataOptions
                       {
-                        Name = "Stubborn Attachments",
+                        Name = "Plata Servicii Contsal",
                       },
                     },
                     Quantity = 1,
                   },
                 },
                     Mode = "payment",
-                    SuccessUrl = "http://localhost:5001" + "/order/success?session_id={CHECKOUT_SESSION_ID}",
+                    SuccessUrl = "https://localhost:5001" + "/order/success?session_id={CHECKOUT_SESSION_ID}&plata_id=" + id,
                     CancelUrl = domain + "/EsecPlata",
-                };
-                var service = new SessionService();
-                Session session = service.Create(options);
+            };
+            var service = new SessionService();
+            // create transaction on the credit/debit card
+            Session session = service.Create(options);
 
-                return Json(new { id = session.Id });
-            }
+            return Json(new { id = session.Id });
         }
+
+    }
 
 }

@@ -1,4 +1,5 @@
 ﻿var dataTable;
+var plataId;
 
 $(document).ready(function () {
     loadDataTable();
@@ -17,14 +18,15 @@ function loadDataTable() {
             {
                 "data": {
                     tipPlata: "tipPlata.denumire",
+                    plataId: "plataId",
                     achitata: "achitata"
                 },
                 "render": function (data) {
 
                     // butonul de plateste se genereaza dinamic doar in cazul platilor de servicii care nu sunt achitate
                     if (data.tipPlata.denumire == "Servicii" && data.achitata == false) {
-                        console.log(typeof (data.achitata));
-                        console.log(data.achitata);
+                        plataId = data.plataId;
+                        console.log(plataId);
                         return `<button type="button" id="checkout-button">Plateste</button>`;
                     } else {
                         return ``;
