@@ -8,6 +8,8 @@ using Licenta.Data;
 using Licenta.Models.QandA;
 using Licenta.Areas.Clienti.Models;
 using Microsoft.AspNetCore.Authorization;
+using Licenta.Models.Notificari;
+using Licenta.Services.NotificationManager;
 
 namespace Licenta.Areas.Clienti.Views
 {
@@ -16,10 +18,13 @@ namespace Licenta.Areas.Clienti.Views
     public class ResponsesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly INotificationManager _notificationManager;
 
-        public ResponsesController(ApplicationDbContext context)
+        public ResponsesController(ApplicationDbContext context,
+            INotificationManager notificationManager)
         {
             _context = context;
+            _notificationManager = notificationManager;
         }
 
         // Index, details
@@ -89,6 +94,16 @@ namespace Licenta.Areas.Clienti.Views
                 _context.Update(question);
 
                 await _context.SaveChangesAsync();
+
+                // Send notification to client about the new added response to his question
+                Notificare notificare = new Notificare()
+                {
+                    Text = $"Intrebarea dumneavoastra '{question.Intrebare}' a primit raspuns - {DateTime.Now}",
+                    RedirectToPage = $"/Clienti/Questions/Details/{question.QuestionId}"
+                };
+
+                await _notificationManager.CreateChatNotificationAsync(notificare, question.ApplicationUserId);
+                
                 TempData["Message"] = "Raspuns adaugat cu succes!";
                 TempData["Success"] = "true";
                 return RedirectToAction("Index", "Questions");

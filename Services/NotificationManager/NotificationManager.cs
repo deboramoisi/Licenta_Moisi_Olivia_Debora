@@ -91,8 +91,6 @@ namespace Licenta.Services.NotificationManager
             var notificareUser = _context.NotificareUsers
                 .Where(x => x.ApplicationUserId == userId && x.NotificareId == id)
                 .FirstOrDefault();
-            notificareUser.Seen = true;
-            _context.NotificareUsers.Update(notificareUser);
             _context.NotificareUsers.Remove(notificareUser);
             _context.SaveChanges();
         }

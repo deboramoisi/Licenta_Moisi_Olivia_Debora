@@ -28,6 +28,8 @@ function loadDataTable() {
                         plataId = data.plataId;
                         console.log(plataId);
                         return `<button type="button" id="checkout-button">Plateste</button>`;
+                    } else if (data.achitata == true) {
+                        return '<button type="button" class="btn btn-dark col-10" disabled>Plata achitata</button>';
                     } else {
                         return ``;
                     }

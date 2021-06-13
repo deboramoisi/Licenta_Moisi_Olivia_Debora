@@ -1,11 +1,14 @@
 ﻿using Licenta.Data;
+using Licenta.Models.Notificari;
 using Licenta.Models.Plati;
+using Licenta.Services.NotificationManager;
 using Licenta.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Stripe;
 using Stripe.Checkout;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,10 +21,13 @@ namespace Licenta.Areas.Clienti.Controllers
     public class InformatiiController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly INotificationManager _notificationManager;
 
-        public InformatiiController(ApplicationDbContext context)
+        public InformatiiController(ApplicationDbContext context,
+            INotificationManager notificationManager)
         {
             _context = context;
+            _notificationManager = notificationManager;
         }
 
         public IActionResult Furnizori()
@@ -81,12 +87,10 @@ namespace Licenta.Areas.Clienti.Controllers
             return Json(new { data = plati });
         }
 
-        public IActionResult SuccesPlata()
-        {
-            return View();
-        }
 
-        public IActionResult EsecPlata()
+        [Route("/order/declined")]
+        [HttpGet]
+        public IActionResult OrderDeclined()
         {
             return View();
         }
@@ -109,8 +113,15 @@ namespace Licenta.Areas.Clienti.Controllers
             _context.Plati.Update(plata);
             await _context.SaveChangesAsync();
 
-            // send mail with invoice
+            // send notification of payment for admin
+            Notificare notificare = new Notificare()
+            {
+                Text = $"{User.Identity.Name} a achitat plata pentru serviciile pentru luna {plata.Data}"
+            };
+            await _notificationManager.CreateAsyncNotificationForAdmin(notificare, _context.ApplicationUsers.First(x => x.Email.Contains("dana_moisi")).Id);
+            // notificare redirectToPage
 
+            // send mail with invoice
 
             return View(plata);
         }
@@ -118,7 +129,8 @@ namespace Licenta.Areas.Clienti.Controllers
         [HttpPost]
         public IActionResult Charge(int id)
         {
-            var domain = "http://localhost:5001/Clienti/Informatii";
+            Plata plata = _context.Plati.FirstOrDefault(x => x.PlataId == id);
+
             var options = new SessionCreateOptions
             {
                 PaymentMethodTypes = new List<string>
@@ -131,7 +143,7 @@ namespace Licenta.Areas.Clienti.Controllers
                   {
                     PriceData = new SessionLineItemPriceDataOptions
                     {
-                      UnitAmount = 2000,
+                      UnitAmount = (int)Math.Round(plata.Suma * 100),
                       Currency = "ron",
                       ProductData = new SessionLineItemPriceDataProductDataOptions
                       {
@@ -143,7 +155,7 @@ namespace Licenta.Areas.Clienti.Controllers
                 },
                     Mode = "payment",
                     SuccessUrl = "https://localhost:5001" + "/order/success?session_id={CHECKOUT_SESSION_ID}&plata_id=" + id,
-                    CancelUrl = domain + "/EsecPlata",
+                    CancelUrl = "https://localhost:5001" + "/order/declined?session_id={CHECKOUT_SESSION_ID}&plata_id=" + id,
             };
             var service = new SessionService();
             // create transaction on the credit/debit card

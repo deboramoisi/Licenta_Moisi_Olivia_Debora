@@ -16,6 +16,23 @@ function loadDataTable() {
             { "data": "data" },
             { "data": "dataScadenta" },
             {
+                "data": {
+                    achitata: "achitata",
+                    tipPlata: "tipPlata.denumire"
+                },
+                "render": function (data) {
+                    if (data.tipPlata.denumire == "Servicii") {
+                        if (data.achitata == true) {
+                            return '<button class="btn btn-outline-success" disabled><i class="far fa-check-circle"></i></button>';
+                        } else {
+                            return '<button class="btn btn-outline-danger text-center" disabled><i class="far fa-times-circle"></i></button>';
+                        }
+                    } else {
+                        return ``;
+                    }
+                }
+            },
+            {
                 "data": "plataId",
                 "render": function (data) {
                     return `

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -10,11 +7,12 @@ using Licenta.Models;
 using Licenta.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Licenta.Services.MailService;
+using System.Collections.Generic;
 
 namespace Licenta.Areas.Identity.Pages.Account
 {
@@ -164,9 +162,17 @@ namespace Licenta.Areas.Identity.Pages.Account
                             values: new { area = "Identity", userId = userId, code = code },
                             protocol: Request.Scheme);
 
-                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                        IEnumerable<EmailAddress> emailAddresses = new List<EmailAddress>() {
+                            new EmailAddress() {
+                                Address = user.Email
+                            }
+                        };
 
+                        var message = new Message(emailAddresses, "Confirmare Cont Contsal",
+                            $"Va rugam sa va confirmati adresa de mail aferent contului prin <strong><a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>click pe link-ul acesta</a></strong>." +
+                            $"Veti fi redirectionat inspre aplicatia noastra Contsal. Va multumim! <br/> <i>Echipa Contsal</i>");
+                        _emailSender.SendEmail(message);
+                        
                         // If account confirmation is required, we need to show the link if we don't have a real email sender
                         if (_userManager.Options.SignIn.RequireConfirmedAccount)
                         {

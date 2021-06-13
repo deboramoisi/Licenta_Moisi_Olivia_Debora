@@ -5,7 +5,7 @@
     ViewData["Title"] = "Detalii intrebare";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var admin = User.IsInRole(ConstantVar.Rol_Admin);
-    var clientCuDrepturi = User.Identity.Name == Model.ApplicationUser.Email;
+    var clientCuDrepturi = (User.Identity.Name == Model.ApplicationUser.Email);
 }
 
 <br />

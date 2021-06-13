@@ -146,31 +146,26 @@ namespace Licenta.Services.ChatManager
             string message,
             string user)
         {
-            var Mesajul = new Mesaj
-            {
-                ChatId = roomId,
-                Text = message,
-                Nume = user,
-                Data = DateTime.Now
-            };
+
+            int mesajId = await CreateMessage(roomId, message, user);
 
             try
             {
+                if (mesajId != 0)
+                {
+                    await _chat.Clients.Group(roomId.ToString())
+                        // ReceiveMessage will exist on the client, when we execute this line
+                        // we will send the message to the client and will execute this declared method
+                        .SendAsync("ReceiveMessage", new
+                        {
+                            Text = message,
+                            Nume = user,
+                            Data = DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss"),
+                        });
 
-                _context.Mesaje.Add(Mesajul);
-                await _context.SaveChangesAsync();
-
-                await _chat.Clients.Group(roomId.ToString())
-                    // ReceiveMessage will exist on the client, when we execute this line
-                    // we will send the message to the client and will execute this declared method
-                    .SendAsync("ReceiveMessage", new
-                    {
-                        Text = Mesajul.Text,
-                        Nume = Mesajul.Nume,
-                        Data = Mesajul.Data.ToString("dd/MM/yyyy hh:mm:ss"),
-                    });
-
-                return true;
+                    return true;
+                } 
+                return false;
             }
             catch
             {

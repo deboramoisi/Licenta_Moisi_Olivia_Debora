@@ -216,4 +216,12 @@ function Delete2(url) {
     });
 }
 
+// Dashboard 
+function RemoveDataset(myChart) {
 
+    for (i = 0; i <= myChart.data.datasets.length; i++) {
+        myChart.data.datasets.pop();
+    }
+    myChart.update();
+
+}

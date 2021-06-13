@@ -1,7 +1,9 @@
-﻿function BarForProfitPierdere(prPierdere) {
+﻿var incasari, plati;
+
+function BarForProfitPierdere(prPierdere) {
 
     var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
+    barPrChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: ['Jan', 'Febr', 'Mar', 'Apr', 'Mai', 'Iun', 'Iul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -52,19 +54,19 @@
 
 }
 
-var incasari, plati;
+function StackedBarHorizontal(data) {
 
-function StackedBar(data) {
-
-    incasari = data[0];
-    plati = data[1];
+    incasari = (data[0].length != 0 ) ? data[0] : '';
+    plati = (data[1].length != 0) ? data[1] : '';
+    months = ['Ian', 'Feb', 'Mar', 'Apr', 'Mai', 'Iun', 'Iul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var availableMonths = months.slice(0, Math.max(plati.length, incasari.length));
 
     var ctx2 = document.getElementById('chart2');
 
-    var stackedBar = new Chart(ctx2, {
+    stackedBar = new Chart(ctx2, {
         type: 'bar',
         data: {
-            labels: ['Ian', 'Feb', 'Mar', 'Apr', 'Mai', 'Iun', 'Iul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            labels: availableMonths,
             datasets: [
                 {
                     label: 'Incasari',
@@ -76,18 +78,27 @@ function StackedBar(data) {
                     data: plati,
                     backgroundColor: '#FAEBCC',
                 }
-                //{
-                //    label: 'Sold_zi',
-                //    data: [47.1, 87.2, 117, 75],
-                //    backgroundColor: '#EBCCD1',
-                //}
             ]
         },
         options: {
-            scales: {
-                xAxes: [{ stacked: true }],
-                yAxes: [{ stacked: true }]
+            indexAxis: 'y',
+            // Elements options apply to all of the options unless overridden in a dataset
+            // In this case, we are setting the border of each horizontal bar to be 2px wide
+            elements: {
+                bar: {
+                    borderWidth: 2,
+                }
+            },
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right',
+                },
+                title: {
+                    display: true,
+                    text: 'Chart.js Horizontal Bar Chart'
+                }
             }
         }
-    });
+    })
 }

@@ -44,7 +44,6 @@ namespace Licenta.Services.MailService
                     client.Connect(_emailConfig.SMTPServer, _emailConfig.Port, true);
                     client.AuthenticationMechanisms.Remove("XOAUTH2");
                     client.Authenticate(_emailConfig.Username, _emailConfig.Password);
-
                     client.Send(mailMessage);
                 }
                 catch

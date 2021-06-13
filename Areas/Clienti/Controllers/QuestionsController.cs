@@ -8,6 +8,8 @@ using Licenta.Data;
 using Licenta.Models.QandA;
 using Licenta.Utility;
 using Licenta.ViewModels;
+using Licenta.Models.Notificari;
+using Licenta.Services.NotificationManager;
 
 namespace Licenta.Areas.Clienti.Views
 {
@@ -15,10 +17,13 @@ namespace Licenta.Areas.Clienti.Views
     public class QuestionsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly INotificationManager _notificationManager;
 
-        public QuestionsController(ApplicationDbContext context)
+        public QuestionsController(ApplicationDbContext context,
+            INotificationManager notificationManager)
         {
             _context = context;
+            _notificationManager = notificationManager;
         }
 
         // Index - sortare, filtrare, cautare
@@ -132,6 +137,16 @@ namespace Licenta.Areas.Clienti.Views
             {
                 _context.Question.Add(question);
                 await _context.SaveChangesAsync();
+
+                // Send notification to admin about the new added question
+                Notificare notificare = new Notificare()
+                {
+                    Text = $"{User.Identity.Name} a adaugat o intrebare in forumul Q&A in data de {DateTime.Now}",
+                    RedirectToPage = $"/Clienti/Questions/Details/{question.QuestionId}"
+                };
+
+                await _notificationManager.CreateAsyncNotificationForAdmin(notificare, _context.ApplicationUsers.First(x => x.Email.Contains("dana_moisi")).Id);
+
                 TempData["Message"] = "Intrebare adaugata cu succes!";
                 TempData["Success"] = "true";
             }

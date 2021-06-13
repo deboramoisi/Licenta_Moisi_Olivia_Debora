@@ -1,12 +1,9 @@
-﻿using Grpc.Core;
-using Licenta.Data;
+﻿using Licenta.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Licenta.Services.FileManager
@@ -169,7 +166,6 @@ namespace Licenta.Services.FileManager
             if (extension.Contains("xml")) {
                 save_path = _xmlPath;
             }
-            // numele im va fi de tip img_zi-luna-an-ora-minut-secunda.extensie
             var fileName = $"{Denumire}_{ClientId}_{UserId}_{DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss")}{extension}";
 
             using (var fileStream = new FileStream(Path.Combine(save_path, fileName), FileMode.Create))
@@ -178,7 +174,6 @@ namespace Licenta.Services.FileManager
                 await document.CopyToAsync(fileStream);
             }
             // returnam numele documentului pentru a fi salvata in baza de date (fara calea absoluta - pentru securitate)
-            // fileName = $"{Denumire}_{ClientId}_{UserId}_{DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss")}{extension}";
             return fileName;
         }
         #endregion
