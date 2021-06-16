@@ -31,8 +31,8 @@ namespace Licenta.Areas.Admin.Controllers
 
         public IActionResult Create()
         {
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire");
-            ViewData["TipPlataId"] = new SelectList(_context.TipPlati, "TipPlataId", "Denumire");
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire");
+            ViewData["TipPlataId"] = new SelectList(_context.TipPlati.OrderBy(x => x.Denumire), "TipPlataId", "Denumire");
             return View();
         }
 
@@ -48,8 +48,8 @@ namespace Licenta.Areas.Admin.Controllers
                 TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", plata.ClientId);
-            ViewData["TipPlataId"] = new SelectList(_context.TipPlati, "TipPlataId", "Denumire", plata.TipPlataId);
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire", plata.ClientId);
+            ViewData["TipPlataId"] = new SelectList(_context.TipPlati.OrderBy(x => x.Denumire), "TipPlataId", "Denumire", plata.TipPlataId);
             return View(plata);
         }
 
@@ -65,8 +65,8 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", plata.ClientId);
-            ViewData["TipPlataId"] = new SelectList(_context.TipPlati, "TipPlataId", "Denumire", plata.TipPlataId);
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire", plata.ClientId);
+            ViewData["TipPlataId"] = new SelectList(_context.TipPlati.OrderBy(x => x.Denumire), "TipPlataId", "Denumire", plata.TipPlataId);
             return View(plata);
         }
 
@@ -101,8 +101,8 @@ namespace Licenta.Areas.Admin.Controllers
                 TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", plata.ClientId);
-            ViewData["TipPlataId"] = new SelectList(_context.TipPlati, "TipPlataId", "Denumire", plata.TipPlataId);
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire", plata.ClientId);
+            ViewData["TipPlataId"] = new SelectList(_context.TipPlati.OrderBy(x => x.Denumire), "TipPlataId", "Denumire", plata.TipPlataId);
             return View(plata);
         }
         

@@ -71,7 +71,7 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClientId"] = new SelectList(_context.Client.ToList(), "ClientId", "Denumire");
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire).ToList(), "ClientId", "Denumire");
             return View(user);
         }
 
@@ -111,7 +111,7 @@ namespace Licenta.Areas.Admin.Controllers
                 }
             }
 
-            ViewData["ClientId"] = new SelectList(_context.Client.ToList(), "ClientId", "Denumire", user.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire).ToList(), "ClientId", "Denumire", user.ClientId);
             return View(user);
         }
 

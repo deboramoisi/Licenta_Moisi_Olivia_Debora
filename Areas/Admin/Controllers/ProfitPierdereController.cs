@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,7 +12,6 @@ using Licenta.Utility;
 using Microsoft.AspNetCore.Identity;
 using System.Xml.Linq;
 using Licenta.Areas.Admin.Models.ViewModels;
-using Licenta.Areas.Admin.Models;
 
 namespace Licenta.Areas.Admin.Controllers
 {
@@ -167,7 +164,7 @@ namespace Licenta.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", document.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire", document.ClientId);
             return View(document);
         }
 
@@ -214,9 +211,9 @@ namespace Licenta.Areas.Admin.Controllers
                 TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", document.ClientId);
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Nume", document.ApplicationUserId);
-            ViewData["TipDocumentId"] = new SelectList(_context.TipDocument, "TipDocumentId", "Denumire", document.TipDocumentId);
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire", document.ClientId);
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers.OrderBy(x => x.Nume), "Id", "Nume", document.ApplicationUserId);
+            ViewData["TipDocumentId"] = new SelectList(_context.TipDocument.OrderBy(x => x.Denumire), "TipDocumentId", "Denumire", document.TipDocumentId);
             return View(documentVM);
         }
 

@@ -61,7 +61,7 @@ namespace Licenta.Areas.Admin.Views
         #region
         public IActionResult Create()
         {
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire");
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire");
             return View();
         }
 
@@ -77,7 +77,7 @@ namespace Licenta.Areas.Admin.Views
                 TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", solduriCasa.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire", solduriCasa.ClientId);
             return View(solduriCasa);
         }
 
@@ -93,7 +93,7 @@ namespace Licenta.Areas.Admin.Views
             {
                 return NotFound();
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", solduriCasa.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire", solduriCasa.ClientId);
             return View(solduriCasa);
         }
 
@@ -128,7 +128,7 @@ namespace Licenta.Areas.Admin.Views
                 TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", solduriCasa.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire", solduriCasa.ClientId);
             return View(solduriCasa);
         }
 

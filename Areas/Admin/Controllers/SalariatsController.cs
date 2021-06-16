@@ -59,7 +59,7 @@ namespace Licenta.Areas.Admin.Controllers
         #region
         public IActionResult Create()
         {
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire");
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire");
             return View();
         }
 
@@ -75,7 +75,7 @@ namespace Licenta.Areas.Admin.Controllers
                 TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire");
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire");
             return View(salariat);
         }
 
@@ -91,7 +91,7 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", salariat.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire", salariat.ClientId);
             return View(salariat);
         }
 
@@ -126,7 +126,7 @@ namespace Licenta.Areas.Admin.Controllers
                 TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", salariat.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire", salariat.ClientId);
             return View(salariat);
         }
        
@@ -246,7 +246,6 @@ namespace Licenta.Areas.Admin.Controllers
                 str = TestNullOrEmpty(salariat.Element("str").Value.ToString()),
                 nr = TestNullOrEmpty(salariat.Element("nr").Value.ToString()),
                 cod_post = TestNullOrEmpty(salariat.Element("cod_post").Value.ToString()),
-                // nr_contr = String.IsNullOrEmpty(salariat.Element("nr_contr").Value.ToString()) ? 0 : int.Parse(salariat.Element("nr_contr").Value),
                 d_contract = String.IsNullOrEmpty(salariat.Element("d_contract").Value.ToString()) ? DateTime.Now : DateTime.Parse(salariat.Element("d_contract").Value),
                 ClientId = clientId
             };

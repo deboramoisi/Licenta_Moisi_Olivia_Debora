@@ -37,7 +37,9 @@ namespace Licenta.Areas.Clienti.Controllers
         {
             var user = _userManager.GetUserAsync(User).Result;
             var salariati = _context.Salariat
+                .Include(x => x.Client)
                 .Where(x => x.ClientId == user.ClientId)
+                .OrderBy(x => x.Client.Denumire)
                 .ToList();
 
             CerereDocument cerere = new CerereDocument();

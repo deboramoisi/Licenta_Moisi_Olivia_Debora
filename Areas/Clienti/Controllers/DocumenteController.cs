@@ -103,7 +103,7 @@ namespace Licenta.Areas.Clienti.Controllers
                 .AsNoTracking()
                 .ToListAsync();
 
-            ViewData["TipDocumente"] = new SelectList(_context.TipDocument.ToList(), "TipDocumentId", "Denumire");
+            ViewData["TipDocumente"] = new SelectList(_context.TipDocument.OrderBy(x => x.Denumire).ToList(), "TipDocumentId", "Denumire");
 
             return View(documente);
         } 

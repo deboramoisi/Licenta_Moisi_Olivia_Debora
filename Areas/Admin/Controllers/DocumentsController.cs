@@ -159,9 +159,9 @@ namespace Licenta.Areas.Admin.Controllers
                 TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", document.ClientId);
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Nume", document.ApplicationUserId);
-            ViewData["TipDocumentId"] = new SelectList(_context.TipDocument, "TipDocumentId", "Denumire", document.TipDocumentId);
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire", document.ClientId);
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers.OrderBy(x => x.Nume), "Id", "Nume", document.ApplicationUserId);
+            ViewData["TipDocumentId"] = new SelectList(_context.TipDocument.OrderBy(x => x.Denumire), "TipDocumentId", "Denumire", document.TipDocumentId);
             return View(documentVM);
         }
         #endregion
@@ -191,9 +191,9 @@ namespace Licenta.Areas.Admin.Controllers
                 Data = document.Data
             };
 
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", document.ClientId);
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Nume", document.ApplicationUserId);
-            ViewData["TipDocumentId"] = new SelectList(_context.TipDocument, "TipDocumentId", "Denumire", document.TipDocumentId);
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire", document.ClientId);
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers.OrderBy(x => x.Nume), "Id", "Nume", document.ApplicationUserId);
+            ViewData["TipDocumentId"] = new SelectList(_context.TipDocument.OrderBy(x => x.Denumire), "TipDocumentId", "Denumire", document.TipDocumentId);
             return View(documentVM);
         }
 
@@ -240,9 +240,9 @@ namespace Licenta.Areas.Admin.Controllers
                 TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", document.ClientId);
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Nume", document.ApplicationUserId);
-            ViewData["TipDocumentId"] = new SelectList(_context.TipDocument, "TipDocumentId", "Denumire", document.TipDocumentId);
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire", document.ClientId);
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers.OrderBy(x => x.Nume), "Id", "Nume", document.ApplicationUserId);
+            ViewData["TipDocumentId"] = new SelectList(_context.TipDocument.OrderBy(x => x.Denumire), "TipDocumentId", "Denumire", document.TipDocumentId);
             return View(documentVM);
         }
 

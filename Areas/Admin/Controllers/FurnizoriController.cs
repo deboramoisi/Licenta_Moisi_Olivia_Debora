@@ -56,7 +56,7 @@ namespace Licenta.Areas.Admin.Controllers
         #region
         public IActionResult Create()
         {
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "CodCAEN");
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire");
             return View();
         }
 
@@ -72,7 +72,7 @@ namespace Licenta.Areas.Admin.Controllers
                 TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "CodCAEN", furnizori.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", furnizori.ClientId);
             return View(furnizori);
         }
 

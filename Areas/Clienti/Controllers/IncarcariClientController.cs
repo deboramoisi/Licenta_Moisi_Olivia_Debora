@@ -59,7 +59,7 @@ namespace Licenta.Areas.Clienti.Controllers
             };
             ViewData["UserId"] = user.UserName;
             ViewData["ClientId"] = _context.Client.Find(userClientId).Denumire;
-            ViewData["TipDocumentId"] = new SelectList(_context.TipDocument, "TipDocumentId", "Denumire");
+            ViewData["TipDocumentId"] = new SelectList(_context.TipDocument.OrderBy(x => x.Denumire), "TipDocumentId", "Denumire");
             return View(documentVM);
         }
 
@@ -100,7 +100,7 @@ namespace Licenta.Areas.Clienti.Controllers
             }
             ViewData["UserId"] = user.Nume;
             ViewData["ClientId"] = _context.Client.Find(document.ClientId).Denumire;
-            ViewData["TipDocumentId"] = new SelectList(_context.TipDocument, "TipDocumentId", "Denumire", document.TipDocumentId);
+            ViewData["TipDocumentId"] = new SelectList(_context.TipDocument.OrderBy(x => x.Denumire), "TipDocumentId", "Denumire", document.TipDocumentId);
             return View(documentVM);
         }
         #endregion
