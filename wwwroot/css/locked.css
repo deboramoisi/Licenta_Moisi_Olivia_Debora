@@ -1,0 +1,29 @@
+﻿body {
+    background-image: url("../img/locked.jpg");
+    color: #ffffe6;
+}
+
+#lockout-text {
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+#lockout-text p {
+    font-size: 20px;
+}
+
+#heading {
+    font-size: 70px;
+}
+
+#contact-link {
+    text-decoration: none;
+    color: #ffffe6;
+}
+
+    #contact-link:hover {
+        text-decoration: none;
+        color: #b3b3ff;
+    }

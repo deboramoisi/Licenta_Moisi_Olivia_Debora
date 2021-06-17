@@ -18,15 +18,18 @@ namespace Licenta.Areas.Admin.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public ApplicationUsersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+
+        public ApplicationUsersController(ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
-        // Index, Details
-        #region
         public async Task<IActionResult> Index()
         {
             return View(await _context.ApplicationUsers
@@ -34,25 +37,6 @@ namespace Licenta.Areas.Admin.Controllers
                                 .OrderBy(u => u.Nume)
                                 .ToListAsync());
         }
-
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.ApplicationUsers
-                .Include(b => b.Client)
-                .FirstOrDefaultAsync(m => m.ClientId == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }
-        #endregion
 
         // Edit
         #region 
@@ -71,7 +55,12 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            var userRole = await _userManager.GetRolesAsync(user);
+
             ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire).ToList(), "ClientId", "Denumire");
+            ViewData["Roluri"] = new SelectList(_roleManager.Roles.ToList(), "Name", "Name");
+            ViewBag.RolId = userRole[0];
+
             return View(user);
         }
 
@@ -94,6 +83,10 @@ namespace Licenta.Areas.Admin.Controllers
                     applicationUser.Nume = user.Nume;
                     applicationUser.PhoneNumber = user.PhoneNumber;
 
+                    var oldRole = _userManager.GetRolesAsync(applicationUser).Result;
+                    await _userManager.RemoveFromRolesAsync(applicationUser, oldRole);
+                    await _userManager.AddToRoleAsync(applicationUser, user.Rol);
+
                     _context.ApplicationUsers.Update(applicationUser);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -110,8 +103,12 @@ namespace Licenta.Areas.Admin.Controllers
                     }
                 }
             }
+            var userRole = await _userManager.GetRolesAsync(user);
 
             ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire).ToList(), "ClientId", "Denumire", user.ClientId);
+            ViewData["Roluri"] = new SelectList(_roleManager.Roles.ToList(), "Name", "Name", user.Rol);
+            ViewBag.RolId = userRole[0];
+
             return View(user);
         }
 

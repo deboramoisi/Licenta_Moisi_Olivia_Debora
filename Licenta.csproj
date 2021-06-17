@@ -38,4 +38,8 @@
     <Folder Include="wwwroot\xml\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\templates\EmailTemplates\PaymentConfirmation.html" />
+  </ItemGroup>
+
 </Project>

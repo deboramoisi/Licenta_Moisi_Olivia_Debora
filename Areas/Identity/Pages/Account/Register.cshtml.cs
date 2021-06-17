@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -12,6 +13,7 @@ using Licenta.Services.MailService;
 using Licenta.Utility;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +21,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using MimeKit;
 
 namespace Licenta.Areas.Identity.Pages.Account
 {
@@ -32,6 +35,7 @@ namespace Licenta.Areas.Identity.Pages.Account
         // Role Manager
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _env;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -39,7 +43,8 @@ namespace Licenta.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             Licenta.Services.MailService.IEmailSender emailSender,
             RoleManager<IdentityRole> roleManager,
-            ApplicationDbContext context)
+            ApplicationDbContext context,
+            IWebHostEnvironment env)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -47,6 +52,7 @@ namespace Licenta.Areas.Identity.Pages.Account
             _emailSender = emailSender;
             _roleManager = roleManager;
             _context = context;
+            _env = env;
         }
 
         [BindProperty]
@@ -179,9 +185,27 @@ namespace Licenta.Areas.Identity.Pages.Account
                         }
                     };
 
-                    var message = new Message(emailAddresses, "Confirmare Cont Contsal",
-                        $"Va rugam sa va confirmati adresa de mail aferent contului prin <strong><a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>click pe link-ul acesta</a></strong>." +
-                        $"Veti fi redirectionat inspre aplicatia noastra Contsal. Va multumim! <br/> <i>Echipa Contsal</i>");
+                    var webRoot = _env.WebRootPath;
+                    var pathToFile = _env.WebRootPath
+                            + Path.DirectorySeparatorChar.ToString()
+                            + "templates"
+                            + Path.DirectorySeparatorChar.ToString()
+                            + "EmailTemplates"
+                            + Path.DirectorySeparatorChar.ToString()
+                            + "EmailConfirmation.html";
+
+                    var builder = new BodyBuilder();
+                    using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+                    {
+                        builder.HtmlBody = SourceReader.ReadToEnd();
+                    }
+
+                    string messageBody = string.Format(builder.HtmlBody,
+                        user.Nume,
+                        HtmlEncoder.Default.Encode(callbackUrl)
+                        );
+
+                    var message = new Message(emailAddresses, "Confirmare cont mail ", messageBody);
                     _emailSender.SendEmail(message);
 
                     // sign in user after registration

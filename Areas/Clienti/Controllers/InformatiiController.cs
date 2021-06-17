@@ -1,15 +1,19 @@
 ﻿using Licenta.Data;
 using Licenta.Models.Notificari;
 using Licenta.Models.Plati;
+using Licenta.Services.MailService;
 using Licenta.Services.NotificationManager;
 using Licenta.Utility;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MimeKit;
 using Stripe;
 using Stripe.Checkout;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,12 +26,18 @@ namespace Licenta.Areas.Clienti.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly INotificationManager _notificationManager;
+        private readonly IWebHostEnvironment _env;
+        private readonly IEmailSender _emailSender; 
 
         public InformatiiController(ApplicationDbContext context,
-            INotificationManager notificationManager)
+            INotificationManager notificationManager,
+            IWebHostEnvironment env,
+            IEmailSender emailSender)
         {
             _context = context;
             _notificationManager = notificationManager;
+            _env = env;
+            _emailSender = emailSender;
         }
 
         public IActionResult Furnizori()
@@ -99,6 +109,7 @@ namespace Licenta.Areas.Clienti.Controllers
         [HttpGet]
         public async Task<ActionResult> OrderSuccess([FromQuery] string session_id, [FromQuery] int plata_id)
         {
+            var webRoot = _env.WebRootPath;
             var sessionService = new SessionService();
             Session session = sessionService.Get(session_id);
 
@@ -116,12 +127,41 @@ namespace Licenta.Areas.Clienti.Controllers
             // send notification of payment for admin
             Notificare notificare = new Notificare()
             {
-                Text = $"{User.Identity.Name} a achitat plata pentru serviciile pentru luna {plata.Data}"
+                Text = $"{User.Identity.Name} a achitat plata pentru serviciile pentru luna {plata.Data}",
+                RedirectToPage = "/Admin/Plata"
             };
             await _notificationManager.CreateAsyncNotificationForAdmin(notificare, _context.ApplicationUsers.First(x => x.Email.Contains("dana_moisi")).Id);
             // notificare redirectToPage
 
             // send mail with invoice
+            var pathToFile = _env.WebRootPath
+                    + Path.DirectorySeparatorChar.ToString()
+                    + "templates"
+                    + Path.DirectorySeparatorChar.ToString()
+                    + "EmailTemplates"
+                    + Path.DirectorySeparatorChar.ToString()
+                    + "PaymentConfirmation.html";
+
+            var builder = new BodyBuilder();
+            using(StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+            {
+                builder.HtmlBody = SourceReader.ReadToEnd();
+            }
+
+            string messageBody = string.Format(builder.HtmlBody,
+                User.Identity.Name,
+                plata.Suma,
+                plata.Data
+                );
+
+            IEnumerable<EmailAddress> emailAddresses = new List<EmailAddress>() {
+                        new EmailAddress() {
+                            Address = User.Identity.Name
+                        }
+                    };
+
+            var message = new Message(emailAddresses, "Plata cu succes servicii Contsal", messageBody);
+            _emailSender.SendEmail(message);
 
             return View(plata);
         }
@@ -154,8 +194,8 @@ namespace Licenta.Areas.Clienti.Controllers
                   },
                 },
                     Mode = "payment",
-                    SuccessUrl = "https://localhost:5001" + "/order/success?session_id={CHECKOUT_SESSION_ID}&plata_id=" + id,
-                    CancelUrl = "https://localhost:5001" + "/order/declined?session_id={CHECKOUT_SESSION_ID}&plata_id=" + id,
+                    SuccessUrl = "https://localhost:44342" + "/order/success?session_id={CHECKOUT_SESSION_ID}&plata_id=" + id,
+                    CancelUrl = "https://localhost:44342" + "/order/declined?session_id={CHECKOUT_SESSION_ID}&plata_id=" + id,
             };
             var service = new SessionService();
             // create transaction on the credit/debit card

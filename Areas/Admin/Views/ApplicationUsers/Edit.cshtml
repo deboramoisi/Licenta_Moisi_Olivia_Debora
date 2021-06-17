@@ -35,7 +35,7 @@
 
         <div class="form-group row">
             <div class="col-3">
-                <label asp-for="PhoneNumber"></label>
+                Telefon
             </div>
             <div class="col-6">
                 <input asp-for="PhoneNumber" class="form-control" />
@@ -53,14 +53,23 @@
             </div>
         </div>
 
-        @*<div class="form-group row">
+        <div class="form-group row">
             <div class="col-3">
                 <label asp-for="Rol"></label>
             </div>
             <div class="col-6">
-                <input value=@ViewBag.Rol class="form-control" readonly />
+                <input value="@ViewBag.RolId" class="form-control" readonly />
             </div>
-        </div>*@
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                Selectati alt rol
+            </div>
+            <div class="col-6">
+                <select asp-for="Rol" class="form-control" asp-items=@ViewBag.Roluri></select>
+            </div>
+        </div>
 
         <div class="form-group row">
             <div class="col-3">
