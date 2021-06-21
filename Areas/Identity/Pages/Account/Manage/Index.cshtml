@@ -5,74 +5,108 @@
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
-@* div PlaceHolder contine cod markup modal (incarcat), trebuie sa atasam modala DOM-ului *@
-<div id="PlaceHolderHereModal"></div>
-
-<h4>@ViewData["Title"]</h4>
+<br />
+<h4>Profilul dumneavoastra</h4>
 <partial name="_StatusMessage" model="Model.StatusMessage" />
+<p class="m-5"></p>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-8">
         <form id="profile-form" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Input.Nume"></label>
-                <input asp-for="Input.Nume" class="form-control" />
-                <span asp-validation-for="Input.Nume" class="text-danger"></span>
-            </div>
             
-            <div class="form-group">
-                <label asp-for="Username"></label>
-                <input asp-for="Username" class="form-control" disabled />
-            </div>  
-            
-            <div class="form-group">
-                <label asp-for="Input.ClientName"></label>
-                <input asp-for="Input.ClientName" class="form-control" disabled />
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Input.PhoneNumber"></label>
-                <input asp-for="Input.PhoneNumber" class="form-control" />
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Input.PozitieFirma"></label>
-                <input asp-for="Input.PozitieFirma" class="form-control" />
-                <span asp-validation-for="Input.PozitieFirma" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label>Rolul dumneavoastra</label>
-                <input asp-for="Input.Rol" class="form-control" disabled />
-            </div>
-            
-            <div>
-                <div class="form-group">
-                    <label asp-for="Input.Descriere"></label>
-                    <textarea asp-for="Input.Descriere" class="form-control"></textarea>
-                    <span asp-validation-for="Input.Descriere" class="text-danger"></span>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <label asp-for="Input.Nume"></label>
+                </div>
+                <div class="col-md-9">
+                    <input asp-for="Input.Nume" class="form-control" />
+                    <span asp-validation-for="Input.Nume" class="text-danger"></span>
                 </div>
             </div>
-            
-            <div class="form-group">
-                <strong>Incarcati poza noua de profil</strong>
-                <input asp-for="Input.ImageUrl" class="form-control" />
-                <span asp-validation-for="Input.ImageUrl" class="text-danger"></span>
+
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <label asp-for="Username"></label>
+                </div>
+                <div class="col-md-9">
+                    <input asp-for="Username" class="form-control" disabled />
+                </div>
             </div>
-            <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
+
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <label asp-for="Input.ClientName"></label>
+                </div>
+                <div class="col-md-9">
+                    <input asp-for="Input.ClientName" class="form-control" disabled />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-3">
+                    Telefon
+                </div>
+                <div class="col-md-9">
+                    <input asp-for="Input.PhoneNumber" class="form-control" />
+                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <label asp-for="Input.PozitieFirma"></label>
+                </div>
+                <div class="col-md-9">
+                    <input asp-for="Input.PozitieFirma" class="form-control" />
+                    <span asp-validation-for="Input.PozitieFirma" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <label>Rolul dumneavoastra</label>
+                </div>
+                <div class="col-md-9">
+                    <input asp-for="Input.Rol" class="form-control" disabled />
+                </div>
+            </div>
+
+            <div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <label asp-for="Input.Descriere"></label>
+                    </div>
+                    <div class="col-md-9">
+                        <textarea asp-for="Input.Descriere" class="form-control"></textarea>
+                        <span asp-validation-for="Input.Descriere" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <strong>Incarcati poza noua de profil</strong>
+                </div>
+                <div class="col-md-9">
+                    <input asp-for="Input.ImageUrl" class="form-control" />
+                    <span asp-validation-for="Input.ImageUrl" class="text-danger"></span>
+                </div>
+            </div>
+
+            <button id="update-profile-button" type="submit" class="btn btn-primary mb-2 form-control col-md-9 offset-md-3">Salvare</button>
         </form>
     </div>
 
     <form>
-        <div class="col-md-6 m-3">
+        <div class="col-md-6">
             <div class="form-group row">
                 <div class="col-md-12 offset-md-11">
                     <img src="@Model.profileImageUrl" width="250" height="400" alt="No image yet." />
-                    <button type="button" class="btn btn-outline-primary text-center mt-3" data-toggle="ajax-profile-modal" data-target="#editProfilePic" asp-page-handler="UpdateImage">
-                        <i class="fa fa-camera" aria-hidden="true"></i>&nbsp;&nbsp;Editare poza profil
-                    </button>
+
+                    <div class="mt-3">
+                        <a asp-area="Identity" asp-page="/Account/Manage/SetPassword">Resetare parola</a>
+                    </div>
                 </div>
             </div>
         </div>

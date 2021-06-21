@@ -97,6 +97,17 @@ function readNotification(id, target) {
 
 }
 
+function generatePassword() {
+    event.preventDefault();
+    $.get(
+        "/Admin/ApplicationUsers/GenerateRandomPassword",
+        function (data) {
+            $("#password").val(data);
+            $("#cfPassword").val(data);
+        }
+    );
+}
+
 // Formular Home
 $('#submitMailButton').click(function (event) {
 

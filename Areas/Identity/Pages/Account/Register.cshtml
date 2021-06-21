@@ -3,6 +3,7 @@
 @using Licenta.Utility
 @{
     ViewData["Title"] = "Register";
+    var admin = User.IsInRole(ConstantVar.Rol_Admin);
 }
 
 @section Styles {
@@ -37,18 +38,22 @@
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <input asp-for="Input.Password" class="form-control" placeholder="Parola" />
+                    <input asp-for="Input.Password" id="password" class="form-control" placeholder="Parola" />
+                    @if (admin)
+                    {
+                        <button onclick="generatePassword()" class="btn btn-dark">Generare parola</button>
+                    }
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Confirma parola" />
+                    <input asp-for="Input.ConfirmPassword" id="cfPassword" class="form-control" placeholder="Confirma parola" />
                     <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Telefon" />
                     <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
                 </div>
-                @if (User.IsInRole(ConstantVar.Rol_Admin))
+                @if (admin)
                 {
                     <div class="form-group">
                         <select asp-for="Input.ClientId" class="form-control" asp-items=@Model.Input.ClientList selected="Client"></select>

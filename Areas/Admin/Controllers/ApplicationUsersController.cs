@@ -9,6 +9,7 @@ using Licenta.Models;
 using Microsoft.AspNetCore.Authorization;
 using Licenta.Utility;
 using Microsoft.AspNetCore.Identity;
+using System.Text;
 
 namespace Licenta.Areas.Admin.Controllers
 {
@@ -144,6 +145,50 @@ namespace Licenta.Areas.Admin.Controllers
             }
         }
 
+        [HttpGet]
+        public string GenerateRandomPassword()
+        {
+            var options = _userManager.Options.Password;
+
+            int passLength = options.RequiredLength;
+
+            bool nonAlphanumeric = options.RequireNonAlphanumeric;
+            bool digits = options.RequireDigit;
+            bool lowercase = options.RequireLowercase;
+            bool uppercase = options.RequireUppercase;
+
+            StringBuilder password = new StringBuilder();
+            Random random = new Random();
+
+            // generate minimum Length password
+            while (password.Length < passLength)
+            {
+                char character = (char)random.Next(32, 126);
+
+                password.Append(character);
+
+                if (char.IsDigit(character))
+                    digits = false;
+                else if (char.IsLower(character))
+                    lowercase = false;
+                else if (char.IsUpper(character))
+                    uppercase = false;
+                else if (!char.IsLetterOrDigit(character))
+                    nonAlphanumeric = false;
+            }
+
+            if (nonAlphanumeric)
+                password.Append((char)random.Next(33, 48));
+            if (digits)
+                password.Append((char)random.Next(48, 58));
+            if (lowercase)
+                password.Append((char)random.Next(97, 123));
+            if (uppercase)
+                password.Append((char)random.Next(65, 91));
+
+            return password.ToString();
+        }
+
         [HttpPost]
         public IActionResult LockUnlock([FromBody] string id)
         {
@@ -166,6 +211,8 @@ namespace Licenta.Areas.Admin.Controllers
             return Json(new { success = true, message = "Operation Successful!" });
         }
         #endregion
+
+
 
     }
 }

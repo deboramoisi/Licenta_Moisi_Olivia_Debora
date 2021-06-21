@@ -151,8 +151,9 @@ namespace Licenta.Areas.Admin.Controllers
             var allChats = _context.Chats
                 .Include(x => x.Users)
                     .ThenInclude(x => x.ApplicationUser)
-                .Where(x => x.Users
-                        .Any(y => y.ApplicationUserId == user.Id))
+                .Where(x => x.Users.Any(y => y.ApplicationUserId == user.Id) 
+                         && x.Tip.Equals("0"))
+                .OrderBy(x => x.Users.First(x => x.Role != 0))
                 .ToList();
 
             var chatVM = new ChatVM

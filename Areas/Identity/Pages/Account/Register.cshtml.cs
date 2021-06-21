@@ -142,7 +142,7 @@ namespace Licenta.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    _logger.LogInformation("Utilizatorul si-a creat un cont nou cu parola.");
 
                     // Check if the role exists
                     if (!await _roleManager.RoleExistsAsync(ConstantVar.Rol_Admin))
@@ -162,15 +162,48 @@ namespace Licenta.Areas.Identity.Pages.Account
                         await _roleManager.CreateAsync(new IdentityRole(ConstantVar.Rol_Angajat));
                     }
 
+                    IEnumerable<EmailAddress> emailAddresses = new List<EmailAddress>() {
+                        new EmailAddress() {
+                            Address = user.Email
+                        }
+                    };
+
+                    var pathToFile = _env.WebRootPath
+                            + Path.DirectorySeparatorChar.ToString()
+                            + "templates"
+                            + Path.DirectorySeparatorChar.ToString()
+                            + "EmailTemplates"
+                            + Path.DirectorySeparatorChar.ToString();
+
+                    var builder = new BodyBuilder();
+
                     if (user.Rol == null)
                     {
                         await _userManager.AddToRoleAsync(user, ConstantVar.Rol_User_Individual);    
                     }
                     else
                     {
+                        // trimitere mail cu credentialele utilizatorului, deoarece contul este creat de administrator
+                        using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile + "RegisterCredentials.html"))
+                        {
+                            builder.HtmlBody = SourceReader.ReadToEnd();
+                        }
+
+                        string messageBodyCredentials = string.Format(builder.HtmlBody,
+                            user.Nume,
+                            _context.Client.FirstOrDefault(x=>x.ClientId == user.ClientId).Denumire,
+                            user.Email,
+                            Input.Password
+                            );
+
+                        var messageCredentials = new Message(emailAddresses, "Credentiale cont platforma Contsal", messageBodyCredentials);
+                        _emailSender.SendEmail(messageCredentials);
+
                         await _userManager.AddToRoleAsync(user, user.Rol);
+
                     }
 
+                    // Confirmation Mail
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
@@ -179,23 +212,8 @@ namespace Licenta.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    IEnumerable<EmailAddress> emailAddresses = new List<EmailAddress>() {
-                        new EmailAddress() {
-                            Address = user.Email
-                        }
-                    };
-
-                    var webRoot = _env.WebRootPath;
-                    var pathToFile = _env.WebRootPath
-                            + Path.DirectorySeparatorChar.ToString()
-                            + "templates"
-                            + Path.DirectorySeparatorChar.ToString()
-                            + "EmailTemplates"
-                            + Path.DirectorySeparatorChar.ToString()
-                            + "EmailConfirmation.html";
-
-                    var builder = new BodyBuilder();
-                    using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+                    builder = new BodyBuilder();
+                    using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile + "EmailConfirmation.html"))
                     {
                         builder.HtmlBody = SourceReader.ReadToEnd();
                     }
@@ -233,8 +251,8 @@ namespace Licenta.Areas.Identity.Pages.Account
                 }
             }
 
-            // If we got this far, something failed, redisplay form
             return Page();
         }
+
     }
 }

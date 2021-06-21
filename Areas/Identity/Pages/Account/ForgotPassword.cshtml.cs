@@ -6,11 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Licenta.Models;
+using Licenta.Services.MailService;
 
 namespace Licenta.Areas.Identity.Pages.Account
 {
@@ -20,7 +20,8 @@ namespace Licenta.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
 
-        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<ApplicationUser> userManager,
+            IEmailSender emailSender)
         {
             _userManager = userManager;
             _emailSender = emailSender;
@@ -57,10 +58,15 @@ namespace Licenta.Areas.Identity.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
-                await _emailSender.SendEmailAsync(
-                    Input.Email,
-                    "Reset Password",
+                IEnumerable<EmailAddress> emailAddresses = new List<EmailAddress>() {
+                        new EmailAddress() {
+                            Address = user.Email
+                        }
+                    };
+
+                var message = new Message(emailAddresses, "Resetare parola", 
                     $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                _emailSender.SendEmail(message);
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

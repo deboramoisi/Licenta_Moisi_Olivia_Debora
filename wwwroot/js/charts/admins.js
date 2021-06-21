@@ -1,4 +1,4 @@
-﻿var selectedClient = 1;
+﻿var selectedClient = 79;
 var selectedName = "Contsal";
 var selectedYear = 2020;
 var solduri = [[]];
