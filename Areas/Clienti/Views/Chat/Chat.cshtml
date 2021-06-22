@@ -1,6 +1,5 @@
-﻿@model Licenta.Models.Chat.Chat
+﻿@model Licenta.ViewModels.ChatVM
 @using System.Security.Claims;
-
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -17,20 +16,57 @@
 }
 
 <div class="wrapper row">
-    <div class="chat-body-user">
-        <div class="chat-input-user">
-            <div class="chat-body">
+    <!-- Side Menu -->
+    <div class="side-menu col-3">
+        <a id="grupuriArea" data-toggle="collapse" href="#grupuri" role="button" aria-expanded="false" aria-controls="grupuri">
+            Grupuri &nbsp; <i class='fas fa-angle-double-down'></i>
+
+        </a>
+        <div class="row">
+            <div class="col">
+                <div class="collapse multi-collapse" id="grupuri">
+                    @foreach (var chat in Model.Grupuri)
+                    {
+                        <div class="user-chat">
+                            <a asp-controller="Chat" asp-action="Chat" asp-route-id="@chat.ChatId">
+                                @chat.Nume
+                                <i class="fas fa-angle-double-right col-1"></i>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Body -->
+    <div id="chatBody" class="col-9">
+        <div class="chat-body">
+            <div>
                 <h3 class="p-2 mt-4 mb-3">
                     <i class="far fa-user"></i> &nbsp;&nbsp;
-                    @Model.Users.Where(x => x.ApplicationUserId != User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault().ApplicationUser.UserName.Split("@")[0]
+                    @if (Model.Chat.Tip.Equals(Licenta.Models.Chat.TipChat.Privat))
+                    {
+                        @Model.Chat.Users.Where(x => x.ApplicationUserId != User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault().ApplicationUser.UserName.Split("@")[0]
+                    }
+                    else
+                    {
+                        @foreach (var user in Model.Chat.Users)
+                        {
+                            @user.ApplicationUser.Nume
+                            @:,
+                        }
+                    }
                 </h3>
+            </div>
 
-            @foreach (var message in Model.Mesaje)
+            @foreach (var message in Model.Chat.Mesaje)
             {
                 if (message.Nume == userName)
                 {
                     messageClass = senderMessage;
-                } else
+                }
+                else
                 {
                     messageClass = receiverMessage;
                 }
@@ -40,26 +76,53 @@
                     <footer>@message.Data</footer>
                 </div>
             }
+
+        </div>
+
+        @*<div class="chat-body-user">
+            <div class="chat-input-user">
+                <div class="chat-body">
+                    <h3 class="p-2 mt-4 mb-3">
+                        <i class="far fa-user"></i> &nbsp;&nbsp;
+                        @Model.Chat.Users.Where(x => x.ApplicationUserId != User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault().ApplicationUser.UserName.Split("@")[0]
+                    </h3>
+
+                    @foreach (var message in Model.Chat.Mesaje)
+                    {
+                        if (message.Nume == userName)
+                        {
+                            messageClass = senderMessage;
+                        }
+                        else
+                        {
+                            messageClass = receiverMessage;
+                        }
+                        <div class="@messageClass">
+                            <header>@message.Nume.Split("@")[0]: &nbsp;</header>
+                            <p>@message.Text</p>
+                            <footer>@message.Data</footer>
+                        </div>
+                    }
+                </div>*@
+
+                <form asp-controller="Chat" asp-action="CreateMessage" onsubmit="sendMessage()" class="chat-input">
+                    <input type="hidden" value="@Model.Chat.ChatId" name="roomId" />
+                    <input type="hidden" value="@Model.Chat.Nume" name="roomName" />
+                    <div class="form-group row m-2">
+                        <input type="text" name="message" id="message-input" class="col-10 form-control" />
+                        <button type="submit" class="col-1 form-control p-2 ml-2 btn btn-secondary"><i class="far fa-paper-plane"></i></button>
+                    </div>
+
+                </form>
             </div>
-
-            <form asp-controller="Chat" asp-action="CreateMessage" onsubmit="sendMessage()" class="chat-input">
-                <input type="hidden" value="@Model.ChatId" name="roomId" />
-                <input type="hidden" value="@Model.Nume" name="roomName" />
-                <div class="form-group row m-2">
-                    <input type="text" name="message" id="message-input" class="col-10 form-control" />
-                    <button type="submit" class="col-1 form-control p-2 ml-2 btn btn-secondary"><i class="far fa-paper-plane"></i></button>
-                </div>
-
-            </form>
         </div>
     </div>
-</div>
 
-@section Scripts {
-    <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
-    <script type="text/javascript">
-        var roomId = "@Model.ChatId";
+    @section Scripts {
+        <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
+        <script type="text/javascript">
+        var roomId = "@Model.Chat.ChatId";
         var loggedUser = "@User.Identity.Name";
-    </script>
-    <script src="~/js/chat/myChat.js"></script>
-} 
+        </script>
+        <script src="~/js/chat/myChat.js"></script>
+    }

@@ -89,13 +89,24 @@ var sendMessage = function () {
 
 // Schimbare sageti de expansiune
 var utilizatoriArea = $("#utilizatoriArea");
+var grupuriArea = $("#grupuriArea");
 
 utilizatoriArea.on("click", function () {
     var ariaExpanded = utilizatoriArea.prop("ariaExpanded");
 
     if (ariaExpanded === "true") {
-        utilizatoriArea.html("Utilizatori &nbsp; <i class='fas fa-angle-double-down'></i>");
+        utilizatoriArea.html(`Utilizatori &nbsp; <i class='fas fa-angle-double-down'></i>`);
     } else {
-        utilizatoriArea.html("Utilizatori &nbsp; <i class='fas fa-angle-double-up'></i>");
+        utilizatoriArea.html(`Utilizatori &nbsp; <i class='fas fa-angle-double-up'></i>`);
+    }
+});
+
+grupuriArea.on("click", function () {
+    var ariaExpanded = grupuriArea.prop("ariaExpanded");
+
+    if (ariaExpanded === "true") {
+        grupuriArea.html(`Grupuri &nbsp; <i class='fas fa-angle-double-down'></i>`);
+    } else {
+        grupuriArea.html(`Grupuri &nbsp; <i class='fas fa-angle-double-up'></i>`);
     }
 });

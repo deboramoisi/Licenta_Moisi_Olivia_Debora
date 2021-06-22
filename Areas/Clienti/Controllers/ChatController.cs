@@ -1,9 +1,11 @@
 ﻿using Licenta.Data;
 using Licenta.Hubs;
 using Licenta.Models;
+using Licenta.Models.Chat;
 using Licenta.Models.Notificari;
 using Licenta.Services.ChatManager;
 using Licenta.Services.NotificationManager;
+using Licenta.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -123,7 +125,7 @@ namespace Licenta.Areas.Clienti.Controllers
         }
 
         [HttpGet("[action]")]
-        public IActionResult Chat()
+        public IActionResult Chat(int? id)
         {
             var user = _context.ApplicationUsers
                 .Include(x => x.Chats)
@@ -141,13 +143,36 @@ namespace Licenta.Areas.Clienti.Controllers
                 chatId = _context.ChatUsers.FirstOrDefault(x => x.ApplicationUserId == user.Id).ChatId;
             }
 
-            var chat = _context.Chats
-                .Include(x => x.Mesaje)
-                .Include(x => x.Users)
-                    .ThenInclude(x => x.ApplicationUser)
-                .FirstOrDefault(x => x.ChatId == chatId);
+            var chat = new Chat();
+            if (id == null)
+            {
+                chat = _context.Chats
+                    .Include(x => x.Mesaje)
+                    .Include(x => x.Users)
+                        .ThenInclude(x => x.ApplicationUser)
+                    .FirstOrDefault(x => x.ChatId == chatId);
+            } else
+            {
+                chat = _context.Chats
+                    .Include(x => x.Mesaje)
+                    .Include(x => x.Users)
+                        .ThenInclude(x => x.ApplicationUser)
+                    .FirstOrDefault(x => x.ChatId == id);
+            }
 
-            return View(chat);
+            var grupuri = _context.Chats
+               .Include(x => x.Users)
+                    .ThenInclude(x => x.ApplicationUser)
+                .Where(x => x.Users.Any(y => y.ApplicationUserId == user.Id) && x.Tip.Equals(TipChat.Grup))
+                .ToList();
+
+            ChatVM chatVM = new ChatVM
+            {
+                Chat = chat,
+                Grupuri = grupuri
+            };
+
+            return View(chatVM);
         }
 
         [HttpGet("[action]")]

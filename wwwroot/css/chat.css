@@ -13,13 +13,13 @@
     flex-direction: column;
     background-color: grey;
     width: 20vw;
-    min-height: 100vh;
+    min-height: 97vh;
     border-radius: 7px 0px 0px 7px;
 }
 
 .chat-body {
-    width: 80vw;
-    min-height: 100vh;
+    width: 60vw;
+    min-height: 97vh;
     display: flex;
     flex-direction: column;
 }
@@ -59,7 +59,7 @@
     }
 
 #chatBody {
-    min-height: 100vh;
+    min-height: 97vh;
     background: url("/img/chat-bg.png");
     background-repeat: repeat;
     border-radius: 0px 7px 7px 0px;
@@ -67,8 +67,8 @@
 }
 
 .chat-body-user {
-    width: 100vw;
-    min-height: 100vh;
+    width: 60vw;
+    min-height: 97vh;
     background: url("/img/chat-bg.png");
     background-repeat: repeat;
     border-radius: 7px 7px;
@@ -83,7 +83,7 @@
     padding-left: 10px;
 }
 
-#utilizatoriArea {
+#utilizatoriArea, #grupuriArea {
     font-size: 24px;
     padding: 8px;
     margin: 24px 0px 16px;
@@ -106,4 +106,11 @@
     color: black;
     border-radius: 8px 8px 8px 0px;
     justify-content: flex-start;
+}
+
+.scroll {
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 2%;
+    margin: 0 auto;
 }

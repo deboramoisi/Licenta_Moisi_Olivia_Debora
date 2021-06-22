@@ -12,6 +12,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Licenta.Utility;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Licenta.Areas.Admin.Controllers
 {
@@ -148,18 +149,23 @@ namespace Licenta.Areas.Admin.Controllers
                     .ThenInclude(x => x.ApplicationUser)
                 .FirstOrDefault(x => x.ChatId == id);
 
-            var allChats = _context.Chats
+            var utilizatoriPrivati = _context.Chats
                 .Include(x => x.Users)
                     .ThenInclude(x => x.ApplicationUser)
-                .Where(x => x.Users.Any(y => y.ApplicationUserId == user.Id) 
-                         && x.Tip.Equals("0"))
-                .OrderBy(x => x.Users.First(x => x.Role != 0))
+                .Where(x => x.Users.Any(y => y.ApplicationUserId == user.Id) && x.Tip.Equals(TipChat.Privat))
+                .ToList();
+
+            var grupuri = _context.Chats
+                .Include(x => x.Users)
+                    .ThenInclude(x => x.ApplicationUser)
+                .Where(x => x.Users.Any(y => y.ApplicationUserId == user.Id) && x.Tip.Equals(TipChat.Grup))
                 .ToList();
 
             var chatVM = new ChatVM
             {
                 Chat = chat,
-                AllChats = allChats
+                Private = utilizatoriPrivati,
+                Grupuri = grupuri
             };
 
             return View(chatVM);
@@ -177,5 +183,54 @@ namespace Licenta.Areas.Admin.Controllers
 
             return View(chats);
         }
+
+        // Add grup modal
+        #region
+        [HttpGet("[action]")]
+        public IActionResult CreateGroup()
+        {
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers.OrderBy(u => u.Nume).ToList(), "Id", "Nume");
+            return PartialView("_AddChatRoom");
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CreateGroupAsync(ChatRoomVM chatRoomVM)
+        {
+            if (ModelState.IsValid)
+            {
+                Chat chat = new Chat
+                {
+                    Tip = TipChat.Grup,
+                    Nume = chatRoomVM.Name
+                };
+
+                _context.Chats.Add(chat);
+                await _context.SaveChangesAsync();
+
+                foreach (var user in chatRoomVM.Users)
+                {
+                    var chatUser = new ChatUser();
+                    chatUser.ApplicationUserId = user;
+                    chatUser.ChatId = chat.ChatId;
+
+                    if (await _userManager.IsInRoleAsync(_context.ApplicationUsers.First(x => x.Id == user), ConstantVar.Rol_Admin))
+                    {
+                        chatUser.Role = UserChatRole.Admin;
+                    }
+                    else
+                    {
+                        chatUser.Role = UserChatRole.Membru;
+                    }
+
+                    chat.Users.Add(chatUser);
+                    _context.ChatUsers.Add(chatUser);
+                }
+                await _context.SaveChangesAsync();
+            }
+
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers.OrderBy(u => u.Nume).ToList(), "Id", "Nume");
+            return PartialView("_AddChatRoom");
+        }
+        #endregion
     }
 }

@@ -1,7 +1,6 @@
 ﻿@model Licenta.ViewModels.ChatVM
 @using System.Security.Claims;
 
-
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Chat";
@@ -16,7 +15,11 @@
     <link rel="stylesheet" href="~/css/chat.css" />
 }
 
+<!-- Modal Placeholder -->
+<div id="chatRoom-modal"></div>
+
 <div class="wrapper row">
+    <!-- Side Menu -->
     <div class="side-menu col-3">
         <a id="utilizatoriArea" data-toggle="collapse" href="#utilizatori" role="button" aria-expanded="false" aria-controls="utilizatori">
             Utilizatori &nbsp; <i class='fas fa-angle-double-down'></i>
@@ -25,7 +28,7 @@
         <div class="row">
             <div class="col">
                 <div class="collapse multi-collapse" id="utilizatori">
-                    @foreach (var chat in Model.AllChats)
+                    @foreach (var chat in Model.Private)
                     {
                         <div class="user-chat">
                             <a asp-controller="Chat" asp-action="Chat" asp-route-id="@chat.ChatId">
@@ -34,18 +37,69 @@
                             </a>
                         </div>
                     }
+                    <div class="user-chat">
+                        <button type="button" class="btn btn-outline-secondary" data-toggle="ajax-chatRoom-modal" data-target="#add-chatRoom">
+                            <i class="fas fa-plus-circle"></i>&nbsp;&nbsp; Creeaza camera privata
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a id="grupuriArea" data-toggle="collapse" href="#grupuri" role="button" aria-expanded="false" aria-controls="grupuri">
+            Grupuri &nbsp; <i class='fas fa-angle-double-down'></i>
+
+        </a>
+        <div class="row">
+            <div class="col">
+                <div class="collapse multi-collapse" id="grupuri">
+                    @foreach (var chat in Model.Grupuri)
+                    {
+                        <div class="user-chat">
+                            <a asp-controller="Chat" asp-action="Chat" asp-route-id="@chat.ChatId">
+                                @chat.Nume
+                                <i class="fas fa-angle-double-right col-1"></i>
+                            </a>
+                        </div>
+                    }
+                <div class="user-chat">
+                    <button type="button" class="btn btn-outline-secondary" data-toggle="ajax-chatRoom-modal" data-target="#add-chatRoom">
+                        <i class="fas fa-plus-circle"></i>&nbsp;&nbsp; Creeaza grup
+                    </button>
+                </div>
                 </div>
             </div>
         </div>
     </div>
 
-
+    <!-- Chat Body -->
     <div id="chatBody" class="col-9">
         <div class="chat-body">
             <div>
                 <h3 class="p-2 mt-4 mb-3">
                     <i class="far fa-user"></i> &nbsp;&nbsp;
-                    @Model.Chat.Users.Where(x => x.ApplicationUserId != User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault().ApplicationUser.UserName.Split("@")[0]
+                    @if (Model.Chat.Tip.Equals(Licenta.Models.Chat.TipChat.Privat))
+                    {
+                        @Model.Chat.Users.Where(x => x.ApplicationUserId != User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault().ApplicationUser.UserName.Split("@")[0]
+                    }
+                    else
+                    {
+                        @foreach (var user in Model.Chat.Users)
+                        {
+                            @user.ApplicationUser.Nume
+                            @: &nbsp;
+                        }
+
+                        // Stergere grup
+                        <span class="dropdown text-right">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                            <span class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Sterge grup</a>
+                            </span>
+                        </span>
+                    }
                 </h3>
             </div>
 
@@ -68,6 +122,7 @@
 
         </div>
 
+        <!-- Chat Input -->
         <form asp-controller="Chat" asp-action="CreateMessage" onsubmit="sendMessage()" class="chat-input">
             <input type="hidden" value="@Model.Chat.ChatId" name="roomId" />
             <input type="hidden" value="@Model.Chat.Nume" name="roomName" />
@@ -88,4 +143,5 @@
         var loggedUser = "@User.Identity.Name";
     </script>
     <script src="~/js/chat/myChat.js"></script>
+    <script src="~/js/chat/chatRoom.js"></script>
 } 

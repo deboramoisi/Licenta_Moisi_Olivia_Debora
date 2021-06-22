@@ -1,11 +1,9 @@
 ﻿$(function () {
 
     var placeholderElement = $('#chatRoom-modal');
-    // la click pe buton adaugare categorie noua
     $('button[data-toggle="ajax-chatRoom-modal"]').click(function (event) {
 
-        // cerere ajax Get - controller Create
-        $.get("/Clienti/Chat/CreateRoomModal").done(function (data) {
+        $.get("/Chat/CreateGroup").done(function (data) {
             placeholderElement.html(data);
             placeholderElement.find('.modal').modal('show');
         });
@@ -16,11 +14,26 @@
         event.preventDefault();
 
         var form = $(this).parents('.modal').find('form');
-        var actionUrl = "/Clienti/Chat/CreateRoomModal";
+
+        var selected_values = new Array();
+        selected_values = []; // initialize empty array
+        var list = $(".users-list option:selected");
+        var listSeparated = list.map(function () {
+            selected_values.push(this.value);
+        });
+
+        console.log(selected_values.length);
+        selected_values.forEach(function (value, index) {
+            console.log(value);
+        });
+
+        $(".users-list:checked").each(function () {
+                selected_values.push($(this).val());
+            });
+
+        var actionUrl = "/Chat/CreateGroup";
         var dataToSend = form.serialize();
 
-        // ajax post action Create din QuestionCategories controller
-        // trimitem datele serializate
         $.post(actionUrl, dataToSend).done(function (data) {
             var newBody = $('.modal-body', data);
             placeholderElement.find('.modal-body').replaceWith(newBody);
