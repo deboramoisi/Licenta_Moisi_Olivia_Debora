@@ -43,7 +43,39 @@
                 placeholderElement.find('.modal').modal('hide');
 
                 toastrAlert("success", "Camera adaugata cu succes");
+                window.location.reload();
             }
         });
     })
+});
+
+$("#deleteGroupButton").on('click', function () {
+
+    swal({
+        title: "Sunteti sigur?",
+        text: "In urma stergerii, datele nu vor putea fi recuperate!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+    }).then((sterge) => {
+        if (sterge) {
+            console.log(sterge);
+            $.ajax({
+                type: "GET",
+                url: "/Chat/DeleteGroup?id=" + roomId,
+                success: function (data) {
+                    if (data.success) {
+                        window.location.href = "/Chat/Chat/" + data.chatId;
+                        toastr.success(data.message);
+                    }
+                    else {
+                        toastr.error(data.message);
+                    }
+                }, 
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        }
+    });
 });

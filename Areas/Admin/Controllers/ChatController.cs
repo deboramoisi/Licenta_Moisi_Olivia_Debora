@@ -184,7 +184,7 @@ namespace Licenta.Areas.Admin.Controllers
             return View(chats);
         }
 
-        // Add grup modal
+        // Create group modal; delete group
         #region
         [HttpGet("[action]")]
         public IActionResult CreateGroup()
@@ -230,6 +230,26 @@ namespace Licenta.Areas.Admin.Controllers
 
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers.OrderBy(u => u.Nume).ToList(), "Id", "Nume");
             return PartialView("_AddChatRoom");
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> DeleteGroup(int? id)
+        {
+            Chat chat = _context.Chats.Find(id.Value);
+            var user = await _userManager.GetUserAsync(User);
+            var chatUser = _context.ChatUsers.First(x => x.ApplicationUserId == user.Id);
+            var chatToOpen = await _context.Chats.FirstOrDefaultAsync(x => x.Users.Contains(chatUser));
+
+            if (chat != null)
+            {
+                _context.Chats.Remove(chat);
+                await _context.SaveChangesAsync();
+                return Json(new { success = true, message = "Grupul a fost sters cu succes!", chatId = chatToOpen.ChatId});
+            } 
+            else
+            {
+                return Json(new { success = false, message = "Grupul nu a fost gasit!" });
+            }
         }
         #endregion
     }

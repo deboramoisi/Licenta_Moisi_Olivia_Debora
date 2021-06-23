@@ -72,6 +72,7 @@ function notificationPopover() {
     $('body').append("<div id='notification-content'></div>")
 }
 
+// Read Notification and redirect To Url
 function readNotification(id, target) {
 
     $.ajax({
