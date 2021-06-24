@@ -51,7 +51,7 @@
                     <i class="far fa-user"></i> &nbsp;&nbsp;
                     @if (privateRoom)
                     {
-                        @Model.Chat.Users.Where(x => x.ApplicationUserId != User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault().ApplicationUser.UserName.Split("@")[0]
+                        @Model.Chat.Users.FirstOrDefault(x => x.ApplicationUserId != userId).ApplicationUser.Nume
                     }
                     else
                     {

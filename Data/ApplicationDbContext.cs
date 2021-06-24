@@ -25,15 +25,12 @@ namespace Licenta.Data
         public DbSet<QuestionCategory> QuestionCategory { get; set; }
         public DbSet<Question> Question { get; set; }
         public DbSet<Response> Response { get; set; }
-        public DbSet<Furnizori> Furnizori { get; set; }
         public DbSet<SolduriCasa> SolduriCasa { get; set; }
         public DbSet<ProfitPierdere> ProfitPierdere { get; set; }
 
         public DbSet<Chat> Chats { get; set; }
         public DbSet<ChatUser> ChatUsers { get; set; }
         public DbSet<Mesaj> Mesaje { get; set; }
-
-        public DbSet<Message> Messages { get; set; }
 
         public DbSet<TipPlata> TipPlati { get; set; }
         public DbSet<Plata> Plati { get; set; }

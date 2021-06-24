@@ -2,36 +2,29 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Licenta.Models;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Licenta.Data;
-using Licenta.Models.Chat;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using Licenta.Areas.Clienti.Models;
 using Licenta.Services.MailService;
 using System.Collections.Generic;
+using System.IO;
 using MimeKit;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Licenta.Areas.Clienti.Controllers
 {
     [Area("Clienti")]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ApplicationDbContext _context;
         private readonly IEmailSender _emailSender;
+        private readonly IWebHostEnvironment _env;
 
-        public HomeController(ILogger<HomeController> logger,
-            UserManager<ApplicationUser> userManager,
-            ApplicationDbContext context,
-            IEmailSender emailSender)
+
+        public HomeController(IEmailSender emailSender,
+            IWebHostEnvironment env)
         {
-            _logger = logger;
-            _userManager = userManager;
-            _context = context;
             _emailSender = emailSender;
+            _env = env;
         }
 
         public IActionResult Index()
@@ -39,48 +32,39 @@ namespace Licenta.Areas.Clienti.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Create(Licenta.Models.Chat.Message message)
-        {
-            if (ModelState.IsValid)
-            {
-                message.UserName = User.Identity.Name;
-                var sender = await _userManager.GetUserAsync(User);
-                message.UserId = sender.Id;
-                // adaugam mesajul cu toate informatiile
-                await _context.AddAsync(message);
-                await _context.SaveChangesAsync();
-                return Ok();
-            }
-            return Error();
-        }
-
-        public async Task<IActionResult> Chat()
-        {
-            var currentUser = await _userManager.GetUserAsync(User);
-            var messages = await _context.Messages.OrderBy(m => m.When).ToListAsync();
-            if (User.Identity.IsAuthenticated)
-            {
-                ViewBag.CurrentUserName = currentUser.UserName;
-                return View(messages);
-            }
-            else
-            {
-                // Pentru return spre Login
-                return LocalRedirect("/Identity/Account/Login");
-            }
-
-        }
-
         [HttpPost]
         public IActionResult SendForm(HomeFormVM form)
         {
-            IEnumerable<EmailAddress> emails = new List<EmailAddress>() { 
-                new EmailAddress{ Address = "deboramoisi@yahoo.com", DisplayName = "Debi" }
-            };
-
+            // formare mail
             if (ModelState.IsValid)
             {
-                var message = new Licenta.Services.MailService.Message(emails, form.Subiect, form.Mesaj + " Email: " + form.Email);
+                var pathToFile = _env.WebRootPath
+                    + Path.DirectorySeparatorChar.ToString()
+                    + "templates"
+                    + Path.DirectorySeparatorChar.ToString()
+                    + "EmailTemplates"
+                    + Path.DirectorySeparatorChar.ToString()
+                    + "EmailHomeForm.html";
+
+                var builder = new BodyBuilder();
+                using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+                {
+                    builder.HtmlBody = SourceReader.ReadToEnd();
+                }
+
+                string messageBody = string.Format(builder.HtmlBody,
+                    form.Subiect,
+                    form.Mesaj,
+                    form.Nume,
+                    form.Email
+                    );
+
+                IEnumerable<EmailAddress> emailAddresses = new List<EmailAddress>() {
+                    new EmailAddress{ Address = "deboramoisi@yahoo.com", DisplayName = "Contsal SRL - Debora Moisi" }
+                };
+
+                var message = new Message(emailAddresses, form.Subiect, messageBody);
+
                 try
                 {
                     _emailSender.SendEmail(message);

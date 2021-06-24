@@ -56,25 +56,6 @@ namespace Licenta.Areas.Clienti.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetFurnizori()
-        {
-            try
-            {
-                var user = _context.ApplicationUsers.FirstOrDefault(u => u.UserName == User.Identity.Name);
-                var furnizori = await _context.Furnizori
-                    .Where(u => u.ClientId == user.ClientId)
-                    .OrderBy(u => u.denumire)
-                    .AsNoTracking()
-                    .ToListAsync();
-                return Json(new { data = furnizori });
-            }
-            catch
-            {
-                return Json(new { data = 0 });
-            }
-        }
-
-        [HttpGet]
         public async Task<IActionResult> GetSalariati()
         {
             var user = _context.ApplicationUsers.FirstOrDefault(u => u.UserName == User.Identity.Name);

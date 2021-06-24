@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Licenta.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210604143037_RemoveColumnsFromClient2")]
-    partial class RemoveColumnsFromClient2
+    [Migration("20210624170506_RemoveFurnizori")]
+    partial class RemoveFurnizori
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -141,34 +141,6 @@ namespace Licenta.Data.Migrations
                     b.ToTable("Mesaje");
                 });
 
-            modelBuilder.Entity("Licenta.Models.Chat.Message", b =>
-                {
-                    b.Property<int>("MessageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("When")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("MessageId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Messages");
-                });
-
             modelBuilder.Entity("Licenta.Models.Client", b =>
                 {
                     b.Property<int>("ClientId")
@@ -223,31 +195,6 @@ namespace Licenta.Data.Migrations
                     b.HasIndex("TipDocumentId");
 
                     b.ToTable("Document");
-                });
-
-            modelBuilder.Entity("Licenta.Models.Furnizori", b =>
-                {
-                    b.Property<int>("FurnizorID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("cod_fiscal")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("denumire")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("FurnizorID");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("Furnizori");
                 });
 
             modelBuilder.Entity("Licenta.Models.Notificari.Notificare", b =>
@@ -877,15 +824,6 @@ namespace Licenta.Data.Migrations
                     b.Navigation("Chat");
                 });
 
-            modelBuilder.Entity("Licenta.Models.Chat.Message", b =>
-                {
-                    b.HasOne("Licenta.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Messages")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("ApplicationUser");
-                });
-
             modelBuilder.Entity("Licenta.Models.Document", b =>
                 {
                     b.HasOne("Licenta.Models.ApplicationUser", "ApplicationUser")
@@ -909,17 +847,6 @@ namespace Licenta.Data.Migrations
                     b.Navigation("Client");
 
                     b.Navigation("TipDocument");
-                });
-
-            modelBuilder.Entity("Licenta.Models.Furnizori", b =>
-                {
-                    b.HasOne("Licenta.Models.Client", "Client")
-                        .WithMany("Furnizori")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("Licenta.Models.Notificari.NotificareUser", b =>
@@ -1101,8 +1028,6 @@ namespace Licenta.Data.Migrations
 
             modelBuilder.Entity("Licenta.Models.Client", b =>
                 {
-                    b.Navigation("Furnizori");
-
                     b.Navigation("ProfitPierdere");
 
                     b.Navigation("Salariati");
@@ -1123,8 +1048,6 @@ namespace Licenta.Data.Migrations
             modelBuilder.Entity("Licenta.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Chats");
-
-                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }

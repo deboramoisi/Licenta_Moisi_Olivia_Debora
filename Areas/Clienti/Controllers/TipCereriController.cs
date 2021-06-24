@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Licenta.Data;
 using Licenta.Models.CereriDocumente;
@@ -50,7 +49,7 @@ namespace Licenta.Areas.Clienti.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TipCerereId,Denumire")] TipCerere tipCerere)
+        public async Task<IActionResult> Create(TipCerere tipCerere)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +77,7 @@ namespace Licenta.Areas.Clienti.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TipCerereId,Denumire")] TipCerere tipCerere)
+        public async Task<IActionResult> Edit(int id, TipCerere tipCerere)
         {
             if (id != tipCerere.TipCerereId)
             {
