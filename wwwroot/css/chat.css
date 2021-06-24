@@ -19,6 +19,7 @@
 
 .chat-body {
     width: 60vw;
+    max-width: 60vw;
     min-height: 97vh;
     display: flex;
     flex-direction: column;
@@ -58,6 +59,18 @@
         text-align: center;
     }
 
+#numeUtilizatorGrup {
+    color: darkblue;
+    font-weight: bold;
+    font-size: 13px;
+    margin-left: 5px;
+}
+
+#chatHeader {
+    font-size: 25px;
+    font-weight: bold;
+}
+
 #chatBody {
     min-height: 97vh;
     background: url("/img/chat-bg.png");
@@ -68,6 +81,7 @@
 
 .chat-body-user {
     width: 60vw;
+    max-width: 60vw;
     min-height: 97vh;
     background: url("/img/chat-bg.png");
     background-repeat: repeat;

@@ -9,11 +9,15 @@
     var senderMessage = "message user-sender";
     var receiverMessage = "message user-receiver";
     var messageClass = "";
+    var privateRoom = Model.Chat.Tip.Equals(Licenta.Models.Chat.TipChat.Privat);
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/chat.css" />
 }
+
+<!-- Modal Placeholder -->
+<div id="chatRoom-modal"></div>
 
 <div class="wrapper row">
     <!-- Side Menu -->
@@ -42,22 +46,33 @@
     <!-- Chat Body -->
     <div id="chatBody" class="col-9">
         <div class="chat-body">
-            <div>
-                <h3 class="p-2 mt-4 mb-3">
+            <div class="row p-2 mt-4 mb-3">
+                <div class="col-9" id="chatHeader">
                     <i class="far fa-user"></i> &nbsp;&nbsp;
-                    @if (Model.Chat.Tip.Equals(Licenta.Models.Chat.TipChat.Privat))
+                    @if (privateRoom)
                     {
                         @Model.Chat.Users.Where(x => x.ApplicationUserId != User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault().ApplicationUser.UserName.Split("@")[0]
                     }
                     else
                     {
-                        @foreach (var user in Model.Chat.Users)
-                        {
-                            @user.ApplicationUser.Nume
-                            @:,
-                        }
+                        @Model.Chat.Nume
                     }
-                </h3>
+                </div>
+
+                @if (!privateRoom)
+                {
+                    <!--Optiuni grup: vizualizare utilizatori-->
+                    <div class="dropdown col-1">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <button type=button class="btn" data-toggle="ajax-groupUsers-modal" data-target="#groupUsers">
+                                Vizualizare utilizatori grup
+                            </button>
+                        </div>
+                    </div>
+                }
             </div>
 
             @foreach (var message in Model.Chat.Mesaje)
@@ -79,43 +94,16 @@
 
         </div>
 
-        @*<div class="chat-body-user">
-            <div class="chat-input-user">
-                <div class="chat-body">
-                    <h3 class="p-2 mt-4 mb-3">
-                        <i class="far fa-user"></i> &nbsp;&nbsp;
-                        @Model.Chat.Users.Where(x => x.ApplicationUserId != User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault().ApplicationUser.UserName.Split("@")[0]
-                    </h3>
-
-                    @foreach (var message in Model.Chat.Mesaje)
-                    {
-                        if (message.Nume == userName)
-                        {
-                            messageClass = senderMessage;
-                        }
-                        else
-                        {
-                            messageClass = receiverMessage;
-                        }
-                        <div class="@messageClass">
-                            <header>@message.Nume.Split("@")[0]: &nbsp;</header>
-                            <p>@message.Text</p>
-                            <footer>@message.Data</footer>
-                        </div>
-                    }
-                </div>*@
-
-                <form asp-controller="Chat" asp-action="CreateMessage" onsubmit="sendMessage()" class="chat-input">
-                    <input type="hidden" value="@Model.Chat.ChatId" name="roomId" />
-                    <input type="hidden" value="@Model.Chat.Nume" name="roomName" />
-                    <div class="form-group row m-2">
-                        <input type="text" name="message" id="message-input" class="col-10 form-control" />
-                        <button type="submit" class="col-1 form-control p-2 ml-2 btn btn-secondary"><i class="far fa-paper-plane"></i></button>
-                    </div>
-
-                </form>
+        <!-- Chat Input -->
+        <form asp-controller="Chat" asp-action="CreateMessage" onsubmit="sendMessage()" class="chat-input">
+            <input type="hidden" value="@Model.Chat.ChatId" name="roomId" />
+            <input type="hidden" value="@Model.Chat.Nume" name="roomName" />
+            <div class="form-group row m-2">
+                <input type="text" name="message" id="message-input" class="col-10 form-control" />
+                <button type="submit" class="col-1 form-control p-2 ml-2 btn btn-secondary"><i class="far fa-paper-plane"></i></button>
             </div>
-        </div>
+
+        </form>
     </div>
 
     @section Scripts {
@@ -125,4 +113,5 @@
         var loggedUser = "@User.Identity.Name";
         </script>
         <script src="~/js/chat/myChat.js"></script>
+        <script src="~/js/chat/chatRoom.js"></script>
     }

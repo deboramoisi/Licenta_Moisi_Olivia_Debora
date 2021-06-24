@@ -9,6 +9,7 @@
     var senderMessage = "message user-sender";
     var receiverMessage = "message user-receiver";
     var messageClass = "";
+    var privateRoom = Model.Chat.Tip.Equals(Licenta.Models.Chat.TipChat.Privat);
 }
 
 @section Styles {
@@ -37,11 +38,6 @@
                             </a>
                         </div>
                     }
-                    <div class="user-chat">
-                        <button type="button" class="btn btn-outline-secondary" data-toggle="ajax-chatRoom-modal" data-target="#add-chatRoom">
-                            <i class="fas fa-plus-circle"></i>&nbsp;&nbsp; Creeaza camera privata
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -75,32 +71,37 @@
     <!-- Chat Body -->
     <div id="chatBody" class="col-9">
         <div class="chat-body">
-            <div>
-                <h3 class="p-2 mt-4 mb-3">
+            <div class="row p-2 mt-4 mb-3">
+                <div class="col-9" id="chatHeader">
                     <i class="far fa-user"></i> &nbsp;&nbsp;
-                    @if (Model.Chat.Tip.Equals(Licenta.Models.Chat.TipChat.Privat))
+                    @if (privateRoom)
                     {
                         @Model.Chat.Users.Where(x => x.ApplicationUserId != User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault().ApplicationUser.UserName.Split("@")[0]
                     }
                     else
                     {
-                        @foreach (var user in Model.Chat.Users)
-                        {
-                            @user.ApplicationUser.Nume
-                            @: &nbsp;
-                        }
-
-                        // Stergere grup
-                        <span class="dropdown text-right">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-h"></i>
-                            </button>
-                            <span class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" id="deleteGroupButton">Sterge grup</a>
-                            </span>
-                        </span>
+                        @Model.Chat.Nume
                     }
-                </h3>
+                </div>
+
+                @if (!privateRoom)
+                {
+                <!--Optiuni grup: stergere, vizualizare utilizatori, adaugare/stergere utilizator-->
+                <div class="dropdown col-1">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <button type=button class="btn" data-toggle="ajax-groupUsers-modal" data-target="#groupUsers">
+                            Vizualizare utilizatori grup
+                        </button>
+                        <button type=button class="btn" data-toggle="ajax-addUserGroup-modal" data-target="#add-usersGroup">
+                            Adaugare utilizator
+                        </button>
+                        <a class="dropdown-item btn" id="deleteGroupButton">Sterge grup</a>
+                    </div>
+                </div>
+                }
             </div>
 
             @foreach (var message in Model.Chat.Mesaje)

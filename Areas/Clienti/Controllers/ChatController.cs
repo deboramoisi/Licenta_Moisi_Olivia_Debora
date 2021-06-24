@@ -186,5 +186,25 @@ namespace Licenta.Areas.Clienti.Controllers
 
             return View(chats);
         }
+
+        // See group users and delete them from group
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetGroupUsers(int id)
+        {
+            Chat chat = await _context.Chats
+                .Include(x => x.Users)
+                    .ThenInclude(x => x.ApplicationUser)
+                .Where(x => x.ChatId == id)
+                .FirstOrDefaultAsync();
+
+            if (chat == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return PartialView("_GroupUsers", chat);
+            }
+        }
     }
 }

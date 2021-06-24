@@ -95,7 +95,7 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 _context.Document.Add(document);
 
-                var fullPath = $"C:/Users/user/source/repos/Licenta/wwwroot{document.DocumentPath}";
+                var fullPath = $"C:/Users/user/source/repos/Licenta/wwwroot/xml/{document.DocumentPath}";
                 XDocument doc = XDocument.Load(fullPath);
 
                 var balante = from bal in doc.Root.Elements()
@@ -240,21 +240,22 @@ namespace Licenta.Areas.Admin.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteAPI(int id)
         {
-            Document document = _context.Document.Find(id);
-            if (document == null)
+            ProfitPierdere profitPierdere = _context.ProfitPierdere.Find(id);
+            if (profitPierdere == null)
             {
-                return Json(new { success = false, message = "Eroare la stergerea documentului!" });
+                return Json(new { success = false, message = "Eroare la stergerea soldurilor de profit/pierdere!" });
             }
             else
             {
-                _context.Document.Remove(document);
-                await _context.SaveChangesAsync();
-                if (_fileManager.DeleteDocument(document.DocumentPath) == "Success")
+                try
                 {
-                    return Json(new { success = true, message = "Document sters cu succes!" });
-                } else
+                    _context.ProfitPierdere.Remove(profitPierdere);
+                    await _context.SaveChangesAsync();
+                    return Json(new { success = true, message = "Solduri profit/pierdere sterse cu succes!" });
+                }
+                catch
                 {
-                    return Json(new { success = false, message = "Eroare la stergerea documentului!" });
+                    return Json(new { success = false, message = "Eroare la stergerea soldurilor de profit/pierdere!" });
                 }
             }
         }

@@ -78,42 +78,6 @@ namespace Licenta.Areas.Admin.Controllers
             
         }
 
-        [HttpPost("[action]/{name}")]
-        public async Task<IActionResult> CreateRoom(string name)
-        {
-            ApplicationUser user = _userManager.GetUserAsync(User).Result;
-
-            if (await _chatManager.CreateRoom(name, user.Id))
-            {
-                return RedirectToAction("Index");
-            }
-            return NotFound();
-        }
-
-        [HttpGet("[action]")]
-        public IActionResult CreateRoomModal()
-        {
-            return PartialView("_AddChatRoom", new Chat());
-        }
-
-        [HttpPost("[action]")]
-        public async Task<IActionResult> CreateRoomModal(Chat chat)
-        {
-            chat.Tip = TipChat.Grup;
-
-            chat.Users.Add(new ChatUser
-            {
-                // find user
-                ApplicationUserId = _userManager.GetUserAsync(User).Result.Id,
-                Role = UserChatRole.Admin
-            });
-
-            _context.Chats.Add(chat);
-            await _context.SaveChangesAsync();
-
-            return PartialView("_AddChatRoom", chat);
-        }
-
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> JoinRoom(int id)
         {
@@ -149,11 +113,7 @@ namespace Licenta.Areas.Admin.Controllers
                     .ThenInclude(x => x.ApplicationUser)
                 .FirstOrDefault(x => x.ChatId == id);
 
-            var utilizatoriPrivati = _context.Chats
-                .Include(x => x.Users)
-                    .ThenInclude(x => x.ApplicationUser)
-                .Where(x => x.Users.Any(y => y.ApplicationUserId == user.Id) && x.Tip.Equals(TipChat.Privat))
-                .ToList();
+            IList<Chat> utilizatoriPrivati = _chatManager.Private(user.Id);
 
             var grupuri = _context.Chats
                 .Include(x => x.Users)
@@ -198,16 +158,58 @@ namespace Licenta.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                Chat chat = new Chat
+                Chat chat = await _chatManager.CreateRoom(chatRoomVM.Name);
+
+                bool addUsersToGroup = await AddUsersToGroup(chatRoomVM.Users, chat);
+            }
+
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers.OrderBy(u => u.Nume).ToList(), "Id", "Nume");
+            return PartialView("_AddChatRoom");
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> AddUsersToGroupModal(int? id)
+        {
+            ICollection<ApplicationUser> notAddedUsers = new List<ApplicationUser>();
+
+            if (id != 0) {
+                Chat chat = await _context.Chats.FirstOrDefaultAsync(x => x.ChatId == id);
+                notAddedUsers = GetNotAddedUsersToGroup(chat);
+            }
+
+            ViewData["ApplicationUserId"] = new SelectList(notAddedUsers.OrderBy(u => u.Nume).ToList(), "Id", "Nume");
+            return PartialView("_AddUsersToGroup");
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> AddUsersToGroupModal(int? id, ChatRoomVM chatVM)
+        {
+            ICollection<ApplicationUser> notAddedUsers = new List<ApplicationUser>();
+            if (id != 0)
+            {
+                Chat chat = await _context.Chats.FirstOrDefaultAsync(x => x.ChatId == id);
+                if (chat == null)
                 {
-                    Tip = TipChat.Grup,
-                    Nume = chatRoomVM.Name
-                };
+                    return NotFound();
+                }
+                notAddedUsers = GetNotAddedUsersToGroup(chat);
 
-                _context.Chats.Add(chat);
-                await _context.SaveChangesAsync();
+                bool addUsersToChat = await AddUsersToGroup(chatVM.Users, chat);
 
-                foreach (var user in chatRoomVM.Users)
+                ViewData["ApplicationUserId"] = new SelectList(notAddedUsers.OrderBy(u => u.Nume).ToList(), "Id", "Nume");
+                return PartialView("_AddUsersToGroup");
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        private async Task<bool> AddUsersToGroup(List<string> users, Chat chat)
+        {
+            if (users.Count() > 0 && chat != null)
+            {
+                foreach (var user in users)
                 {
                     var chatUser = new ChatUser();
                     chatUser.ApplicationUserId = user;
@@ -226,10 +228,36 @@ namespace Licenta.Areas.Admin.Controllers
                     _context.ChatUsers.Add(chatUser);
                 }
                 await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+
+        private List<ApplicationUser> GetNotAddedUsersToGroup(Chat chat)
+        {
+            ICollection<ApplicationUser> addedUsers = new List<ApplicationUser>();
+            ICollection<ApplicationUser> notAddedUsers = new List<ApplicationUser>();
+            ICollection<ApplicationUser> users = _context.ApplicationUsers.ToList();
+
+            if (chat != null)
+            {
+                List<ChatUser> chatUsers = _context.ChatUsers.Where(x => x.ChatId == chat.ChatId).ToList();
+
+                foreach (var user in chatUsers)
+                {
+                    addedUsers.Add(_context.ApplicationUsers.First(x => x.Id == user.ApplicationUserId));
+                }
+
+                foreach (var user in users)
+                {
+                    if (!addedUsers.Contains(user))
+                    {
+                        notAddedUsers.Add(user);
+                    }
+                }
             }
 
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers.OrderBy(u => u.Nume).ToList(), "Id", "Nume");
-            return PartialView("_AddChatRoom");
+            return notAddedUsers.ToList();
         }
 
         [HttpGet("[action]")]
@@ -252,5 +280,31 @@ namespace Licenta.Areas.Admin.Controllers
             }
         }
         #endregion
+
+        #region
+        // Delete user from given group
+        [HttpGet("[action]")]
+        public async Task<IActionResult> DeleteGroupUser(string id, int chatId)
+        {
+            Chat chat = _context.Chats.Find(chatId);
+
+            if (chat == null)
+            {
+                return Json(new { success = false, message = $"Grupul {chat.Nume} nu exista" });
+            }
+
+            ChatUser chatUser = _context.ChatUsers.Where(x => x.ChatId == chat.ChatId && x.ApplicationUserId == id).First();
+
+            if (chatUser != null)
+            {
+                _context.ChatUsers.Remove(chatUser);
+                await _context.SaveChangesAsync();
+                return Json(new { success = true, message = $"Utilizator sters cu succes din grupul {chat.Nume}" });
+            }
+
+            return Json(new { success = false, message = $"Utilizator nu exista in grupul {chat.Nume}" });
+        }
+        #endregion
+
     }
 }

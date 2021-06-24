@@ -205,7 +205,7 @@ namespace Licenta.Areas.Admin.Controllers
                     // procesam XML-ul
                     // adaugam salariatii preluati din acesta clientului ales de utilizator
 
-                    var fullPath = $"C:/Users/user/source/repos/Licenta/wwwroot{document.DocumentPath}";
+                    var fullPath = $"C:/Users/user/source/repos/Licenta/wwwroot/xml/{document.DocumentPath}";
                     XDocument doc = XDocument.Load(fullPath);
 
                     var salariati = from salariat in doc.Root.Elements()

@@ -12,7 +12,7 @@ $(function () {
         });
     });
 
-    placeholderElement.on('click', '[data-save="modal"]', function (event) {
+    placeholderElement.on('click', '[data-save="modal-casa"]', function (event) {
         event.preventDefault();
 
         var form = $(this).parents('.modal').find('form');

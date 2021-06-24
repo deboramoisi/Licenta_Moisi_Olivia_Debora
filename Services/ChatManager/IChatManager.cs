@@ -9,7 +9,7 @@ namespace Licenta.Services.ChatManager
 {
     public interface IChatManager
     {
-        Task<bool> CreateRoom(string name, string admin);
+        Task<Chat> CreateRoom(string name);
         Task<int> CreatePrivateRoom(string userId, string admin);
         Task<bool> JoinRoom(string connectionId, string roomId);
         Task<bool> JoinRoom(int id, string userId);

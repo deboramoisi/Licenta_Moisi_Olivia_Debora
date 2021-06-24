@@ -25,33 +25,25 @@ namespace Licenta.Services.ChatManager
             _context = context;
         }
 
-        public async Task<bool> CreateRoom(string name, string admin)
+        public async Task<Chat> CreateRoom(string name)
         {
-            var chat = new Chat
+            Chat chat = new Chat
             {
-                Nume = name,
-                Tip = TipChat.Grup
+                Tip = TipChat.Grup,
+                Nume = name
             };
-
-            chat.Users.Add(new ChatUser
-            {
-                // find user
-                ApplicationUserId = admin,
-                Role = UserChatRole.Admin
-            });
 
             try
             {
                 _context.Chats.Add(chat);
                 await _context.SaveChangesAsync();
-                return true;
+                return chat;
             }
             catch
             {
                 throw;
             }
         }
-
 
         public async Task<int> CreatePrivateRoom(string userId, string admin) {
             var chat = new Chat

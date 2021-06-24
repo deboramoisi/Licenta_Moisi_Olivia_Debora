@@ -29,16 +29,7 @@ namespace Licenta.Models
         public string Descriere { get; set; }
         public string ProfileImageUrl { get; set; }
 
-        // 1 - * ApplicationUser || Message
-        public ICollection<Message> Messages { get; set; }
-
         // un user poate avea mai multe chats (incluzand grupurile)
         public ICollection<ChatUser> Chats { get; set; }
-
-
-        public ApplicationUser()
-        {
-            Messages = new HashSet<Message>();
-        }
     }
 }

@@ -1,10 +1,10 @@
 ﻿@model Licenta.ViewModels.ChatRoomVM
 
-<div class="modal fade" id="add-chatRoom" tabindex="-1" role="dialog" aria-labelledby="addChatRoom" aria-hidden="true">
+<div class="modal fade" id="add-usersGroup" tabindex="-1" role="dialog" aria-labelledby="add-usersGroup" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addChatRoom">Creeaza camera</h5>
+                <h5 class="modal-title" id="add-usersGroup">Adauga mai multi utilizatori grupului</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -12,18 +12,7 @@
             <div class="modal-body">
                 <form>
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <!-- Verificam daca modelul e valid, transmitem pentru notificare si inchidere modal -->
-                    <input type="hidden" name="IsValid" value="@ViewData.ModelState.IsValid.ToString()" />
-
-                    <div class="form-group row">
-                        <div class="col-3">
-                            <label asp-for="Name" class="control-label"></label>
-                        </div>
-                        <div class="col-6">
-                            <input asp-for="Name" class="form-control" />
-                            <span asp-validation-for="Name" class="text-danger"></span>
-                        </div>
-                    </div>
+                   <input type="hidden" name="IsValid" value="@ViewData.ModelState.IsValid.ToString()" />
 
                     <div class="form-group row">
                         <div class="col-3">
@@ -40,7 +29,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-save="modal-cr">Creeaza</button>
+                <button type="button" class="btn btn-primary" data-save="modal-usersGroup">Creeaza</button>
             </div>
         </div>
     </div>

@@ -122,7 +122,7 @@ namespace Licenta.Services.FileManager
 
         public void DeleteDocumentXML(string fileName)
         {
-            string fullPath = "wwwroot" + fileName;
+            string fullPath = "wwwroot/xml/" + fileName;
             if (File.Exists(fullPath))
             {
                 File.Delete(fullPath);
@@ -163,7 +163,7 @@ namespace Licenta.Services.FileManager
         {
             // extragere extensie document
             var extension = Path.GetExtension(document.FileName);
-            if (extension.Contains("xml")) {
+            if (extension.ToLower().Contains("xml")) {
                 save_path = _xmlPath;
             }
             var fileName = $"{Denumire}_{ClientId}_{UserId}_{DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss")}{extension}";

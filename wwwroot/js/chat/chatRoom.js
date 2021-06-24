@@ -1,9 +1,14 @@
-﻿$(function () {
+﻿var urlAddUsersToGroup = "/Chat/AddUsersToGroupModal?id=";
+var urlGroupUsers = "/Chat/GetGroupUsers?id=";
+var urlDeleteUserFromGroup = "/Chat/DeleteGroupUser?id=";
+var urlCreateGroup = "/Chat/CreateGroup";
+
+$(function () {
 
     var placeholderElement = $('#chatRoom-modal');
     $('button[data-toggle="ajax-chatRoom-modal"]').click(function (event) {
 
-        $.get("/Chat/CreateGroup").done(function (data) {
+        $.get(urlCreateGroup).done(function (data) {
             placeholderElement.html(data);
             placeholderElement.find('.modal').modal('show');
         });
@@ -31,10 +36,9 @@
                 selected_values.push($(this).val());
             });
 
-        var actionUrl = "/Chat/CreateGroup";
         var dataToSend = form.serialize();
 
-        $.post(actionUrl, dataToSend).done(function (data) {
+        $.post(urlCreateGroup, dataToSend).done(function (data) {
             var newBody = $('.modal-body', data);
             placeholderElement.find('.modal-body').replaceWith(newBody);
 
@@ -46,7 +50,86 @@
                 window.location.reload();
             }
         });
+    }) 
+
+    $('button[data-toggle="ajax-addUserGroup-modal"]').click(function (event) {
+
+        $.ajax({
+            type: "GET",
+            url: urlAddUsersToGroup + roomId,
+            success: function (data) {
+                placeholderElement.html(data);
+                placeholderElement.find('.modal').modal('show');
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+
+    });
+
+    placeholderElement.on('click', '[data-save="modal-usersGroup"]', function (event) {
+        event.preventDefault();
+
+        var form = $(this).parents('.modal').find('form');
+        var dataToSend = form.serialize();
+
+        $.ajax({
+            type: "POST",
+            url: urlAddUsersToGroup + roomId,
+            data: dataToSend,
+            success: function () {
+                placeholderElement.find('.modal').modal('hide');
+                toastrAlert("success", "Utilizatori adaugati cu succes!");
+                setTimeout(function () {
+                    location.reload(true);
+                }, 5000);
+            }, 
+            error: function (e) {
+                console.log(e);
+            }
+        });
     })
+
+    $('button[data-toggle="ajax-groupUsers-modal"]').click(function (event) {
+
+        $.ajax({
+            type: "GET",
+            url: urlGroupUsers + roomId,
+            success: function (data) {
+                placeholderElement.html(data);
+                placeholderElement.find('.modal').modal('show');
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+
+    }); 
+
+    $(document).on("click", ".deleteUserFromGroup", function (e) {
+        var targetId = e.target.id;
+        var chatId = $("[name = 'chatId']")[0].id;
+
+        $.ajax({
+            type: "GET",
+            url: urlDeleteUserFromGroup + targetId + "&chatId=" + chatId,
+            success: function (data) {
+                if (data.success) {
+                    toastrAlert("success", data.message);
+
+                    placeholderElement.find('.modal').modal('hide');
+
+                } else {
+                    toastrAlert("error", data.message);
+                }
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        })       
+    })
+
 });
 
 $("#deleteGroupButton").on('click', function () {
