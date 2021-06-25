@@ -10,6 +10,8 @@ using Licenta.Utility;
 using Licenta.ViewModels;
 using Licenta.Models.Notificari;
 using Licenta.Services.NotificationManager;
+using Microsoft.AspNetCore.Identity;
+using Licenta.Models;
 
 namespace Licenta.Areas.Clienti.Views
 {
@@ -18,12 +20,15 @@ namespace Licenta.Areas.Clienti.Views
     {
         private readonly ApplicationDbContext _context;
         private readonly INotificationManager _notificationManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public QuestionsController(ApplicationDbContext context,
-            INotificationManager notificationManager)
+            INotificationManager notificationManager,
+            UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _notificationManager = notificationManager;
+            _userManager = userManager;
         }
 
         // Index - sortare, filtrare, cautare
@@ -97,6 +102,7 @@ namespace Licenta.Areas.Clienti.Views
                 return NotFound();
             }
 
+            ViewBag.LoggedUser = _userManager.GetUserId(User);
             return View(question);
         }
         #endregion
@@ -113,6 +119,7 @@ namespace Licenta.Areas.Clienti.Views
                 };
                 ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Nume");
                 ViewData["QuestionCategoryId"] = new SelectList(_context.QuestionCategory, "QuestionCategoryId", "Denumire");
+                ViewBag.LoggedUser = _userManager.GetUserId(User);
                 return PartialView("_AddQuestion", question);
             }
             else
@@ -131,27 +138,38 @@ namespace Licenta.Areas.Clienti.Views
             {
                 var user = _context.ApplicationUsers.FirstOrDefault(u => u.UserName == User.Identity.Name);
                 question.ApplicationUserId = user.Id;
-            }
+            } 
 
             if (ModelState.IsValid)
             {
                 _context.Question.Add(question);
                 await _context.SaveChangesAsync();
 
-                // Send notification to admin about the new added question
+                var user = await _userManager.GetUserAsync(User);
+                var qCategory = _context.QuestionCategory.First(x => x.QuestionCategoryId == question.QuestionCategoryId).Denumire;
+
                 Notificare notificare = new Notificare()
                 {
-                    Text = $"{User.Identity.Name} a adaugat o intrebare in forumul Q&A in data de {DateTime.Now}",
+                    Text = $"{user.Nume} a adaugat o intrebare din categoria {qCategory} in forumul Q&A in data de {DateTime.Now}",
                     RedirectToPage = $"/Clienti/Questions/Details/{question.QuestionId}"
                 };
 
-                await _notificationManager.CreateAsyncNotificationForAdmin(notificare, _context.ApplicationUsers.First(x => x.Email.Contains("dana_moisi")).Id);
-
+                if (await _userManager.IsInRoleAsync(user, ConstantVar.Rol_Admin_Firma))
+                {
+                    // Send notification to admin about the new added question
+                    await _notificationManager.CreateAsyncNotificationForAdmin(notificare, _context.ApplicationUsers.First(x => x.Email.Contains("dana_moisi")).Id);
+                } 
+                else
+                {
+                    var allUsers = _userManager.Users.Where(x => x.Id != user.Id).ToList();
+                    _notificationManager.CreateNotificationQuestionsByAdmin(notificare, allUsers);
+                }
                 TempData["Message"] = "Intrebare adaugata cu succes!";
                 TempData["Success"] = "true";
             }
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Nume", question.ApplicationUserId);
             ViewData["QuestionCategoryId"] = new SelectList(_context.QuestionCategory, "QuestionCategoryId", "Denumire", question.QuestionCategoryId);
+            ViewBag.LoggedUser = _userManager.GetUserId(User);
             return PartialView("_AddQuestion", question);
         }
         #endregion
@@ -172,6 +190,7 @@ namespace Licenta.Areas.Clienti.Views
             }
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Nume", question.ApplicationUserId);
             ViewData["QuestionCategoryId"] = new SelectList(_context.QuestionCategory, "QuestionCategoryId", "Denumire", question.QuestionCategoryId);
+            ViewBag.LoggedUser = _userManager.GetUserId(User);
             return View(question);
         }
 
@@ -210,6 +229,7 @@ namespace Licenta.Areas.Clienti.Views
             }
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Nume", question.ApplicationUserId);
             ViewData["QuestionCategoryId"] = new SelectList(_context.QuestionCategory, "QuestionCategoryId", "Denumire", question.QuestionCategoryId);
+            ViewBag.LoggedUser = _userManager.GetUserId(User);
             return View(question);
         }
 

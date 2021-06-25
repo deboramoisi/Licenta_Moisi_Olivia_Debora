@@ -149,6 +149,31 @@ namespace Licenta.Areas.Admin.Controllers
         }
         #endregion
 
+        // Create Manual
+        #region
+        public IActionResult ManualCreate()
+        {
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ManualCreate(ProfitPierdere profitPierdere)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.ProfitPierdere.Add(profitPierdere);
+                await _context.SaveChangesAsync();
+                TempData["Message"] = "Solduri profit pierdere adaugate cu succes!";
+                TempData["Success"] = "true";
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire", profitPierdere.ClientId);
+            return View(profitPierdere);
+        }
+        #endregion
+
         // Edit, edit uploaded document
         #region
         public async Task<IActionResult> Edit(int? id)
@@ -158,47 +183,35 @@ namespace Licenta.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var document = await _context.ProfitPierdere.FindAsync(id);
-            if (document == null)
+            var profitPierdere = await _context.ProfitPierdere.FindAsync(id);
+            if (profitPierdere == null)
             {
                 return NotFound();
             }
 
-            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire", document.ClientId);
-            return View(document);
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire", profitPierdere.ClientId);
+            return View(profitPierdere);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, DocumentVM documentVM)
+        public async Task<IActionResult> Edit(int id, ProfitPierdere profitPierdere)
         {
-            var document = await _context.Document.FindAsync(documentVM.DocumentId);
-
-            if (id != document.DocumentId)
+            if (id != profitPierdere.ProfitPierdereId)
             {
                 return NotFound();
             }
-
-            if (documentVM.DocumentPathUrl != null)
-            {
-                var documentType = _context.TipDocument.Find(documentVM.TipDocumentId);
-                document.DocumentPath = await _fileManager.UpdateDocument(documentVM.DocumentPathUrl, documentVM.DocumentId, documentType.Denumire, documentVM.ClientId, documentVM.ApplicationUserId);
-            } 
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    document.ApplicationUserId = documentVM.ApplicationUserId;
-                    document.ClientId = documentVM.ClientId;
-                    document.TipDocumentId = documentVM.TipDocumentId;
-                    document.Data = documentVM.Data;
-                    _context.Document.Update(document);
+                    _context.ProfitPierdere.Update(profitPierdere);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DocumentExists(document.DocumentId))
+                    if (!ProfitPierdereExists(profitPierdere.ProfitPierdereId))
                     {
                         return NotFound();
                     }
@@ -207,14 +220,12 @@ namespace Licenta.Areas.Admin.Controllers
                         throw;
                     }
                 }
-                TempData["Message"] = "Solduri profit-pierdere actualizate cu succes!";
+                TempData["Message"] = "Solduri profit pierdere actualizate cu succes!";
                 TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire", document.ClientId);
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers.OrderBy(x => x.Nume), "Id", "Nume", document.ApplicationUserId);
-            ViewData["TipDocumentId"] = new SelectList(_context.TipDocument.OrderBy(x => x.Denumire), "TipDocumentId", "Denumire", document.TipDocumentId);
-            return View(documentVM);
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire", profitPierdere.ClientId);
+            return View(profitPierdere);
         }
 
         private bool DocumentExists(int id)
@@ -259,6 +270,7 @@ namespace Licenta.Areas.Admin.Controllers
                 }
             }
         }
+        #endregion
 
         // Delete solduri profit/pierdere
         #region
@@ -283,6 +295,10 @@ namespace Licenta.Areas.Admin.Controllers
             return Ok();
         }
         #endregion
-        #endregion
+
+        private bool ProfitPierdereExists(int id)
+        {
+            return _context.ProfitPierdere.Any(e => e.ProfitPierdereId == id);
+        }
     }
 }

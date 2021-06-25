@@ -132,7 +132,7 @@ namespace Licenta.Areas.Admin.Controllers
                 await _context.SaveChangesAsync();
                 // aici notificam user-ul ca a primit un document
                 Notificare notificare = new Notificare();
-                string redirectToPage = "https://localhost:5001/img/documente/" + document.DocumentPath;
+                string redirectToPage = "https://localhost:44342/img/documente/" + document.DocumentPath;
                 
                 if (id == 0 || id == null)
                 {

@@ -1,16 +1,17 @@
 ﻿@model Licenta.Models.CereriDocumente.TipCerere
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Sterge tip cerere";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Delete</h1>
+<br />
+<h2>Stergere tip cerere</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<hr />
+<h3>Sunteti sigur? </h3>
 <div>
-    <h4>TipCerere</h4>
-    <hr />
+
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Denumire)
@@ -22,7 +23,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="TipCerereId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Sterge" class="btn btn-danger" /> |
+        <a class="btn btn-primary" asp-action="Index">Inapoi</a>
     </form>
 </div>

@@ -1,7 +1,6 @@
-﻿using Licenta.Models.Notificari;
-using System;
+﻿using Licenta.Models;
+using Licenta.Models.Notificari;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Licenta.Services.NotificationManager
@@ -14,5 +13,7 @@ namespace Licenta.Services.NotificationManager
         Task<List<NotificareUser>> GetNotificareUsers(string userId);
         void NotificationSeen(int id, string userId);
         string GetRedirectToPageForNotification(int id);
+        void CreateNotificationQuestionsByAdmin(Notificare notificare, List<ApplicationUser> users);
+
     }
 }

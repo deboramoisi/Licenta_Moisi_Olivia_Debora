@@ -59,8 +59,14 @@ namespace Licenta.Areas.Admin.Controllers
         #region
         public IActionResult Create()
         {
+            Salariat salariat = new Salariat();
+
             ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(x => x.Denumire), "ClientId", "Denumire");
-            return View();
+            if (User.IsInRole(ConstantVar.Rol_Admin_Firma))
+            {
+                salariat.ClientId = _context.ApplicationUsers.Where(x => x.Email == User.Identity.Name).First().ClientId.Value;
+            }
+            return View(salariat);
         }
 
         [HttpPost]

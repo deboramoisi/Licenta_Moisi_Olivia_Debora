@@ -31,8 +31,9 @@
     background: #efe9e9;
     margin: 10px 10px 20px 10px;
     width: 255px;
-    height: 350px;
+    height: 450px;
     border-radius: 5px 5px;
+    text-align: justify;
 }
 
 .services_img {
@@ -42,6 +43,7 @@
 
 .card-title {
     font-style: italic;
+    font-weight: bold;
 }
 
 #contact-body {

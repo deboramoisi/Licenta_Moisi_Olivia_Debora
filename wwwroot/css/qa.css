@@ -23,6 +23,7 @@
         z-index: 300;
         padding-left: 65px;
         padding-top: 3px;
+        text-align: justify;
     }
 
     .qa-tools {
@@ -30,9 +31,12 @@
         flex-direction: column;*/
     }
 
+.qaTextJustified {
+    text-align: justify;
+}
+
 #searchQuestion {
     width: 30vw;
-
 }
 
 #searchLabel {

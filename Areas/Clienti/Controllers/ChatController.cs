@@ -166,9 +166,16 @@ namespace Licenta.Areas.Clienti.Controllers
                 .Where(x => x.Users.Any(y => y.ApplicationUserId == user.Id) && x.Tip.Equals(TipChat.Grup))
                 .ToList();
 
-            ChatVM chatVM = new ChatVM
+            var privat = _context.Chats
+            .Include(x => x.Users)
+                    .ThenInclude(x => x.ApplicationUser)
+                .Where(x => x.Users.Any(y => y.ApplicationUserId == user.Id) && x.Tip.Equals(TipChat.Privat))
+                .ToList();
+
+        ChatVM chatVM = new ChatVM
             {
                 Chat = chat,
+                Private = privat, 
                 Grupuri = grupuri
             };
 

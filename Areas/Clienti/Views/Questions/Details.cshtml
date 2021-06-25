@@ -5,7 +5,11 @@
     ViewData["Title"] = "Detalii intrebare";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var admin = User.IsInRole(ConstantVar.Rol_Admin);
-    var clientCuDrepturi = (User.Identity.Name == Model.ApplicationUser.Email);
+    var clientCuDrepturi = (ViewBag.LoggedUser == Model.ApplicationUserId);
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/qa.css" />
 }
 
 <br />
@@ -28,7 +32,6 @@
     @if (admin)
     {
        <a asp-controller="Responses" asp-action="Create" asp-route-id="@Model.QuestionId" class="btn btn-outline-primary"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Adauga raspuns nou!</a>
-        
     }
     </div>
 
@@ -44,7 +47,7 @@
             <dt class="col-sm-2">
                 Detalii intrebare
             </dt>
-            <dd class="col-sm-10 descriere-intrebare">
+            <dd class="col-sm-10 descriere-intrebare qaTextJustified">
                 @Html.DisplayFor(model => model.Descriere)
             </dd>
         }
@@ -53,7 +56,7 @@
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => response.Raspuns)
             </dt>
-            <dd class="col-sm-10 raspuns-intrebare">
+            <dd class="col-sm-10 raspuns-intrebare qaTextJustified">
                 @Html.DisplayFor(model => response.Raspuns) &nbsp;
                 <a asp-controller="Responses" asp-action="Edit" asp-route-id="@response.ResponseId" title="Editare raspuns" class="text-right">
                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;Edit

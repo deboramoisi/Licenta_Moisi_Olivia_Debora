@@ -5,7 +5,15 @@
     ViewData["Title"] = "Confirmare plata";
 }
 
-Plata serviciilor in suma de @Model.Suma pentru data de @Model.Data, client @Model.Client.Denumire a fost acceptata!
-<br/> @DateTime.Now;
+<div class="jumbotron text-center">
+    <h1 class="display-4 text-center">Plata serviciilor prestate de Contsal a fost realizata cu succes!</h1>
+    <p class="lead">Plata serviciilor in suma de @Model.Suma pentru data de @Model.Data, client @Model.Client.Denumire a fost acceptata!</p>
+    <hr class="my-4">
+    <p>Va multumim! <br /> @DateTime.Now</p>
+    <p class="lead">
+        <a class="btn btn-secondary btn-lg" role="button" asp-area="Clienti" asp-controller="Home" asp-action="Index">About Us</a>
+    </p>
+</div>
+
 
 

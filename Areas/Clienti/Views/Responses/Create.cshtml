@@ -30,16 +30,17 @@
                     Intrebare detaliata
                 </div>
                 <div class="col-6">
-                    <textarea asp-for="Question.Descriere" class="form-control" rows="8" readonly></textarea>
+                    <textarea class="form-control" rows="10">@ViewBag.Descriere</textarea>
                 </div>
             </div>
         }
+
         <div class="form-group row">
             <div class="col-4">
                 <label asp-for="Raspuns" class="control-label"></label>
             </div>
             <div class="col-6">
-                <textarea asp-for="Raspuns" class="form-control" rows="8"></textarea>
+                <textarea asp-for="Raspuns" class="form-control" rows="10"></textarea>
                 <span asp-validation-for="Raspuns" class="text-danger"></span>
             </div>
         </div>

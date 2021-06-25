@@ -9,6 +9,8 @@ using Licenta.Data;
 using Licenta.Models.Plati;
 using Microsoft.AspNetCore.Authorization;
 using Licenta.Utility;
+using Licenta.Models.Notificari;
+using Licenta.Services.NotificationManager;
 
 namespace Licenta.Areas.Admin.Controllers
 {
@@ -17,10 +19,13 @@ namespace Licenta.Areas.Admin.Controllers
     public class PlataController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly INotificationManager _notificationManager;
 
-        public PlataController(ApplicationDbContext context)
+        public PlataController(ApplicationDbContext context,
+            INotificationManager notificationManager)
         {
             _context = context;
+            _notificationManager = notificationManager;
         }
 
         public async Task<IActionResult> Index()
@@ -44,6 +49,16 @@ namespace Licenta.Areas.Admin.Controllers
             {
                 _context.Plati.Add(plata);
                 await _context.SaveChangesAsync();
+
+                var tipPlata = _context.TipPlati.Where(x => x.TipPlataId == plata.TipPlataId).First().Denumire;
+                // Send notificare after creating plata
+                Notificare notificare = new Notificare()
+                {
+                    Text = $"Contsal a adaugat suma de plata pentru {tipPlata}, data: {plata.Data}, data scadenta: {plata.DataScadenta}",
+                    RedirectToPage = "/Informatii/Plati"
+                };
+                await _notificationManager.CreateAsync(notificare, plata.ClientId);
+
                 TempData["Message"] = "Plata adaugata cu succes!";
                 TempData["Success"] = "true";
                 return RedirectToAction(nameof(Index));

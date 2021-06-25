@@ -1,18 +1,18 @@
 ﻿@model Licenta.Models.ProfitPierdere
 
 @{
-    ViewData["Title"] = "Edit document";
+    ViewData["Title"] = "Adaugare solduri pr/pierdere";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <br />
-<h2>Editare document transmis</h2>
+<h2>@ViewData["Title"]</h2>
 
 <hr />
 <div class="container mt-5">
-    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <form asp-controller="ProfitPierdere" asp-action="ManualCreate" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="ProfitPierdereId" />
+        
         <div class="form-group row">
             <div class="col-4">
                 <label asp-for="ClientId" class="control-label"></label>
@@ -124,7 +124,7 @@
 
         <div class="form-group row">
             <div class="col-2 offset-4">
-                <input type="submit" value="Actualizeaza" class="btn btn-success form-control" />
+                <input type="submit" value="Adauga" class="btn btn-success form-control" />
             </div>
             <div class="col-2">
                 <a asp-action="Index" class="btn btn-primary form-control">Inapoi</a>

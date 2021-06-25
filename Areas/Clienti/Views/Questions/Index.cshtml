@@ -5,6 +5,11 @@
     ViewData["Title"] = "Q&A";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var admin = User.IsInRole(ConstantVar.Rol_Admin);
+    var loggedUser = ViewBag.LoggedUser;
+}
+
+@section Styles {
+    <link href="~/css/qa.css" rel="stylesheet" />
 }
 
 <br />
@@ -54,7 +59,7 @@
         </a>
 
         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <a class="dropdown-item" asp-controller="Questions" asp-action="Index" asp-route-sortOrder="@ViewData["QuestionSortParam"]" >
+            <a class="dropdown-item" asp-controller="Questions" asp-action="Index" asp-route-sortOrder="@ViewData["QuestionSortParam"]">
                 Intrebare &nbsp;
                 @if (ViewData["QuestionSortParam"].ToString() == "Question")
                 {
@@ -65,7 +70,7 @@
                     @: <i class="fa fa-sort-desc" aria-hidden="true"></i>
                 }
             </a>
-            <a class="dropdown-item" asp-controller="Questions" asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]" >
+            <a class="dropdown-item" asp-controller="Questions" asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">
                 Data adaugarii &nbsp;
                 @if (ViewData["DateSortParam"].ToString() == "Date")
                 {
@@ -76,7 +81,7 @@
                     @: <i class="fa fa-sort-desc" aria-hidden="true"></i>
                 }
             </a>
-            <a class="dropdown-item" asp-controller="Questions" asp-action="Index" asp-route-sortOrder="@ViewData["CategorySortParam"]" >
+            <a class="dropdown-item" asp-controller="Questions" asp-action="Index" asp-route-sortOrder="@ViewData["CategorySortParam"]">
                 Categorii &nbsp;
                 @if (ViewData["CategorySortParam"].ToString() == "Category")
                 {
@@ -107,27 +112,27 @@
                                 {
                                     <span class="text-danger font-weight-bold">NEW! &nbsp;</span>
                                 }
-                                @Html.DisplayFor(modelItem => item.Intrebare)
+                                <span class="qaTextJustified">@Html.DisplayFor(modelItem => item.Intrebare)</span>
                             </a>
                         </div>
                         @if (User.Identity.IsAuthenticated)
                         {
-                            @if (admin || User.Identity.Name == item.ApplicationUser.Email)
+                            @if (admin || loggedUser == item.ApplicationUserId)
                             {
-                            <div class="col-2 text-right">
-                                <a asp-controller="Questions" asp-action="Edit" asp-route-id="@item.QuestionId" class="text-right">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                </a>
-                                @if (admin)
-                                {
-                                    <a id="DeleteQuestion" onclick="DeleteQuestion('/Clienti/Questions/DeleteAPI/@item.QuestionId')" class="text-right text-danger">
-                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                <div class="col-2 text-right">
+                                    <a asp-controller="Questions" asp-action="Edit" asp-route-id="@item.QuestionId" class="text-right">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                     </a>
-                                    <a asp-controller="Responses" asp-action="Create" asp-route-id="@item.QuestionId" class="text-right">
-                                        <i class="fa fa-plus" aria-hidden="true"></i>
-                                    </a>
-                                }
-                            </div>
+                                    @if (admin)
+                                    {
+                                        <a id="DeleteQuestion" onclick="DeleteQuestion('/Clienti/Questions/DeleteAPI/@item.QuestionId')" class="text-right text-danger">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </a>
+                                        <a asp-controller="Responses" asp-action="Create" asp-route-id="@item.QuestionId" class="text-right">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </a>
+                                    }
+                                </div>
                             }
                         }
                     </div>
@@ -169,9 +174,9 @@
                     @if (admin)
                     {
 
-                    <a onclick="Delete('/Clienti/QuestionCategories/DeleteAPI/@item.QuestionCategoryId')" class="text-danger text-right">
-                        <i class="fa fa-trash" aria-hidden="true"></i>
-                    </a>
+                        <a onclick="Delete('/Clienti/QuestionCategories/DeleteAPI/@item.QuestionCategoryId')" class="text-danger text-right">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </a>
                     }
                 }
                 @if (ViewData["filterBy"].ToString() == "All")
@@ -184,10 +189,6 @@
     </div>
 
 </div>
-
-@section Styles {
-    <link href="~/css/qa.css" rel="stylesheet" />
-} 
 
 @section Scripts {
     <script src="~/js/qa/questions.js"></script>

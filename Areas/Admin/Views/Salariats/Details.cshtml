@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Info Salariat";
+    var adminFirma = User.IsInRole(ConstantVar.Rol_Admin_Firma);
 }
 
 <br />
@@ -141,13 +142,13 @@
         <a asp-action="Edit" asp-route-id="@Model.SalariatId" class="btn btn-success">Editare salariat</a> |
     </div>
     <div class="col-3">
-        @if (User.IsInRole(ConstantVar.Rol_Admin))
+        @if (!adminFirma)
         {
             <a asp-action="Index" class="btn btn-primary form-control">Inapoi</a>
         }
         else
         {
-            <a asp-area="Clienti" asp-controller="Salariati" asp-action="Index" class="btn btn-primary form-control">Inapoi</a>
+            <a asp-area="Clienti" asp-controller="Informatii" asp-action="Salariati" class="btn btn-primary form-control">Inapoi</a>
         }
     </div>
 </div>

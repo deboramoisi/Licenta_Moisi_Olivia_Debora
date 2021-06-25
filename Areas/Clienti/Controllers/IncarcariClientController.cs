@@ -92,7 +92,7 @@ namespace Licenta.Areas.Clienti.Controllers
                 var admin = _context.ApplicationUsers.FirstOrDefault(x => x.Email.Contains("dana_moisi")).Id;
 
                 Notificare notificare = new Notificare();
-                string redirectToPage = "https://localhost:5001/img/documente/" + document.DocumentPath;
+                string redirectToPage = "https://localhost:44342/img/documente/" + document.DocumentPath;
                 notificare.Text = $"{User.Identity.Name} a incarcat {denumireDocument.Denumire} pentru {document.Data} in {DateTime.Now}";
                 notificare.RedirectToPage = redirectToPage;
                 await _notificationManager.CreateAsyncNotificationForAdmin(notificare, admin);

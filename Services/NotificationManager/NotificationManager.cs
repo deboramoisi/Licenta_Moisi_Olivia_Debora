@@ -1,5 +1,6 @@
 ﻿using Licenta.Data;
 using Licenta.Hubs;
+using Licenta.Models;
 using Licenta.Models.Notificari;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -60,6 +61,23 @@ namespace Licenta.Services.NotificationManager
 
             // execute client side method from site.js
             await _hubContext.Clients.All.SendAsync("displayNotification", "");
+        }
+
+        public void CreateNotificationQuestionsByAdmin(Notificare notificare, List<ApplicationUser> users)
+        {
+            _context.Notificari.Add(notificare);
+            _context.SaveChanges();
+
+            foreach (var user in users)
+            {
+                var notificareUser = new NotificareUser() { };
+                notificareUser.ApplicationUserId = user.Id;
+                notificareUser.NotificareId = notificare.NotificareId;
+                _context.NotificareUsers.Add(notificareUser);
+
+            }
+
+            _context.SaveChanges();
         }
 
         public async Task CreateChatNotificationAsync(Notificare notificare, string userId)

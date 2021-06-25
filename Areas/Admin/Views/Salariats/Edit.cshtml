@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Edit Salariat";
+    var adminFirma = User.IsInRole(ConstantVar.Rol_Admin_Firma);
 }
 
 <br />
@@ -19,7 +20,14 @@
                 <label asp-for="ClientId" class="control-label"></label>
             </div>
             <div class="col-5">
-                <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
+                @if (adminFirma)
+                {
+                    <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId" disabled></select>
+                }
+                else
+                {
+                    <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
+                }
             </div>
         </div>
 
@@ -218,13 +226,13 @@
                 <input type="submit" value="Update" class="btn btn-success form-control" />
             </div>
             <div class="col-2">
-                @if (User.IsInRole(ConstantVar.Rol_Admin))
+                @if (!adminFirma)
                 {
                     <a asp-action="Index" class="btn btn-primary form-control">Inapoi</a>
                 }
                 else
                 {
-                    <a asp-area="Clienti" asp-controller="Salariati" asp-action="Index" class="btn btn-primary form-control">Inapoi</a>
+                    <a asp-area="Clienti" asp-controller="Informatii" asp-action="Salariati" class="btn btn-primary form-control">Inapoi</a>
                 }
             </div>
         </div>

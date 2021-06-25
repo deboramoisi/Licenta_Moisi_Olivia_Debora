@@ -25,23 +25,6 @@ namespace Licenta.Areas.Clienti.Controllers
             return View(await _context.TipCereri.ToListAsync());
         }
 
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tipCerere = await _context.TipCereri
-                .FirstOrDefaultAsync(m => m.TipCerereId == id);
-            if (tipCerere == null)
-            {
-                return NotFound();
-            }
-
-            return View(tipCerere);
-        }
-
         public IActionResult Create()
         {
             return View();

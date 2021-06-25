@@ -1,7 +1,14 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Esec plata!";
 }
 
-<div>
-    <h3 class="bg-danger">Esec plata!</h3>
+<div class="jumbotron text-center">
+    <h1 class="display-4 text-center">Plata dumneavoastra nu a putut fi procesata!</h1>
+    <p class="lead">A fost produsa o eroare datorata fie cardului expirat, credentialelor incorecte, indisponibilitatea soldurilor sau alte probleme.</p>
+    <hr class="my-4">
+    <p>Va rugam sa reincercati.</p>
+    <p class="lead">
+        <a class="btn btn-secondary btn-lg" role="button" asp-area="Clienti" asp-controller="Informatii" asp-action="Plati">Plati</a>
+    </p>
 </div>

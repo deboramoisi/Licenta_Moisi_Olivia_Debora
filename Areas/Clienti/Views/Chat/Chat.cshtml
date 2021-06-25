@@ -22,6 +22,25 @@
 <div class="wrapper row">
     <!-- Side Menu -->
     <div class="side-menu col-3">
+        <a id="utilizatoriArea" data-toggle="collapse" href="#utilizatori" role="button" aria-expanded="false" aria-controls="utilizatori">
+            Camere private &nbsp; <i class='fas fa-angle-double-down'></i>
+        </a>
+        <div class="row">
+            <div class="col">
+                <div class="collapse multi-collapse" id="utilizatori">
+                    @foreach (var chat in Model.Private)
+                    {
+                        <div class="user-chat">
+                            <a asp-controller="Chat" asp-action="Chat" asp-route-id="@chat.ChatId">
+                                @chat.Users.FirstOrDefault(x => x.ApplicationUserId != userId).ApplicationUser.Nume
+                                <i class="fas fa-angle-double-right col-1"></i>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
         <a id="grupuriArea" data-toggle="collapse" href="#grupuri" role="button" aria-expanded="false" aria-controls="grupuri">
             Grupuri &nbsp; <i class='fas fa-angle-double-down'></i>
 
