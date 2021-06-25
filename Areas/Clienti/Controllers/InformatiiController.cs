@@ -102,6 +102,7 @@ namespace Licenta.Areas.Clienti.Controllers
                 .FirstOrDefaultAsync(x => x.PlataId == plata_id);
 
             plata.Achitata = true;
+            plata.SuccesPlata = true;
             _context.Plati.Update(plata);
             await _context.SaveChangesAsync();
 

@@ -122,8 +122,7 @@ namespace Licenta.Areas.Clienti.Views
 
             var response = await _context.Response.FindAsync(id);
             var question = await _context.Question.FindAsync(response.QuestionId);
-            //var questionCateg = _context.QuestionCategory.Where(u => u.QuestionCategoryId == question.QuestionCategoryId);
-
+            
             if (response == null)
             {
                 return NotFound();

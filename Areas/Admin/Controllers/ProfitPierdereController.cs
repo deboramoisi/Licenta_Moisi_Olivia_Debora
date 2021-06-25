@@ -36,15 +36,6 @@ namespace Licenta.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             var profitPierdere = _context.ProfitPierdere.Include(d => d.Client).OrderBy(u => u.ClientId);
-                //if (pp.rulaj_c > pp.rulaj_d)
-                //{
-                //    pp.Profit_luna = pp.rulaj_c - pp.rulaj_d;
-                //} 
-                //else
-                //{
-                //    pp.Pierdere_luna = pp.rulaj_d - pp.rulaj_c;
-                //}
-                //_context.Update(pp);
             return View(await profitPierdere.ToListAsync());
         }
 
@@ -287,12 +278,18 @@ namespace Licenta.Areas.Admin.Controllers
             var year = soldVM.DataEnd.Year;
             var month = soldVM.DataStart.Month;
 
-            _context.ProfitPierdere.RemoveRange(_context.ProfitPierdere.Where(
-                                        x => x.ClientId == soldVM.ClientId 
-                                        && (int.Parse(x.Year) >= soldVM.DataStart.Year && int.Parse(x.Year) <= soldVM.DataEnd.Year)
-                                        && (int.Parse(x.Month) >= soldVM.DataStart.Month && int.Parse(x.Month) <= soldVM.DataEnd.Month)));
-            await _context.SaveChangesAsync();
-            return Ok();
+            var solduri = _context.ProfitPierdere.Where(x => x.ClientId == soldVM.ClientId).ToList();
+            var solduriLuna = solduri.Where(x => int.Parse(x.Month) >= soldVM.DataStart.Month && int.Parse(x.Month) <= soldVM.DataEnd.Month).ToList();
+            var solduriAn = solduriLuna.Where(x => int.Parse(x.Year) >= soldVM.DataStart.Year && int.Parse(x.Year) <= soldVM.DataStart.Year).ToList();
+
+            if (solduriAn != null)
+            {
+                _context.ProfitPierdere.RemoveRange(solduriAn);
+                await _context.SaveChangesAsync();
+                return Json(new { message = "Soldurile de profit-pierdere din perioada selectata au fost sterse cu succes!", success = true});
+            }
+            return Json(new { message = "Nu exista solduri din perioada selectata!", success = false });
+
         }
         #endregion
 

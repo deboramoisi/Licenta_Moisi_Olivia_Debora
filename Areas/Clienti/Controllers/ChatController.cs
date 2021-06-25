@@ -182,18 +182,6 @@ namespace Licenta.Areas.Clienti.Controllers
             return View(chatVM);
         }
 
-        [HttpGet("[action]")]
-        public async Task<IActionResult> Index()
-        {
-            var chats = await _context.Chats
-                    .Include(x => x.Users)
-                        .ThenInclude(x => x.ApplicationUser)
-                    .Where(x => !x.Users.Any(y => y.ApplicationUserId == User.FindFirst(ClaimTypes.NameIdentifier).Value))
-                    .ToListAsync();
-
-            return View(chats);
-        }
-
         // See group users and delete them from group
         [HttpGet("[action]")]
         public async Task<IActionResult> GetGroupUsers(int id)

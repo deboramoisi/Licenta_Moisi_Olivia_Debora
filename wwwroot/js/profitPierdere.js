@@ -46,7 +46,7 @@ function deleteSolduriBalanta() {
     var placeholderElement = $('#modal-solduri-delete-ph');
     $('button[data-toggle="ajax-del-profitP-modal"]').click(function (event) {
         var url = $(this).data('url');
-        alert("hei");
+        
         $.get(url).done(function (data) {
             placeholderElement.html(data);
             placeholderElement.find('.modal').modal('show');
@@ -64,13 +64,17 @@ function deleteSolduriBalanta() {
             type: 'POST',
             url: actionUrl,
             data: data,
-            success: function (message) {
-                placeholderElement.find('.modal').modal('hide');
-                toastrAlert("success", "Solduri balanta sterse cu succes!")
-                dataTable.ajax.reload();
+            success: function (data) {
+                if (data.success) {
+                    placeholderElement.find('.modal').modal('hide');
+                    toastrAlert("success", data.message);
+                    dataTable.ajax.reload();
+                } else {
+                    toastrAlert("error", data.message);
+                }
+                
             }, error: function (err) {
                 console.log(err);
-                toastrAlert("error", "Eroare la stergerea soldurilor de profit si pierdere!")
             }
         });
 

@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Licenta.Utility;
 using Microsoft.AspNetCore.Identity;
@@ -43,22 +42,6 @@ namespace Licenta.Areas.Admin.Controllers
                 return Ok();
             }
             return NotFound();
-        }
-
-        [HttpGet("[action]")]
-        public IActionResult Find()
-        {
-            IList<ApplicationUser> users = _chatManager.Find(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            return View(users);
-        }
-
-        [HttpGet("[action]")]
-        public IActionResult Private()
-        {
-            ApplicationUser user = _userManager.GetUserAsync(User).Result;
-
-            IList<Chat> chats = _chatManager.Private(user.Id);
-            return View(chats);
         }
 
         [HttpPost("[action]/{userId}")]
@@ -129,19 +112,6 @@ namespace Licenta.Areas.Admin.Controllers
             };
 
             return View(chatVM);
-        }
-
-        [HttpGet("[action]")]
-        public async Task<IActionResult> Index()
-        {
-            ApplicationUser user = _userManager.GetUserAsync(User).Result;
-            var chats = await _context.Chats
-                    .Include(x => x.Users)
-                        .ThenInclude(x => x.ApplicationUser)
-                    .Where(x => !x.Users.Any(y => y.ApplicationUserId == user.Id))
-                    .ToListAsync();
-
-            return View(chats);
         }
 
         // Create group modal; delete group
