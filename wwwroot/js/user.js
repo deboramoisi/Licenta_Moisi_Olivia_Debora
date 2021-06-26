@@ -83,8 +83,6 @@ function LockUnlock(id) {
                 toastr.error(data.message);
             }
         }
-        
-        
     });
 
 }

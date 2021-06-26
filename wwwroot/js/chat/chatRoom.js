@@ -20,21 +20,16 @@ $(function () {
 
         var form = $(this).parents('.modal').find('form');
 
-        var selected_values = new Array();
-        selected_values = []; // initialize empty array
-        var list = $(".users-list option:selected");
-        var listSeparated = list.map(function () {
-            selected_values.push(this.value);
-        });
+        //var selected_values = new Array();
+        //selected_values = []; // initialize empty array
+        //var list = $(".users-list option:selected");
+        //var listSeparated = list.map(function () {
+        //    selected_values.push(this.value);
+        //});
 
-        console.log(selected_values.length);
-        selected_values.forEach(function (value, index) {
-            console.log(value);
-        });
-
-        $(".users-list:checked").each(function () {
-                selected_values.push($(this).val());
-            });
+        //$(".users-list:checked").each(function () {
+        //        selected_values.push($(this).val());
+        //    });
 
         var dataToSend = form.serialize();
 
@@ -45,7 +40,6 @@ $(function () {
             var isValid = newBody.find('[name="IsValid"]').val() == 'True';
             if (isValid) {
                 placeholderElement.find('.modal').modal('hide');
-
                 toastrAlert("success", "Camera adaugata cu succes");
                 window.location.reload();
             }
@@ -117,7 +111,6 @@ $(function () {
             success: function (data) {
                 if (data.success) {
                     toastrAlert("success", data.message);
-
                     placeholderElement.find('.modal').modal('hide');
 
                 } else {

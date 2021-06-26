@@ -14,11 +14,8 @@ $(document).on('click', "#checkout-button", function () {
             return stripe.redirectToCheckout({ sessionId: session.id });
         })
         .then(function (result) {
-            alert(result);
-            console.log(result);
             // If redirectToCheckout fails due to a browser or network
-            // error, you should display the localized error message to your
-            // customer using error.message.
+            // error, you should display the localized error message using error.message.
             if (result.error) {
                 alert(result.error.message);
             }

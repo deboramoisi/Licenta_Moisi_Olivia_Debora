@@ -27,7 +27,6 @@ $(document).on("click", "li.notification-text", function (e) {
     // this is for dynamically generated elements, they have to be bound to some existing ones to add events on them
     var target = e.target;
     var id = target.id;
-    console.log(target);
 
     readNotification(id, target);
 });
@@ -86,7 +85,6 @@ function readNotification(id, target) {
                 url: "/Clienti/Notificare/GetRedirectToPage/" + id,
                 method: "GET",
                 success: function (data) {
-                    console.log(data.redirectToPage);
                     window.location.href = data.redirectToPage;
                 }
             });
@@ -202,7 +200,17 @@ function Delete(url) {
     });
 }
 
-function Delete2(url) {
+// Dashboard 
+function RemoveDataset(myChart) {
+
+    for (i = 0; i <= myChart.data.datasets.length; i++) {
+        myChart.data.datasets.pop();
+    }
+    myChart.update();
+
+}
+
+function DeleteQuestion(url) {
     swal({
         title: "Sunteti sigur?",
         text: "In urma stergerii, datele nu vor putea fi recuperate!",
@@ -217,7 +225,7 @@ function Delete2(url) {
                 success: function (data) {
                     if (data.success) {
                         toastr.success(data.message);
-                        dataTable.ajax.reload();
+                        ReloadPage(1500);
                     }
                     else {
                         toastr.error(data.message);
@@ -228,12 +236,6 @@ function Delete2(url) {
     });
 }
 
-// Dashboard 
-function RemoveDataset(myChart) {
-
-    for (i = 0; i <= myChart.data.datasets.length; i++) {
-        myChart.data.datasets.pop();
-    }
-    myChart.update();
-
+function ReloadPage(timeout) {
+    setTimeout(function () { window.location.reload(true); }, timeout);
 }

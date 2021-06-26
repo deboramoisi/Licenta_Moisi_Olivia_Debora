@@ -43,8 +43,6 @@ var joinRoom = function () {
         },
         error: function (err) {
             console.error(err)
-            console.log("eroare")
-            console.log(_connectionId)
         }
     })
 }
@@ -78,7 +76,6 @@ var sendMessage = function () {
         data: data,
         success: function () {
             console.log("Mesaj transmis")
-            console.log(data)
         },
         error: function () {
             alert("Eroare la trimiterea mesajului!")

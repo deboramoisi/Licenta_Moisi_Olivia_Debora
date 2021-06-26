@@ -43,7 +43,6 @@ function InitializeCalendar() {
                         successCallback(events);
                     },
                     error: function (data) {
-                        console.log(data);
                         toastrAlert("error", data.message);
                     }
                 });         
@@ -75,7 +74,6 @@ function onShowModal(cerereDetails, inEditingMode) {
         if (isAdmin) {
             $("#incarcaDoc").html(`<a class="btn btn-primary" href="/Admin/Documents/Create/${cerereDetails.cerereDocumentId}">Incarca document</a>`);
         }
-        console.log($("#adminInput").val());
 
     } else {
         $('[name = "DataStart"]').val(cerereDetails.startStr);
@@ -147,13 +145,11 @@ function getCerereDetailsByCerereId(information) {
         success: function (data) {
 
             if (data.success) {
-                console.log(data.cerere.denumireClient);
                 onShowModal(data.cerere, true);
             }
             
         },
         error: function (data) {
-            console.log(data);
             toastrAlert("error", data);
         }
     });    

@@ -18,7 +18,6 @@ $(document).ready(function () {
         var form = $('#formTip');
         console.log(form);
         var data = form.serialize();
-        console.log(data);
 
         $.ajax({
             url: url,
@@ -50,8 +49,7 @@ function transmiteId(id) {
         event.preventDefault();
         var form = $('#formTipEdit');
         var data = form.serialize();
-        console.log(data);
-
+        
         $.ajax({
             url: url,
             type: 'POST',

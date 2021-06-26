@@ -1,4 +1,9 @@
 ﻿@model Licenta.Models.Chat.Chat
+@using Licenta.Utility
+
+@{ 
+    var admin = User.IsInRole(ConstantVar.Rol_Admin);
+}
 
 <div class="modal fade" id="groupUsers" tabindex="-1" role="dialog" aria-labelledby="groupUsers" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -18,6 +23,14 @@
                         <div class="col-7" id="numeUtilizatorGrup">
                             @user.ApplicationUser.Nume
                         </div>
+                        @if (admin)
+                        {
+                            <div class="col-2">
+                                <button class="btn btn-danger deleteUserFromGroup" id="@user.ApplicationUserId">
+                                    <i class="fas fa-user-slash"></i> &nbsp;&nbsp;
+                                </button>
+                            </div>
+                        }
                     </div>
                 }
 

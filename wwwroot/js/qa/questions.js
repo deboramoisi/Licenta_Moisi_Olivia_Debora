@@ -7,7 +7,6 @@ $(function () {
         var url = $(this).data('url');
         $.get(url).done(function (data) {
             placeholderElement.html(data);
-            // cautam elementul cu clasa modal
             placeholderElement.find('.modal').modal('show');
         });
     });
@@ -26,41 +25,9 @@ $(function () {
             var isValid = newBody.find('[name="IsValid"]').val() == 'True';
             if (isValid) {
                 placeholderElement.find('.modal').modal('hide');
-
                 toastrAlert("success", "Intrebare adaugata cu succes");
-                
                 ReloadPage(2000);
             }
         });
     })
 });
-
-function DeleteQuestion(url) {
-    swal({
-        title: "Sunteti sigur?",
-        text: "In urma stergerii, datele nu vor putea fi recuperate!",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true
-    }).then((sterge) => {
-        if (sterge) {
-            $.ajax({
-                type: "DELETE",
-                url: url,
-                success: function (data) {
-                    if (data.success) {
-                        toastr.success(data.message);
-                        ReloadPage(1500);
-                    }
-                    else {
-                        toastr.error(data.message);
-                    }
-                }
-            });
-        }
-    });
-}
-
-function ReloadPage(timeout) {
-    setTimeout(function () { window.location.reload(true); }, timeout);
-}

@@ -22,7 +22,6 @@ function GetProfitPierdereAJAX() {
         contentType: "application/json",
         dataType: "json",
         success: function (data) {
-            console.log("data ", data);
             if (data.length !== 0) {
                 // daca avem date pentru perioada selectata atunci afisam vizualizarile
                 $("#myChart").css("display", "block");

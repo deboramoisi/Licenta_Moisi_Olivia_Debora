@@ -17,7 +17,6 @@ function FilterByClient(client, year) {
     if (client !== '') {
         selectedClient = client;
     }
-    console.log(selectedClient, selectedYear);
 
     GetDenumire();
     GetProfitPierdereAJAX();

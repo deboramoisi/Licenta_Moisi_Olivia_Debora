@@ -6,7 +6,6 @@ $(document).ready(function () {
 
 function loadDataTable() {
     dataTable = $('#tblData').DataTable({
-        // functia ce returneaza toate elementele tabelulului
         "ajax": {
             "url": "/Admin/Documents/GetAll",
         },
