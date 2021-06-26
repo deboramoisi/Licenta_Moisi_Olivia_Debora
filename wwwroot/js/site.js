@@ -151,6 +151,30 @@ function getExtensie(data) {
     return icon;
 }
 
+// Verify XML documents
+function verifyExtension(fileInput) {
+    var filePath = fileInput.value;
+    var allowedExtensions =
+        /(\.xml)$/i;
+
+    if (!allowedExtensions.exec(filePath)) {
+        return false;
+    } 
+    return true;
+}
+
+function returnAlertWrongExtension(fileInput) {
+    if (!verifyExtension(fileInput)) {
+        swal({
+            title: "Extensie document incorecta!",
+            text: "Va rugam incarcati document in format XML!",
+            icon: "warning",
+        });
+        return false;
+    } 
+    return true;
+}
+
 function toastrAlert(type, message) {
     // toastr pentru succes
     toastr[type](message)

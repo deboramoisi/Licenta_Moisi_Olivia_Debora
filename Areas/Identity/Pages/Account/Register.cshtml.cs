@@ -117,7 +117,9 @@ namespace Licenta.Areas.Identity.Pages.Account
                RolList = _roleManager.Roles.Where(u => u.Name != ConstantVar.Rol_User_Individual).Select(x => x.Name).Select(i => new SelectListItem { 
                     Text = i,
                     Value = i
-               })
+               }),
+                Email = null,
+               Password = null
             };
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }

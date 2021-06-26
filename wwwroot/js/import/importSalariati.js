@@ -21,6 +21,12 @@ $(function () {
         var formData = new FormData();
 
         var fileInput = $('#fileUpload').get(0);
+
+        // verify if it's a XML document
+        if (!returnAlertWrongExtension(fileInput)) {
+            return false;
+        }
+
         var files = fileInput.files;
         formData.append(files[0].name, files[0]);
 

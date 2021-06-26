@@ -21,6 +21,11 @@ $(function () {
         var formData = new FormData();
 
         var fileInput = $('#fileUpload').get(0);
+
+        if (!returnAlertWrongExtension(fileInput)) {
+            return false;
+        } 
+
         var files = fileInput.files;
         formData.append(files[0].name, files[0]);
 

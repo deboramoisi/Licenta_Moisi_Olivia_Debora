@@ -12,6 +12,7 @@ using Licenta.Utility;
 using Microsoft.AspNetCore.Identity;
 using System.Xml.Linq;
 using Licenta.Areas.Admin.Models.ViewModels;
+using System.IO;
 
 namespace Licenta.Areas.Admin.Controllers
 {
@@ -74,6 +75,15 @@ namespace Licenta.Areas.Admin.Controllers
             var user = await _userManager.GetUserAsync(User);
             var documentType = _context.TipDocument.FirstOrDefault(u => u.Denumire == "XML").TipDocumentId;
 
+            if (Path.GetExtension(balanta.DocumentPathUrl.FileName).ToLower() != ".xml")
+            {
+                // if we don't have a xml document
+                TempData["Message"] = "Va rugam incarcati un document in format XML!";
+                TempData["Success"] = "";
+                ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(u => u.Denumire), "ClientId", "Denumire", balanta.ClientId);
+                return View(balanta);
+            }
+
             Document document = new Document()
             {
                 ApplicationUserId = user.Id,
@@ -103,7 +113,7 @@ namespace Licenta.Areas.Admin.Controllers
                 _context.Document.Remove(document);
                 _context.SaveChanges();
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Denumire", balanta.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Client.OrderBy(u => u.Denumire), "ClientId", "Denumire", balanta.ClientId);
             TempData["Message"] = "Solduri profit-pierdere importate cu succes!";
             TempData["Success"] = "true";
             return RedirectToAction(nameof(Index));
