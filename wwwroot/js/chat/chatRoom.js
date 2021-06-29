@@ -20,17 +20,6 @@ $(function () {
 
         var form = $(this).parents('.modal').find('form');
 
-        //var selected_values = new Array();
-        //selected_values = []; // initialize empty array
-        //var list = $(".users-list option:selected");
-        //var listSeparated = list.map(function () {
-        //    selected_values.push(this.value);
-        //});
-
-        //$(".users-list:checked").each(function () {
-        //        selected_values.push($(this).val());
-        //    });
-
         var dataToSend = form.serialize();
 
         $.post(urlCreateGroup, dataToSend).done(function (data) {

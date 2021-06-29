@@ -56,13 +56,16 @@
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => response.Raspuns)
             </dt>
-            <dd class="col-sm-10 raspuns-intrebare qaTextJustified">
-                @Html.DisplayFor(model => response.Raspuns) &nbsp;
-                <a asp-controller="Responses" asp-action="Edit" asp-route-id="@response.ResponseId" title="Editare raspuns" class="text-right">
-                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;Edit
-                </a>
-            </dd>
-        }
+            @if (admin)
+                {
+                <dd class="col-sm-10 raspuns-intrebare qaTextJustified">
+                    @Html.DisplayFor(model => response.Raspuns) &nbsp;
+                    <a asp-controller="Responses" asp-action="Edit" asp-route-id="@response.ResponseId" title="Editare raspuns" class="text-right">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;Edit
+                    </a>
+                </dd>
+                }
+            }
         <dt class="col-sm-2">
             Categorie
         </dt>

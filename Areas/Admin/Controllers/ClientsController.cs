@@ -201,7 +201,7 @@ namespace Licenta.Areas.Admin.Controllers
                     // procesam XML-ul
                     // adaugam furnizorii preluati din acesta clientului ales de utilizator
 
-                    var fullPath = $"C:/Users/user/source/repos/Licenta/wwwroot{document.DocumentPath}";
+                    var fullPath = $"C:/Users/user/source/repos/Licenta/wwwroot/{document.DocumentPath}";
                     XDocument doc = new XDocument();
                     doc = XDocument.Load(document.DocumentPath);
 

@@ -71,8 +71,6 @@ namespace Licenta.Services.DashboardManager
 
             return rezultat;
         }
-
-
         #endregion
     }
 }

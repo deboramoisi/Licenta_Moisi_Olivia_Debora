@@ -30,14 +30,17 @@
                 <div class="collapse multi-collapse" id="utilizatori">
                     @foreach (var chat in Model.Private)
                     {
-                        <div class="user-chat">
-                            <a asp-controller="Chat" asp-action="Chat" asp-route-id="@chat.ChatId">
-                                @chat.Users.FirstOrDefault(x => x.ApplicationUserId != userId).ApplicationUser.Nume
-                                <i class="fas fa-angle-double-right col-1"></i>
-                            </a>
-                        </div>
+                        @if (chat.Users.Count() > 1)
+                        {
+                            <div class="user-chat">
+                                <a asp-controller="Chat" asp-action="Chat" asp-route-id="@chat.ChatId">
+                                    @chat.Users.FirstOrDefault(x => x.ApplicationUserId != userId).ApplicationUser.Nume
+                                    <i class="fas fa-angle-double-right col-1"></i>
+                                </a>
+                            </div>
+                        }
                     }
-                </div>
+                    </div>
             </div>
         </div>
 
